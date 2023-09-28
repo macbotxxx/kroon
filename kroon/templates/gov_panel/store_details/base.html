@@ -1,0 +1,53 @@
+{% extends 'gov_panel/base.html' %}
+{% load static crispy_forms_tags humanize %}
+
+
+{% block content %}
+
+<div class="nk-content ">
+    <div class="container-fluid">
+        <div class="nk-content-inner">
+            <div class="nk-content-body">
+                <div class="nk-block">
+                    <div class="card card-bordered">
+                        <div class="card-aside-wrap">
+                           
+
+                            <div class="card-aside card-aside-left user-aside toggle-slide toggle-slide-left toggle-break-lg" data-toggle-body="true" data-content="userAside" data-toggle-screen="lg" data-toggle-overlay="true">
+                                <div class="card-inner-group" data-simplebar>
+                                    <div class="card-inner">
+                                        <h3 class="nk-block-title page-title">Store , Merchant Details</h3>
+                                        <div class="nk-block-des text-soft">
+                                            <p>This displays the merchant store details and many more such as , worker details , revenue and logs </p>
+                                        </div>
+                                    </div><!-- .card-inner -->
+                                    <div class="card-inner p-0">
+                                        <ul class="link-list-menu">
+                                            <li><a class="active" href="{% url 'gov_store_details' store_id %}"><em class="icon ni ni-user-fill-c"></em><span>Merchant Info</span></a></li>
+                                            <li><a href="{% url 'store_revenue' store_id %}"><em class="icon ni ni-lock-alt-fill"></em><span>Store Revenue</span></a></li>
+                                            <li><a href="{% url 'store_products_list' store_id %}"><em class="icon ni ni-shield-star-fill"></em><span>Products List</span></a></li>
+                                            <hr>
+                                            <li class="nk-menu-heading">
+                                                <h6 class="overline-title text-primary-alt">Workers Report </h6>
+                                            </li>
+                                            <li><a href="{% url 'store_workers' store_id %}"><em class="icon ni ni-activity-round-fill"></em><span>Workers Activity</span></a></li>
+                                        </ul>
+                                    </div><!-- .card-inner -->
+                                </div><!-- .card-inner-group -->
+                            </div><!-- card-aside -->
+                            {% block details %}
+
+                            {% endblock %}
+
+
+                        </div><!-- card-aside-wrap -->
+                    </div><!-- .card -->
+                </div><!-- .nk-block -->
+            </div>
+        </div>
+    </div>
+</div>
+<!-- content @e -->
+{% endblock %}
+
+              

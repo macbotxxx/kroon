@@ -1,0 +1,165 @@
+{% extends 'app_subscription/base.html' %}
+{% load static crispy_forms_tags humanize %}
+
+{% block content %}
+ <!-- content @s -->
+ <div class="nk-content ">
+    <div class="container-fluid">
+        <div class="nk-content-inner">
+            <div class="nk-content-body">
+                <div class="content-page wide-sm m-auto">
+                    <div class="nk-block-head nk-block-head-lg wide-xs mx-auto">
+                        <div class="nk-block-head-content text-center">
+                            <div class="nk-block-head-sub"><span>Subscription</span></div>
+                            <h2 class="nk-block-title fw-normal">{{ plan.plan_name | title }}</h2>
+                           
+                        </div>
+                    </div><!-- .nk-block-head -->
+                    <div class="nk-block nk-block-lg">
+                      
+                        <div class="card card-bordered">
+                            <div class="card-inner">
+                                <div class="nk-block-head">
+                                    <div class="nk-block-head-content">
+                                        <h4 class="title nk-block-title"><b> Duration : </b>{% if  plan_period == "monthly" %} {{ plan.plan_duration }} {% else %} {{ plan.yearly_plan_duration }} {% endif %} Days  |  <b>Amount :</b>{% if  plan_period == "monthly" %} {{ plan.plan_fee | intcomma }} {% else %} {{ plan.yearly_plan_fee }} {% endif %} {{ plan.plan_default_currency }}</h4>
+                                        <div class="nk-block-des">
+                                            <p style="font-style: italic;"> {{ plan.plan_content | safe }} </p>
+                                        </div>
+                                    </div>
+                                </div>
+                               
+                                   
+                                <div class="row g-3">
+                                        <a href="{% url 'in_app_government_code' plan.id %}" class="btn btn-lg btn-outline-primary "> <span class="text-center"> Pay With Your Promo Code </span></a>   
+                                    <hr>
+                                    <div id="paypal-button-container"></div>
+                                </div>
+                            </div>
+                        </div><!-- card -->
+                    </div><!-- .nk-block -->
+                   
+                </div><!-- .content-page -->
+            </div>
+        </div>
+    </div>
+</div>
+{% csrf_token %}
+<!-- content @e -->
+
+<!-- live code -->
+<!-- <script src="https://www.paypal.com/sdk/js?client-id=AbmFk8h1I12qfgPgMzayLpgZirWNEE3R94UUU00lyOEuKVxMJa_2Ylj5oZ1DhnU49Zoz9YbhCHrVaslu&currency=USD"></script> -->
+
+<script src="https://www.paypal.com/sdk/js?client-id=AbmFk8h1I12qfgPgMzayLpgZirWNEE3R94UUU00lyOEuKVxMJa_2Ylj5oZ1DhnU49Zoz9YbhCHrVaslu&vault=true&intent=subscription">
+</script> 
+
+<!-- test code normal payment link -->
+<!-- <script src="https://www.paypal.com/sdk/js?client-id=Acf-VAuyB6NmUCxEPA4u9Y8Ft_TKXFDQqxDunQW4JZ1ae0oDYPZBE597m58zvSUFkEocqBE2PTWxN1xm&currency=USD"></script> -->
+
+
+<!-- test code for subcribtion link -->
+<!-- <script src="https://www.paypal.com/sdk/js?client-id=Acf-VAuyB6NmUCxEPA4u9Y8Ft_TKXFDQqxDunQW4JZ1ae0oDYPZBE597m58zvSUFkEocqBE2PTWxN1xm&vault=true&intent=subscription">
+</script>  -->
+<!-- 
+<script>
+  
+
+    var url = "{% url 'PayPal_Payment' %}"
+    var  csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    var payment_method = "PayPal"
+    var period = "{{ plan_period }}"
+    var plan_id = "{{ plan.id }}"
+    var amount = {% if  plan_period == "monthly" %} "{{ plan.plan_fee | intcomma }}" {% else %} "{{ plan.yearly_plan_fee }}" {% endif %}
+
+    // Render the PayPal button into #paypal-button-container
+    paypal.Buttons({
+       
+        // Set up the transaction
+        createOrder: function(data, actions) {
+            return actions.order.create({
+                purchase_units: [{
+                    amount: {
+                        value: amount
+                    }
+                }]
+            });
+        },
+
+        // Finalize the transaction
+        onApprove: function(data, actions) {
+            return actions.order.capture().then(function(orderData) {
+                console.log(orderData);
+                sendData();
+                function sendData(){
+                    fetch(url,{
+                        method : 'POST',
+                        headers : {
+                            "content-type": "application/json",
+                            "X-CSRFToken": csrftoken,
+                        },
+                        body:JSON.stringify({
+                            transID : orderData.id,
+                            payment_method : payment_method,
+                            period : period,
+                            plan_id : plan_id,
+                        }),
+                    })
+                .then(response => response.json())
+                .then(data => console.log(data));
+               }
+               window.location.href="{% url 'my_subscriptions' %}";
+            });
+        }
+
+
+    }).render('#paypal-button-container');
+</script> -->
+
+
+<script>
+
+    var url = "{% url 'PayPal_Payment' %}"
+    var plan_activice_id  = "{{ plan_id }}"
+    var csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    var payment_method = "PayPal"
+    var period = "{{ plan_period }}"
+    var plans_market_id = "{{ plan.id }}"
+    
+    paypal.Buttons({
+      createSubscription: function(data, actions) {
+        return actions.subscription.create({
+          'plan_id': plan_activice_id // Creates the subscription
+        });
+      },
+      onApprove: function(data, actions) {
+      
+        sendData();
+        function sendData(){
+            fetch(url,{
+                method : 'POST',
+                headers : {
+                    "content-type": "application/json",
+                    "X-CSRFToken": csrftoken,
+                },
+                body:JSON.stringify({
+
+                    transID : data.orderID,
+                    payment_method : payment_method,
+                    period : period,
+                    plan_id : plans_market_id,
+                    subscription_id : data.subscriptionID,
+
+                }),
+                
+            })
+            
+        .then(response => response.json())
+        .then(data => console.log(data));
+        }
+        window.location.href="{% url 'my_subscriptions' %}";
+       
+      }
+    }).render('#paypal-button-container'); // Renders the PayPal button
+  </script>
+
+
+{% endblock %}

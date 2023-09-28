@@ -1,0 +1,186 @@
+{% extends 'gov_panel/store_details/base.html' %}
+{% load static crispy_forms_tags humanize %}
+
+{% block details %}
+ <!-- content @s -->
+<div class="card-inner card-inner-lg">
+
+                                
+                                <div class="nk-block">
+                                    <div class="nk-block">
+                                           
+                                            <div class="col-lg-10">
+                                                <div class="nk-block-head">
+                                                    <div class="nk-block-head-content">
+                                                        <h5 class="nk-block-title title">Applicant Information</h5>
+                                                        <p>Basic info, like name, phone, address, country etc.</p>
+                                                    </div>
+                                                </div>
+                                                <div class="card card-bordered">
+                                                    <ul class="data-list is-compact">
+                                                        <li class="data-item">
+                                                            <div class="data-col">
+                                                                <div class="data-label">First Name</div>
+                                                                <div class="data-value">{{ store_details.user.first_name | title }}</div>
+                                                            </div>
+                                                        </li>
+                                                        <li class="data-item">
+                                                            <div class="data-col">
+                                                                <div class="data-label">Last Name</div>
+                                                                <div class="data-value">{{ store_details.user.first_name | title }}</div>
+                                                            </div>
+                                                        </li>
+                                                        <li class="data-item">
+                                                            <div class="data-col">
+                                                                <div class="data-label">Email Address</div>
+                                                                <div class="data-value">{{ store_details.user.email }}</div>
+                                                            </div>
+                                                        </li>
+                                                        <li class="data-item">
+                                                            <div class="data-col">
+                                                                <div class="data-label">Phone Number</div>
+                                                                <div class="data-value text-soft"><em>{{ store_details.user.contact_number }}</em></div>
+                                                            </div>
+                                                        </li>
+                                                        <li class="data-item">
+                                                            <div class="data-col">
+                                                                <div class="data-label">Gender</div>
+                                                                <div class="data-value text-soft"><em>{{ store_details.user.gender | title }}</em></div>
+                                                            </div>
+                                                        </li>
+                                                        <li class="data-item">
+                                                            <div class="data-col">
+                                                                <div class="data-label">Date of Birth</div>
+                                                                <div class="data-value">{{ store_details.user.date_of_birth }}</div>
+                                                            </div>
+                                                        </li>
+                                                        <li class="data-item">
+                                                            <div class="data-col">
+                                                                <div class="data-label">Onboarded Date</div>
+                                                                <div class="data-value">{{ store_details.user.on_boarding_complete_date }}</div>
+                                                            </div>
+                                                        </li>
+                                                        <li class="data-item">
+                                                            <div class="data-col">
+                                                                <div class="data-label">Country of Residence</div>
+                                                                <div class="data-value">{{ store_details.user.country_of_residence }}</div>
+                                                            </div>
+                                                        </li>
+                                                        <li class="data-item">
+                                                            <div class="data-col">
+                                                                <div class="data-label">Country Provence</div>
+                                                                <div class="data-value">{{ store_details.user.country_province }}</div>
+                                                            </div>
+                                                        </li>
+                                                        <li class="data-item">
+                                                            <div class="data-col">
+                                                                <div class="data-label">Wallet ID</div>
+                                                                <div class="data-value">{{ store_details.user.wallet_id }}</div>
+                                                            </div>
+                                                        </li>
+                                                        <li class="data-item">
+                                                            <div class="data-col">
+                                                                <div class="data-label">Business Name</div>
+                                                                <div class="data-value text-break">{{ store_details.user.merchant_business_name | title }}</div>
+                                                            </div>
+                                                        </li>
+                                                        <li class="data-item">
+                                                            <div class="data-col">
+                                                                <div class="data-label">Default Currency</div>
+                                                                <div class="data-value text-break">{{ store_details.user.default_currency_id  }}</div>
+                                                            </div>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div><!-- .col -->
+                                            <br>
+                                            <div class="col-lg-10">
+                                                <div class="nk-block-head">
+                                                    <div class="nk-block-head-content">
+                                                        <h5 class="nk-block-title title">Applicant Store Information</h5>
+                                                        <p>Basic info, like name, phone, address, country etc.</p>
+                                                    </div>
+                                                </div>
+                                                <div class="card card-bordered">
+                                                    <ul class="data-list is-compact">
+                                                        <li class="data-item">
+                                                            <div class="data-col">
+                                                                <div class="data-label">Store Name  </div>
+                                                                <div class="data-value">{{ store_details.user.kyc_complete_date  }}</div>
+                                                            </div>
+                                                        </li>
+                                                        <li class="data-item">
+                                                            <div class="data-col">
+                                                                <div class="data-label">Last Name</div>
+                                                                <div class="data-value">{{ store_details.user.first_name | title }}</div>
+                                                            </div>
+                                                        </li>
+                                                        <li class="data-item">
+                                                            <div class="data-col">
+                                                                <div class="data-label">Email Address</div>
+                                                                <div class="data-value">{{ store_details.user.email }}</div>
+                                                            </div>
+                                                        </li>
+                                                        <li class="data-item">
+                                                            <div class="data-col">
+                                                                <div class="data-label">Phone Number</div>
+                                                                <div class="data-value text-soft"><em>{{ store_details.user.contact_number }}</em></div>
+                                                            </div>
+                                                        </li>
+                                                        <li class="data-item">
+                                                            <div class="data-col">
+                                                                <div class="data-label">Gender</div>
+                                                                <div class="data-value text-soft"><em>{{ store_details.user.gender | title }}</em></div>
+                                                            </div>
+                                                        </li>
+                                                        <li class="data-item">
+                                                            <div class="data-col">
+                                                                <div class="data-label">Date of Birth</div>
+                                                                <div class="data-value">{{ store_details.user.date_of_birth }}</div>
+                                                            </div>
+                                                        </li>
+                                                        <li class="data-item">
+                                                            <div class="data-col">
+                                                                <div class="data-label">Onboarded Date</div>
+                                                                <div class="data-value">{{ store_details.user.on_boarding_complete_date }}</div>
+                                                            </div>
+                                                        </li>
+                                                        <li class="data-item">
+                                                            <div class="data-col">
+                                                                <div class="data-label">Country of Residence</div>
+                                                                <div class="data-value">{{ store_details.user.country_of_residence }}</div>
+                                                            </div>
+                                                        </li>
+                                                        <li class="data-item">
+                                                            <div class="data-col">
+                                                                <div class="data-label">Country Provence</div>
+                                                                <div class="data-value">{{ store_details.user.country_province }}</div>
+                                                            </div>
+                                                        </li>
+                                                        <li class="data-item">
+                                                            <div class="data-col">
+                                                                <div class="data-label">Wallet ID</div>
+                                                                <div class="data-value">{{ store_details.user.wallet_id }}</div>
+                                                            </div>
+                                                        </li>
+                                                        <li class="data-item">
+                                                            <div class="data-col">
+                                                                <div class="data-label">Business Name</div>
+                                                                <div class="data-value text-break">{{ store_details.user.merchant_business_name | title }}</div>
+                                                            </div>
+                                                        </li>
+                                                        <li class="data-item">
+                                                            <div class="data-col">
+                                                                <div class="data-label">Default Currency</div>
+                                                                <div class="data-value text-break">{{ store_details.user.default_currency_id  }}</div>
+                                                            </div>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div><!-- .col -->
+                                    </div><!-- .nk-block -->
+                                </div><!-- .nk-block-head -->
+                                
+    </div><!-- .card-inner -->
+                                              
+{% endblock %}

@@ -1,0 +1,101 @@
+{% extends "emails/base.html" %}
+{% load static humanize %}
+{% load i18n %}
+
+
+
+{%block content %}
+
+
+
+  <tr  >
+    <td height="40" style="font-size:40px;line-height:40px;" >&nbsp;</td>
+  </tr>
+  <tr  >
+    <td align="center" class="center-text">
+      <img style="width:190px;border:0px;display: inline!important;" src="https://www.kroonapp.com/wp-content/uploads/2022/03/otp.png
+      " width="190" border="0"       alt="intro">
+    </td>
+  </tr>
+  <tr  >
+    <td height="40" style="font-size:40px;line-height:40px;" >&nbsp;</td>
+  </tr>
+  <tr  >
+    <td class="center-text"  align="center" style="font-family:'Roboto Slab',Arial,Helvetica,sans-serif;font-size:42px;line-height:52px;font-weight:400;font-style:normal;color:#FFFFFF;text-decoration:none;letter-spacing:0px;">
+        
+          <div  >
+            Activate with Code
+          </div>
+        
+    </td>
+  </tr>
+  <tr  >
+    <td height="20" style="font-size:20px;line-height:20px;" >&nbsp;</td>
+  </tr>
+  <tr  >
+    <td class="center-text"  align="center" style="font-family:'Poppins',Arial,Helvetica,sans-serif;font-size:16px;line-height:26px;font-weight:300;font-style:normal;color:#FFFFFF;text-decoration:none;letter-spacing:0px;">
+        
+          <div  >
+            {{content}}
+          </div>
+        
+    </td>
+  </tr>
+  <tr  >
+    <td height="30" style="font-size:30px;line-height:30px;" >&nbsp;</td>
+  </tr>
+  <tr  >
+    <td align="center" class="container-padding">
+      <!-- Use Code -->
+      <table border="0" cellspacing="0" cellpadding="0" role="presentation" align="center" class="row" width="480" style="width:480px;max-width:480px;">
+        <tr>
+          <td align="center"    bgcolor="#4d57b9" style="border-radius: 6px;border: 2px dashed #7982da;">
+            <!-- Content -->
+            <table border="0" cellspacing="0" cellpadding="0" role="presentation" align="center" class="row" width="480" style="width:480px;max-width:480px;">
+              <tr>
+                <td height="20" style="font-size:20px;line-height:20px;">&nbsp;</td>
+              </tr>
+              <tr>
+                <td class="center-text"  align="center" style="font-family:'Poppins',Arial,Helvetica,sans-serif;font-size:16px;line-height:26px;font-weight:300;font-style:normal;color:#FFFFFF;text-decoration:none;letter-spacing:0px;">
+                    
+                      <div  >
+                       <b> USE CODE : <span style="color:#d6de58;">{{opt}}</span> </b>
+                      </div>
+                    
+                </td>
+              </tr>
+              <tr>
+                <td height="20" style="font-size:20px;line-height:20px;">&nbsp;</td>
+              </tr>
+            </table>
+            <!-- Content -->
+          </td>
+        </tr>
+      </table>
+      <!-- User Code -->
+    </td>
+  </tr>
+  <tr  >
+    <td height="30" style="font-size:30px;line-height:30px;" >&nbsp;</td>
+  </tr>
+
+  <tr  >
+    <td class="center-text"  align="center" style="font-family:'Poppins',Arial,Helvetica,sans-serif;font-size:16px;line-height:26px;font-weight:300;font-style:normal;color:#FFFFFF;text-decoration:none;letter-spacing:0px;">
+        
+          <div  >
+            In any case you are facing issues with kroon email OTP ? dont be scared it happens to the best of us we are here to assist you in any way possible, please  <a href="mailto:support@mykroonapp.com" style="color:#ed6e7a;text-decoration: underline;">Contact Us</a>
+          </div>
+        
+    </td>
+  </tr>
+  <tr>
+    <td height="40" style="font-size:40px;line-height:40px;" >&nbsp;</td>
+  </tr>
+</table>
+<!-- Content -->
+
+    </td>
+  </tr>
+</table>
+
+{%endblock content %}

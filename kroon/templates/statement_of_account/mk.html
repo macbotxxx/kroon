@@ -1,0 +1,45 @@
+<html>
+  <head>
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <script src="https://www.gstatic.com/charts/loader.js"></script>
+<script src="https://www.google.com/jsapi"></script>
+  <script>
+    google.charts.load('current', {
+    'packages': ['map'],
+    // Note: you will need to get a mapsApiKey for your project.
+    // See: https://developers.google.com/chart/interactive/docs/basic_load_libs#load-settings
+    'mapsApiKey': 'AIzaSyCsXhMECWd3uz5bEPi-1wWKZ_s6sRCAWzs'
+    
+    });
+    google.charts.setOnLoadCallback(drawMap);
+
+    function drawMap() {
+      var data = google.visualization.arrayToDataTable([
+        ['Province', 'Population'],
+        ['Western Cape', 'Western Cape: 1,363,800,000'],
+        ['Eastern Cape', 'Eastern Cape: 1,242,620,000'],
+        ['Northern Cape', 'Northern Cape: 1,242,620,000'],
+        ['North West', 'North West: 1,242,620,000'],
+        ['Free State', 'Free State: 1,242,620,000'],
+        ['Kwazulu-Natal', 'Kwazulu-Natal: 1,242,620,000'],
+        ['Gauteng', 'Gauteng: 1,242,620,000'],
+        ['Limpopo', 'Limpopo: 1,242,620,000'],
+        ['Mpumlanga', 'Mpumlanga: 1,242,620,000'],
+      
+      ]);
+
+    var options = {
+      showTooltip: true,
+      showInfoWindow: true
+    };
+
+    var map = new google.visualization.Map(document.getElementById('chart_div'));
+
+    map.draw(data, options);
+  };
+  </script>
+  </head>
+  <body>
+    <div id="chart_div"></div>
+  </body>
+</html>

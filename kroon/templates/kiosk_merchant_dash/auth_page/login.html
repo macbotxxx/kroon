@@ -1,0 +1,62 @@
+{% extends 'kiosk_merchant_dash/auth_page/base.html' %}
+{% load i18n static %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+<div class="nk-block nk-block-middle nk-auth-body">
+    <div class="brand-logo pb-5">
+        <a href="#" class="logo-link">
+            <img class="logo-light logo-img logo-img-lg" src="https://www.kroonapp.com/wp-content/uploads/2022/04/Kroon-Kiosk-Icon-Blue.png" srcset="https://www.kroonapp.com/wp-content/uploads/2022/04/Kroon-Kiosk-Icon-Blue.png alt="logo">
+            <img class="logo-dark logo-img logo-img-lg" src="https://www.kroonapp.com/wp-content/uploads/2022/04/Kroon-Kiosk-Icon-Blue.png" srcset="https://www.kroonapp.com/wp-content/uploads/2022/04/Kroon-Kiosk-Icon-Blue.png" alt="logo-dark">
+        </a>
+    </div>
+   
+    <div class="nk-block-head">
+        <div class="nk-block-head-content">
+            <h5 class="nk-block-title">Welcome Back </h5>
+            <div class="nk-block-des">
+                <p>Login so to be able to enjoy the merchant benefits on Kroon Kiosk.</p>
+            </div>
+        </div>
+    </div><!-- .nk-block-head -->
+
+    {% if messages %}
+    <div class="alert alert-pro alert-danger">
+        <div class="alert-text">
+            <h6>Verification Error</h6>
+            {% for message in messages %}
+            <p>{{ message }}</p>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    <form action="{% url 'account_login' %}" method="POST" class="form-validate is-alter" autocomplete="off">
+        {% csrf_token %}
+        <div class="form-group">
+            
+            <div class="form-control-wrap">
+                {{ form | crispy }}
+            </div>
+        </div><!-- .form-group -->
+        {% if redirect_field_value %}
+        <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+        {% endif %}
+        <div class="form-group">
+            <button type="submit" class="btn btn-lg btn-primary btn-block">Verify My Email</button>
+        </div>
+    </form><!-- form -->
+    <div class="form-note-s2 pt-4"> Already a Mechant ? <a href="#">Click to login</a>
+    </div>
+    <div class="text-center pt-4 pb-3">
+        <h6 class="overline-title overline-title-sap"><span>OR</span></h6>
+    </div>
+    <ul class="nav justify-center gx-4">
+        <li class="nav-item"><a class="nav-link" href="#">Facebook</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">Google</a></li>
+    </ul>
+    <div class="text-center mt-5">
+        <span class="fw-500">I don't have an account? <a href="#">Try 15 days free</a></span>
+    </div>
+</div><!-- .nk-block -->
+{% endblock %}

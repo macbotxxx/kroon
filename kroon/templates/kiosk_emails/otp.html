@@ -1,0 +1,111 @@
+{% extends "kiosk_emails/base.html" %}
+{% load static humanize %}
+{% load i18n %}
+
+
+
+{%block content %}
+
+
+
+  <tr  >
+    <td height="40" style="font-size:40px;line-height:40px;" >&nbsp;</td>
+  </tr>
+  <tr  >
+    <td align="center" class="center-text">
+      <img style="width:190px;border:0px;display: inline!important;" src="https://www.kroonapp.com/wp-content/uploads/2022/04/forget_pasw.png
+      " width="190" border="0"       alt="intro">
+    </td>
+  </tr>
+  <tr>
+    <td height="40" style="font-size:40px;line-height:40px;" >&nbsp;</td>
+  </tr>
+  <tr  >
+    <td class="center-text"  align="center" style="font-family:'Roboto Slab',Arial,Helvetica,sans-serif;font-size:42px;line-height:52px;font-weight:400;font-style:normal;color:#000000;text-decoration:none;letter-spacing:0px;">
+        
+          <div  >
+            Kroon Kiosk Email Verification - Activate Your Account
+          </div>
+        
+    </td>
+  </tr>
+  <tr  >
+    <td height="20" style="font-size:20px;line-height:20px;" >&nbsp;</td>
+  </tr>
+  <tr  >
+    <td class="center-text"  align="center" style="font-family:'Poppins',Arial,Helvetica,sans-serif;font-size:16px;line-height:26px;font-weight:300;font-style:normal;color:#000000;text-decoration:none;letter-spacing:0px;">
+        
+          <div  >
+            Thank you for choosing Kroon Kiosk, the leading enterprise solution for small businesses. We are excited to have you on board!
+            <br>
+            To proceed with your account activation, please use the following One-Time PIN (OTP) within the next 5 minutes:
+          </div>
+        
+    </td>
+  </tr>
+  <tr  >
+    <td height="30" style="font-size:30px;line-height:30px;" >&nbsp;</td>
+  </tr>
+  <tr  >
+    <td align="center" class="container-padding">
+      <!-- Use Code -->
+      <table border="0" cellspacing="0" cellpadding="0" role="presentation" align="center" class="row" width="480" style="width:480px;max-width:480px;">
+        <tr>
+          <td align="center"    bgcolor="#000000" style="border-radius: 6px;border: 2px dashed #000000;">
+            <!-- Content -->
+            <table border="0" cellspacing="0" cellpadding="0" role="presentation" align="center" class="row" width="480" style="width:480px;max-width:480px;">
+              <tr>
+                <td height="20" style="font-size:20px;line-height:20px;">&nbsp;</td>
+              </tr>
+              <tr>
+                <td class="center-text"  align="center" style="font-family:'Poppins',Arial,Helvetica,sans-serif;font-size:16px;line-height:26px;font-weight:300;font-style:normal;color:#e1ff00;text-decoration:none;letter-spacing:0px;">
+                    
+                      <div  >
+                       <b> USE CODE : <span style="color:#ffffff;">{{ opt }}</span> </b>
+                      </div>
+                    
+                </td>
+              </tr>
+              <tr>
+                <td height="20" style="font-size:20px;line-height:20px;">&nbsp;</td>
+              </tr>
+            </table>
+            <!-- Content -->
+          </td>
+        </tr>
+      </table>
+      <!-- User Code -->
+    </td>
+  </tr>
+  <tr  >
+    <td height="30" style="font-size:30px;line-height:30px;" >&nbsp;</td>
+  </tr>
+
+  <tr  >
+    <td class="center-text"  align="center" style="font-family:'Poppins',Arial,Helvetica,sans-serif;font-size:16px;line-height:26px;font-weight:300;font-style:normal;color:#000000;text-decoration:none;letter-spacing:0px;">
+        
+          <div  >
+            In the rare event that you encounter any issues with the Kroon email OTP, rest assured that we're here to help. Our dedicated support team is ready to assist you every step of the way. Simply reach out to us via the "Contact Us" link provided below, and we'll swiftly resolve any concerns. <a href="mailto:support@mykroonapp.com" style="color:#ed6e7a;text-decoration: underline;">Contact Us</a>
+
+            <br>
+            At Kroon Kiosk, we strive to provide you with a seamless experience and empower your business growth. Should you have any questions or need further assistance, please don't hesitate to reach out to us. We're here to support you on your journey to success.
+
+            <br>
+            Best regards,
+            <br>
+            Kroon Kiosk Team
+          </div>
+        
+    </td>
+  </tr>
+  <tr>
+    <td height="40" style="font-size:40px;line-height:40px;" >&nbsp;</td>
+  </tr>
+</table>
+<!-- Content -->
+
+    </td>
+  </tr>
+</table>
+
+{%endblock content %}

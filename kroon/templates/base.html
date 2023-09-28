@@ -1,0 +1,117 @@
+{% load static i18n %}<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>{% block title %}Kroon{% endblock title %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="kroon is a peer2peer digital token transfer.">
+    <meta name="author" content="Michael Assanama">
+
+    <link rel="icon" href="{% static 'images/favicons/favicon.ico' %}">
+
+    {% block css %}
+    <!-- Latest compiled and minified Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css" integrity="sha512-GQGU0fMMi238uA+a/bdWJfpUGKUkBdgfFdgBm72SUQ6BeyWjoY/ton0tEjH+OSH9iP4Dfh+7HM0I9f5eR0L/4w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lykmapipo/themify-icons@0.1.2/css/themify-icons.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pixeden-stroke-7-icon@1.2.3/pe-icon-7-stroke/dist/pe-icon-7-stroke.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.2.0/css/flag-icon.min.css">
+
+    <!-- Your stuff: Third-party CSS libraries go here -->
+    <!-- This file stores project-specific CSS -->
+    <link href="{% static 'css/project.css' %}" rel="stylesheet">
+    {% endblock %}
+    <!-- Le javascript
+    ================================================== -->
+    {# Placed at the top of the document so pages load faster with defer #}
+    {% block javascript %}
+      <!-- Bootstrap JS -->
+      <script defer src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/js/bootstrap.min.js" integrity="sha512-OvBgP9A2JBgiRad/mM36mkzXSXaJE9BEIENnVEmeZdITvwT09xnxLtT4twkCa8m/loMbPHsvPl0T8lRGVBwjlQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+      <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+      <!-- Your stuff: Third-party javascript libraries go here -->
+
+      <!-- place project specific Javascript in this file -->
+      <script defer src="{% static 'js/project.js' %}"></script>
+
+    {% endblock javascript %}
+
+  </head>
+
+  <body>
+
+    <div class="mb-1">
+      <nav class="navbar navbar-expand-md navbar-light bg-light">
+        <div class="container-fluid">
+          <button class="navbar-toggler navbar-toggler-right" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <a class="navbar-brand" href="{% url 'home' %}">Kroon</a>
+
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+              <li class="nav-item active">
+                <a class="nav-link" href="{% url 'home' %}">Home <span class="visually-hidden">(current)</span></a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'about' %}">About</a>
+              </li>
+              {% if request.user.is_authenticated %}
+                <li class="nav-item">
+                  {# URL provided by django-allauth/account/urls.py #}
+                  <a class="nav-link" href="{% url 'users:detail' request.user.username  %}">{% translate "My Profile" %}</a>
+                </li>
+                <li class="nav-item">
+                  {# URL provided by django-allauth/account/urls.py #}
+                  <a class="nav-link" href="{% url 'account_logout' %}">{% translate "Sign Out" %}</a>
+                </li>
+              {% else %}
+                <li class="nav-item">
+                  {# URL provided by django-allauth/account/urls.py #}
+                  <a id="sign-up-link" class="nav-link" href="{% url 'account_signup' %}">{% translate "Sign Up" %}</a>
+                </li>
+                <li class="nav-item">
+                  {# URL provided by django-allauth/account/urls.py #}
+                  <a id="log-in-link" class="nav-link" href="{% url 'account_login' %}">{% translate "Sign In" %}</a>
+                </li>
+              {% endif %}
+            </ul>
+          </div>
+        </div>
+      </nav>
+
+    </div>
+
+    <div class="container">
+
+      {% if messages %}
+        {% for message in messages %}
+          <div class="alert alert-dismissible {% if message.tags %}alert-{{ message.tags }}{% endif %}">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        {% endfor %}
+      {% endif %}
+
+      {% block content %}
+
+      {% endblock content %}
+
+    </div> <!-- /container -->
+
+    {% block modal %}{% endblock modal %}
+
+    {% block inline_javascript %}
+    {% comment %}
+    Script tags with only code, no src (defer by default). To run
+    with a "defer" so that you run run inline code:
+    <script>
+      window.addEventListener('DOMContentLoaded', () => {/* Run whatever you want */});
+    </script>
+    {% endcomment %}
+    {% endblock inline_javascript %}
+    <script src="https://cdn.lr-in.com/LogRocket.min.js" crossorigin="anonymous"></script>
+    <script>window.LogRocket && window.LogRocket.init('bbneps/scriptheart');</script>
+  </body>
+</html>

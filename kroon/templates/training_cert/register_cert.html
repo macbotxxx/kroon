@@ -1,0 +1,60 @@
+{% extends "training_cert/base.html" %}
+{% load static humanize %}
+{% load i18n crispy_forms_tags %}
+
+
+{% block content %}
+  <!-- content @s -->
+  <div class="nk-content ">
+    <div class="container-fluid">
+        <div class="nk-content-inner">
+            <div class="nk-content-body">
+                <div class="content-page wide-sm m-auto">
+                    <div class="nk-block-head nk-block-head-lg wide-xs mx-auto">
+                        <div class="nk-block-head-content text-center">
+                            <div class="nk-block-head-sub"><span>Publish Traning Cert</span></div>
+                            <h2 class="nk-block-title fw-normal">Publish Traning Cert</h2>
+                            <div class="nk-block-des">
+                                <p class="lead">this form recieves the user details so to create the traning certificate </p>
+                            </div>
+                        </div>
+                    </div><!-- .nk-block-head -->
+                    <div class="nk-block nk-block-lg">
+                      
+                        <div class="card card-bordered">
+                            <div class="card-inner">
+                               
+                                <form action="" method="POST" class="gy-3">
+                                    {% csrf_token %}
+                                    <div class="row g-3 align-center">
+                                       
+                                        <div class="col-lg-15">
+                                            <div class="form-group">
+                                                <div class="form-control-wrap">
+                                                  {{ form | crispy }}
+                                                </div>
+                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                   
+                                    <div class="row g-3">
+                                        <div class="col-lg-10 offset-lg-3">
+                                            <div class="form-group mt-4">
+                                                <button type="submit" class="btn btn-lg btn-primary">Pushlish Training Cert</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div><!-- card -->
+                    </div><!-- .nk-block -->
+                   
+                </div><!-- .content-page -->
+            </div>
+        </div>
+    </div>
+</div>
+<!-- content @e -->
+
+{% endblock %}

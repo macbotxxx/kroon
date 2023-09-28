@@ -1,0 +1,219 @@
+
+{% extends 'kiosk_merchant_dash/base.html' %}
+{% load static crispy_forms_tags humanize %}
+
+{% block content %}
+<!-- content @s -->
+<div class="nk-content ">
+    <div class="container-fluid">
+        <div class="nk-content-inner">
+            <div class="nk-content-body">
+                <div class="nk-block-head nk-block-head-sm">
+                    <div class="nk-block-between">
+                        <div class="nk-block-head nk-block-head-lg">
+                            <div class="nk-block-between-md g-4">
+                                <div class="nk-block-head-content">
+                                   
+                                    <h2 class="nk-block-title fw-normal">Welcome,
+                                    {% if user.is_authenticated %}
+                                        {% if my_business_profile %}
+                                            {% for b in my_business_profile %}
+                                                {% if b.active %}
+                                                    {{ b.business_name }}
+                                                {% endif %}
+                                            {% endfor %}
+                                        {% endif %}
+                                    {% endif %}
+                                        </h2>
+                                    <div class="nk-block-des">
+                                        <p>Welcome to our dashboard. Manage your account and your subscriptions.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div><!-- .nk-block-head -->
+                      
+                    </div><!-- .nk-block-between -->
+                </div><!-- .nk-block-head -->
+                <div class="nk-block">
+                    <div class="row g-gs">
+                        <div class="col-xxl-3 col-sm-6">
+                            <div class="card">
+                                <div class="nk-ecwg nk-ecwg6">
+                                    <div class="card-inner">
+                                        <div class="card-title-group">
+                                            <div class="card-title">
+                                                <h6 class="title">Total Sales Amount</h6>
+                                            </div>
+                                        </div>
+                                        <div class="data">
+                                            <div class="data-group">
+                                                <div class="amount">{{total_sale | intcomma }} {{ request.user.default_currency_id }}</div>
+                                               
+                                            </div>
+                                            <div class="info"><span>all time</span></div>
+                                        </div>
+                                    </div><!-- .card-inner -->
+                                </div><!-- .nk-ecwg -->
+                            </div><!-- .card -->
+                        </div><!-- .col -->
+                        <div class="col-xxl-3 col-sm-6">
+                            <div class="card">
+                                <div class="nk-ecwg nk-ecwg6">
+                                    <div class="card-inner">
+                                        <div class="card-title-group">
+                                            <div class="card-title">
+                                                <h6 class="title">Daily Sales Amount</h6>
+                                            </div>
+                                        </div>
+                                        <div class="data">
+                                            <div class="data-group">
+                                                <div class="amount">{{ daily_total_sale | intcomma }}</div>
+                                               
+                                            </div>
+                                            <div class="info"><span class="change up text-danger">{{sale_percentage}}%</span><span> vs. yesterday</span></div>
+                                        </div>
+                                    </div><!-- .card-inner -->
+                                </div><!-- .nk-ecwg -->
+                            </div><!-- .card -->
+                        </div><!-- .col -->
+                        <div class="col-xxl-3 col-sm-6">
+                            <div class="card">
+                                <div class="nk-ecwg nk-ecwg6">
+                                    <div class="card-inner">
+                                        <div class="card-title-group">
+                                            <div class="card-title">
+                                                <h6 class="title">Total Sale Count</h6>
+                                            </div>
+                                        </div>
+                                        <div class="data">
+                                            <div class="data-group">
+                                                <div class="amount">{{ order_count }}</div>
+                                               
+                                            </div>
+                                            <div class="info"><span class="change up text-danger"><span>All completed sales</span></div>
+                                        </div>
+                                    </div><!-- .card-inner -->
+                                </div><!-- .nk-ecwg -->
+                            </div><!-- .card -->
+                        </div><!-- .col -->
+                        <div class="col-xxl-3 col-sm-6">
+                            <div class="card">
+                                <div class="nk-ecwg nk-ecwg6">
+                                    <div class="card-inner">
+                                        <div class="card-title-group">
+                                            <div class="card-title">
+                                                <h6 class="title">Today Sale Count</h6>
+                                            </div>
+                                        </div>
+                                        <div class="data">
+                                            <div class="data-group">
+                                                <div class="amount">{{ daily_count }}</div>
+                                               
+                                            </div>
+                                            <div class="info"><span class="change up text-danger">{{sale_percentage}}%</span><span> vs. yesterday</span></div>
+                                        </div>
+                                    </div><!-- .card-inner -->
+                                </div><!-- .nk-ecwg -->
+                            </div><!-- .card -->
+                        </div><!-- .col -->
+                        <div class="col-xxl-9">
+                            <div class="card card-full">
+                                <div class="card-inner">
+                                    <div class="card-title-group">
+                                        <div class="card-title">
+                                            <h6 class="title">Recent Orders</h6>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="nk-tb-list mt-n2">
+                                    <div class="nk-tb-item nk-tb-head">
+                                        <div class="nk-tb-col"><span>Order No.</span></div>
+                                        <div class="nk-tb-col tb-col-sm"><span>Worker</span></div>
+                                        <div class="nk-tb-col tb-col-md"><span>Date</span></div>
+                                        <div class="nk-tb-col"><span>Amount</span></div>
+                                        <div class="nk-tb-col"><span class="d-none d-sm-inline">Payment Method</span></div>
+                                    </div>
+                                    {% for s in recent_sales %}
+
+                                    <div class="nk-tb-item">
+                                        <div class="nk-tb-col">
+                                            <span class="tb-lead"><a href="{% url 'sale_details' s.order_number %}">{{ s.order_number }}</a></span>
+                                        </div>
+                                        <div class="nk-tb-col tb-col-sm">
+                                            <div class="user-card">
+                                                <div class="user-avatar sm bg-purple-dim">
+                                                    <img src="https://test-server-space.nyc3.digitaloceanspaces.com/kroon-kiosk-test-static/3135715.png" alt="" srcset="">
+                                                </div>
+                                                <div class="user-name">
+                                                    <span class="tb-lead">{{ s.worker | title }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="nk-tb-col tb-col-md">
+                                            <span class="tb-sub">{{ s.created_date }}</span>
+                                        </div>
+                                        <div class="nk-tb-col">
+                                            <span class="tb-sub tb-amount">{{ s.order_total | intcomma }} <span>{{ request.user.default_currency_id }}</span></span>
+                                        </div>
+                                        <div class="nk-tb-col">
+                                            <span class="badge badge-dot badge-dot-xs bg-success">{{ s.payment.payment_method | title }}</span>
+                                        </div>
+                                    </div>
+
+                                    {% endfor %}
+                                   
+                                </div>
+                            </div><!-- .card -->
+                        </div>
+                       
+                        <div class="col-xxl-3 col-md-6">
+                            <div class="card h-100">
+                                <div class="card-inner">
+                                    <div class="card-title-group mb-2">
+                                        <div class="card-title">
+                                            <h6 class="title">Store Statistics</h6>
+                                        </div>
+                                    </div>
+                                    <ul class="nk-store-statistics">
+                                        <li class="item">
+                                            <div class="info">
+                                                <div class="title">Sales</div>
+                                                <div class="count">{{ order_count }}</div>
+                                            </div>
+                                            <em class="icon bg-primary-dim ni ni-bag"></em>
+                                        </li>
+                                        <li class="item">
+                                            <div class="info">
+                                                
+                                                <div class="title">Workers </div>
+                                                <div class="count">{{ worker_count }} </div>
+                                            </div>
+                                            <em class="icon bg-info-dim ni ni-users"></em>
+                                        </li>
+                                        <li class="item">
+                                            <div class="info">
+                                                <div class="title">Products</div>
+                                                <div class="count">{{ product_count }}</div>
+                                            </div>
+                                            <em class="icon bg-pink-dim ni ni-box"></em>
+                                        </li>
+                                        <li class="item">
+                                            <div class="info">
+                                                <div class="title">Categories</div>
+                                                <div class="count">{{ category_count }}</div>
+                                            </div>
+                                            <em class="icon bg-purple-dim ni ni-server"></em>
+                                        </li>
+                                    </ul>
+                                </div><!-- .card-inner -->
+                            </div><!-- .card -->
+                        </div><!-- .col -->
+                       
+                    </div><!-- .row -->
+                </div><!-- .nk-block -->
+            </div>
+        </div>
+    </div>
+</div>
+<!-- content @e -->
+{% endblock %}

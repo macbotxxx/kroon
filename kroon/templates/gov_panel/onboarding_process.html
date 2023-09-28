@@ -1,0 +1,95 @@
+{% extends "gov_panel/base.html" %}
+{% load static humanize %}
+{% load i18n crispy_forms_tags %}
+ 
+{% block content %}
+                <!-- content @s -->
+                <div class="nk-content ">
+                    <div class="container-fluid">
+                        <div class="nk-content-inner">
+                            <div class="nk-content-body">
+                                <div class="components-preview wide-md mx-auto">
+                                    <div class="nk-block-head nk-block-head-lg wide-sm">
+                                        <div class="nk-block-head-content">
+                                           
+                                            <h2 class="nk-block-title fw-normal">Merchants Onboarding Process</h2>
+                                            <div class="nk-block-des">
+                                                <p class="lead">This shows the merchants onbaording progress , Kroon Kiosk gives the ability to process a large amount of merchants registeration , which is been submitted for process</p>
+                                            </div>
+                                        </div>
+                                    </div><!-- nk-block-head -->
+                                    <div class="nk-block nk-block-lg">
+                                        <div class="nk-block-head">
+                                            <div class="nk-block-head-content">
+                                                <h4 class="nk-block-title">Onboarding List</h4>
+                                               
+                                            </div>
+                                        </div>
+                                        <div class="card card-bordered card-preview">
+                                            <table class="table table-tranx">
+                                                <thead>
+                                                    <tr class="tb-tnx-head">
+                                                       
+                                                        <th class="tb-tnx-info">
+                                                            <span class="tb-tnx-desc d-none d-sm-inline-block">
+                                                                <span>File Name</span>
+                                                            </span>
+                                                            <span class="tb-tnx-date d-md-inline-block d-none">
+                                                                <span class="d-md-none">Date</span>
+                                                                <span class="d-none d-md-block">
+                                                                    <span>Submitted Date </span>
+                                                                    <span>Completed Date</span>
+                                                                </span>
+                                                            </span>
+                                                        </th>
+                                                        <th class="tb-tnx-amount is-alt">
+                                                            <span class="tb-tnx-total">Onboarding Completed</span>
+                                                            <span class="tb-tnx-status d-none d-md-inline-block">Status</span>
+                                                        </th>
+                                                        
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {% for i in progress_list %}
+                                                    <tr class="tb-tnx-item">
+                                                       
+                                                        <td class="tb-tnx-info">
+                                                            <div class="tb-tnx-desc">
+                                                                <span class="title">{{i.on_boarding_user_file | title }}</span>
+                                                            </div>
+                                                            <div class="tb-tnx-date">
+                                                                <span class="date">{{i.created_date}}</span>
+                                                                <span class="date">{{i.on_boarding_complete_date}}</span>
+                                                            </div>
+                                                        </td>
+                                                        <td class="tb-tnx-amount is-alt">
+                                                            <div class="tb-tnx-total">
+                                                                <span class="amount">{{i.on_boarding_complete}}</span>
+                                                            </div>
+                                                            <div class="tb-tnx-status">
+                                                                <span class="badge badge-dot bg-warning">
+                                                                {% if i.on_boarding_complete %}
+                                                                    Completed
+                                                                {% else %}
+                                                                    Queued
+                                                                {% endif %}
+                                                                </span>
+                                                            </div>
+                                                        </td>
+                                                        
+                                                    </tr>
+                                                    {% endfor %}
+                                                   
+                                                </tbody>
+                                            </table>
+                                        </div><!-- .card-preview -->
+                                    </div><!-- nk-block -->
+                                   
+                                </div><!-- .components-preview -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- content @e -->
+{% endblock  %}
+              

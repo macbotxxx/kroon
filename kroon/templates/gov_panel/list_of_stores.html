@@ -1,0 +1,422 @@
+{% extends "gov_panel/base.html" %}
+{% load static humanize %}
+{% load i18n crispy_forms_tags %}
+ 
+{% block content %}
+            <!-- content @s -->
+            <div class="nk-content ">
+                <div class="container-fluid">
+                    <div class="nk-content-inner">
+                        <div class="nk-content-body">
+                            <div class="nk-block-head nk-block-head-sm">
+                                <div class="nk-block-between">
+                                    <div class="nk-block-head-content">
+                                        <h3 class="nk-block-title page-title">{{ qs.province | title}} Merchants Store Lists</h3>
+                                        <div class="nk-block-des text-soft">
+                                            <p>Total of {{user_count | intcomma }} Stores.</p>
+                                        </div>
+                                    </div>
+                                </div><!-- .nk-block-between -->
+                                {% if request.user.country_of_residence.iso2 == "NG" %}
+                                       
+                                <div class="col-lg-6 col-xxl-12">
+                                    <div class="row g-gs">
+                                        <div class="col-xxl-3 col-sm-6">
+                                            <div class="card card-bordered">
+                                                <div class="card-inner">
+                                                    <div class="card-title-group align-start mb-2">
+                                                        <div class="card-title">
+                                                            <h6 class="title">Total Other MOU Business</h6>
+                                                        </div>
+                                                        <div class="card-tools">
+                                                            <em class="card-hint icon ni ni-help-fill" data-bs-toggle="tooltip" data-bs-placement="left" title="Total active businesses that are registered in Nigeria "></em>
+                                                        </div>
+                                                    </div>
+                                                    <div class="align-end flex-sm-wrap g-4 flex-md-nowrap">
+                                                        <div class="nk-sale-data">
+                                                            <span class="amount">{{ nigerian_users | intcomma }} </span>
+                                                            <span class="sub-title"><span class="change down text-danger"></span>Total count of all merchants </span>
+                                                        </div>
+                                                        <div class="nk-sales-ck">
+                                                            
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div><!-- .card -->
+                                        </div><!-- .col -->
+                                        <div class="col-xxl-3 col-sm-6">
+                                            <div class="card card-bordered">
+                                                <div class="card-inner">
+                                                    <div class="card-title-group align-start mb-2">
+                                                        <div class="card-title">
+                                                            <h6 class="title">NASME Registered Merchants  </h6>
+                                                        </div>
+                                                        <div class="card-tools">
+                                                            <em class="card-hint icon ni ni-help-fill" data-bs-toggle="tooltip" data-bs-placement="left" title="this shows the total merchants that is registered with NASME or nay government Organizations "></em>
+                                                        </div>
+                                                    </div>
+                                                    <div class="align-end flex-sm-wrap g-4 flex-md-nowrap">
+                                                        <div class="nk-sale-data">
+                                                            <span class="amount">{{user_count | intcomma }}</span>
+                                                            <span class="sub-title"><span class="change up text-success"></span>Total Merchants Registered With Government </span>
+                                                        </div>
+                                                        <div class="nk-sales-ck">
+                                                        
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div><!-- .card -->
+                                        </div><!-- .col -->
+                                        <div class="col-xxl-3 col-sm-6">
+                                            <div class="card card-bordered">
+                                                <div class="card-inner">
+                                                    <div class="card-title-group align-start mb-2">
+                                                        <div class="card-title">
+                                                            <h6 class="title">Gender Related</h6>
+                                                        </div>
+                                                        <div class="card-tools">
+                                                            <em class="card-hint icon ni ni-help-fill" data-bs-toggle="tooltip" data-bs-placement="left" title="this shows the total numbers of merchants base on gender related "></em>
+                                                        </div>
+                                                    </div>
+                                                    <div class="align-end flex-sm-wrap g-4 flex-md-nowrap">
+                                                        <div class="nk-sale-data">
+                                                            <span class="amount">Male {{country_gender_male}} / Female {{country_gender_female}}</span>
+                                                            <span class="sub-title"><span class="change up text-success"></span>Total Merchants base on gender </span>
+                                                        </div>
+                                                        <div class="nk-sales-ck">
+                                                        
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div><!-- .card -->
+                                        </div><!-- .col -->
+                                        <div class="col-xxl-3 col-sm-6">
+                                            <div class="card card-bordered">
+                                                <div class="card-inner">
+                                                    <div class="card-title-group align-start mb-2">
+                                                        <div class="card-title">
+                                                            <h6 class="title">Total Revenue </h6>
+                                                        </div>
+                                                        <div class="card-tools">
+                                                            <em class="card-hint icon ni ni-help-fill" data-bs-toggle="tooltip" data-bs-placement="left" title="this shoews the total revenue of merchants registered under the Nigerian government Organizations "></em>
+                                                        </div>
+                                                    </div>
+                                                    <div class="align-end flex-sm-wrap g-4 flex-md-nowrap">
+                                                        <div class="nk-sale-data">
+                                                            <span class="amount">{{ total_revenue | intcomma }} {{ currency }}</span>
+                                                            <span class="sub-title"><span class="change up text-success"></span>Total Revenue Generated</span>
+                                                        </div>
+                                                        <div class="nk-sales-ck">
+                                                        
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div><!-- .card -->
+                                        </div><!-- .col -->
+                                    </div><!-- .row -->
+                                </div><!-- .col -->
+
+                            {% endif %}
+                            </div><!-- .nk-block-head -->
+                            <div class="nk-block">
+                                <div class="card card-bordered card-stretch">
+                                    <div class="card-inner-group">
+                                        <div class="card-inner position-relative card-tools-toggle">
+                                            <div class="card-title-group">
+                                                <form method="get" class="col-md-6" >
+
+                                                    {{ filters_store.form | crispy }}
+                                                    <input type="submit" class="form-control btn-secondary"/>
+                                                </form>
+                                             <div class="card-tools">
+                                                
+                                                    <div class="form-inline flex-nowrap gx-3">
+                                                        <div class="form-wrap w-150px">
+                                                            
+                                                        </div>
+                                                        
+                                                    </div>
+                                                </div>
+                                                <div class="card-tools me-n1">
+                                                    <ul class="btn-toolbar gx-1">
+                                                        <!-- <li>
+                                                            <a href="#" class="btn btn-icon search-toggle toggle-search" data-target="search"><em class="icon ni ni-search"></em></a>
+                                                        </li> -->
+                                                        <!-- <li class="btn-toolbar-sep"></li> -->
+                                                        <li>
+                                                            <div class="toggle-wrap">
+                                                                <!-- <a href="#" class="btn btn-icon btn-trigger toggle" data-target="cardTools"><em class="icon ni ni-menu-right"></em></a> -->
+                                                                <div class="toggle-content" data-content="cardTools">
+                                                                    <ul class="btn-toolbar gx-1">
+                                                                        <!-- <li class="toggle-close">
+                                                                            <a href="#" class="btn btn-icon btn-trigger toggle" data-target="cardTools"><em class="icon ni ni-arrow-left"></em></a>
+                                                                        </li> -->
+                                                                        <li>
+                                                                            <div class="dropdown">
+                                                                                <!-- <a href="#" class="btn btn-trigger btn-icon dropdown-toggle" data-bs-toggle="dropdown">
+                                                                                    <div class="dot dot-primary"></div>
+                                                                                    <em class="icon ni ni-filter-alt"></em>
+                                                                                </a> -->
+                                                                                <div class="filter-wg dropdown-menu dropdown-menu-xl dropdown-menu-end">
+                                                                                    <div class="dropdown-head">
+                                                                                        <span class="sub-title dropdown-title">Filter Users</span>
+                                                                                        <div class="dropdown">
+                                                                                            <a href="#" class="btn btn-sm btn-icon">
+                                                                                                <em class="icon ni ni-more-h"></em>
+                                                                                            </a>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="dropdown-body dropdown-body-rg">
+                                                                                        <div class="row gx-6 gy-3">
+                                                                                            <div class="col-6">
+                                                                                                <div class="custom-control custom-control-sm custom-checkbox">
+                                                                                                    <input type="checkbox" class="custom-control-input" id="hasBalance">
+                                                                                                    <label class="custom-control-label" for="hasBalance"> Have Balance</label>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <div class="col-6">
+                                                                                                <div class="custom-control custom-control-sm custom-checkbox">
+                                                                                                    <input type="checkbox" class="custom-control-input" id="hasKYC">
+                                                                                                    <label class="custom-control-label" for="hasKYC"> KYC Verified</label>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <div class="col-6">
+                                                                                                <div class="form-group">
+                                                                                                    <label class="overline-title overline-title-alt">Role</label>
+                                                                                                    <select class="form-select js-select2">
+                                                                                                        <option value="any">Any Role</option>
+                                                                                                        <option value="investor">Investor</option>
+                                                                                                        <option value="seller">Seller</option>
+                                                                                                        <option value="buyer">Buyer</option>
+                                                                                                    </select>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <div class="col-6">
+                                                                                                <div class="form-group">
+                                                                                                    <label class="overline-title overline-title-alt">Status</label>
+                                                                                                    <select class="form-select js-select2">
+                                                                                                        <option value="any">Any Status</option>
+                                                                                                        <option value="active">Active</option>
+                                                                                                        <option value="pending">Pending</option>
+                                                                                                        <option value="suspend">Suspend</option>
+                                                                                                        <option value="deleted">Deleted</option>
+                                                                                                    </select>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <div class="col-12">
+                                                                                                <div class="form-group">
+                                                                                                    <button type="button" class="btn btn-secondary">Filter</button>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="dropdown-foot between">
+                                                                                        <a class="clickable" href="#">Reset Filter</a>
+                                                                                        <a href="#">Save Filter</a>
+                                                                                    </div>
+                                                                                </div><!-- .filter-wg -->
+                                                                            </div><!-- .dropdown -->
+                                                                        </li><!-- li -->
+                                                                        <li>
+                                                                            <div class="dropdown">
+                                                                                <!-- <a href="#" class="btn btn-trigger btn-icon dropdown-toggle" data-bs-toggle="dropdown">
+                                                                                    <em class="icon ni ni-setting"></em>
+                                                                                </a> -->
+                                                                                <div class="dropdown-menu dropdown-menu-xs dropdown-menu-end">
+                                                                                    <!-- <ul class="link-check">
+                                                                                        <li><span>Show</span></li>
+                                                                                        <li class="active"><a href="#">10</a></li>
+                                                                                        <li><a href="#">20</a></li>
+                                                                                        <li><a href="#">50</a></li>
+                                                                                    </ul> -->
+                                                                                    <!-- <ul class="link-check">
+                                                                                        <li><span>Order</span></li>
+                                                                                        <li class="active"><a href="#">DESC</a></li>
+                                                                                        <li><a href="#">ASC</a></li>
+                                                                                    </ul> -->
+                                                                                </div>
+                                                                            </div><!-- .dropdown -->
+                                                                        </li><!-- li -->
+                                                                    </ul><!-- .btn-toolbar -->
+                                                                </div><!-- .toggle-content -->
+                                                            </div><!-- .toggle-wrap -->
+                                                        </li><!-- li -->
+                                                    </ul><!-- .btn-toolbar -->
+                                                </div>
+                                            </div><!-- .card-title-group -->
+                                            <div class="card-search search-wrap" data-search="search">
+                                                <div class="card-body">
+                                                    <!-- <div class="search-content">
+                                                        <a href="#" class="search-back btn btn-icon toggle-search" data-target="search"><em class="icon ni ni-arrow-left"></em></a>
+                                                        <input type="text" class="form-control border-transparent form-focus-none" placeholder="Search by user or email">
+                                                        <button class="search-submit btn btn-icon"><em class="icon ni ni-search"></em></button>
+                                                    </div> -->
+                                                    
+                                                </div>
+                                            </div><!-- .card-search -->
+                                        </div><!-- .card-inner -->
+                                        <div class="card-inner p-0">
+                                            <div class="nk-tb-list nk-tb-ulist is-compact">
+                                                <div class="nk-tb-item nk-tb-head">
+                                                   
+                                                    <div class="nk-tb-col"><span class="sub-text">Business Name</span></div>
+                                                    <div class="nk-tb-col tb-col-md"><span class="sub-text">Business info</span></div>
+                                                    <div class="nk-tb-col tb-col-sm"><span class="sub-text">Location</span></div>
+                                                    <div class="nk-tb-col tb-col-md"><span class="sub-text">Business Type</span></div>
+                                                    <div class="nk-tb-col tb-col-xxl"><span class="sub-text"> Created Date</span></div>
+                                                   
+                                                    <div class="nk-tb-col tb-col-xxl"><span class="sub-text">On Boarding Date</span></div>
+                                                    <div class="nk-tb-col"><span class="sub-text">Status</span></div>
+                                                    <!-- <div class="nk-tb-col nk-tb-col-tools text-end">
+                                                        <div class="dropdown">
+                                                            <a href="#" class="btn btn-xs btn-outline-light btn-icon dropdown-toggle" data-bs-toggle="dropdown" data-offset="0,5"><em class="icon ni ni-plus"></em></a>
+                                                            <div class="dropdown-menu dropdown-menu-xs dropdown-menu-end">
+                                                                <ul class="link-tidy sm no-bdr">
+                                                                    <li>
+                                                                        <div class="custom-control custom-control-sm custom-checkbox">
+                                                                            <input type="checkbox" class="custom-control-input" checked="" id="bl">
+                                                                            <label class="custom-control-label" for="bl">Balance</label>
+                                                                        </div>
+                                                                    </li>
+                                                                    <li>
+                                                                        <div class="custom-control custom-control-sm custom-checkbox">
+                                                                            <input type="checkbox" class="custom-control-input" checked="" id="ph">
+                                                                            <label class="custom-control-label" for="ph">Phone</label>
+                                                                        </div>
+                                                                    </li>
+                                                                    <li>
+                                                                        <div class="custom-control custom-control-sm custom-checkbox">
+                                                                            <input type="checkbox" class="custom-control-input" id="vri">
+                                                                            <label class="custom-control-label" for="vri">Verified</label>
+                                                                        </div>
+                                                                    </li>
+                                                                    <li>
+                                                                        <div class="custom-control custom-control-sm custom-checkbox">
+                                                                            <input type="checkbox" class="custom-control-input" id="st">
+                                                                            <label class="custom-control-label" for="st">Status</label>
+                                                                        </div>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                    </div> -->
+                                                </div><!-- .nk-tb-item -->
+                                                {% for u in all_gov_stores %}
+                                               
+                                                <div class="nk-tb-item">
+                                                    <!-- <div class="nk-tb-col nk-tb-col-check">
+                                                        <div class="custom-control custom-control-sm custom-checkbox notext">
+                                                            <input type="checkbox" class="custom-control-input" id="uid2">
+                                                            <label class="custom-control-label" for="uid2"></label>
+                                                        </div>
+                                                    </div> -->
+                                                  
+                                                   
+                                                    <div class="nk-tb-col">
+                                                        <div class="user-card">
+                                                            <div class="user-avatar sm bg-light">
+                                                                <div class="user-avatar sm bg-success-dim">
+                                                                    <span> {% if u.business_logo %} <img src="{{u.business_logo.url}} " alt="" srcset=""> {% endif %} </span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="user-name">
+                                                                <span class="tb-lead">{{ u.business_name | title }}</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                   
+                                                    <div class="nk-tb-col tb-col-sm">
+                                                        <span class="tb-lead">{{ u.user.name | title }}</span>
+                                                        <span class="sub-text">{{ u.user.email }}</span>
+                                                        <span class="sub-text">{{ u.business_contact_number }}</span>
+                                                    </div>
+                                                    <div class="nk-tb-col tb-col-lg">
+                                                        <span>{{ u.user.country_of_residence }}</span>
+                                                        <span class="sub-text">{{ u.user.country_province }}</span>
+                                                    </div>
+                                                    <div class="nk-tb-col tb-col-lg">
+                                                        <ul class="list-status">
+                                                            <li> <span>{{ u.business_type | title }}</span></li>
+                                                        </ul>
+                                                    </div>
+                                                    <div class="nk-tb-col tb-col-lg">
+                                                        <ul class="list-status">
+                                                            <li> <span>{{u.created_date}}</span></li>
+                                                        </ul>
+                                                    </div>
+                                                    <!-- <div class="nk-tb-col">
+                                                        <span class="tb-status text-info">{{u.workers.count}}</span>
+                                                    </div> -->
+                                                    <div class="nk-tb-col tb-col-lg">
+                                                        <ul class="list-status">
+                                                            <li> <span>{{u.created_date}}</span></li>
+                                                        </ul>
+                                                    </div>
+                                                    <div class="nk-tb-col">
+                                                        {% if u.active %}
+                                                        <span class="tb-status text-info">Active</span>
+                                                        {% else %}
+                                                        <span class="tb-status text-info">Inactive</span>
+                                                        {% endif %}
+                                                    </div>
+                                                    <div class="nk-tb-col nk-tb-col-tools">
+                                                        <ul class="nk-tb-actions gx-2">
+                                                            <!-- <li class="nk-tb-action-hidden">
+                                                                <a href="#" class="btn btn-sm btn-icon btn-trigger" data-bs-toggle="tooltip" data-bs-placement="top" title="Send Email">
+                                                                    <em class="icon ni ni-mail-fill"></em>
+                                                                </a>
+                                                            </li> -->
+                                                            <li>
+                                                                <div class="drodown">
+                                                                    <a href="#" class="btn btn-sm btn-icon btn-trigger dropdown-toggle" data-bs-toggle="dropdown"><em class="icon ni ni-more-h"></em></a>
+                                                                    <div class="dropdown-menu dropdown-menu-end">
+                                                                        <ul class="link-list-opt no-bdr">
+                                                                            <li><a href="{% url 'gov_store_details' u.id %}"><em class="icon ni ni-eye"></em><span>View Details</span></a></li>
+                                                                           
+                                                                           
+                                                                        </ul>
+                                                                    </div>
+                                                                </div>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div><!-- .nk-tb-item -->
+                                                {% endfor %}
+                                               
+                                            </div><!-- .nk-tb-list -->
+                                        </div><!-- .card-inner -->
+                                        <div class="card-inner">
+                                            <div class="nk-block-between-md g-3">
+                                                <div class="card-inner">
+                                                    <ul class="pagination justify-content-center justify-content-md-start">
+                                                        {% if all_gov_stores.has_previous %}
+                                                        <li class="page-item"><a class="page-link" href="?page={{ all_gov_stores.previous_page_number }}">Prev</a></li>
+                                                        {% endif %}
+                                                        
+                                                        {%for num in all_gov_stores.paginator.page_range %}
+                                                        {%if all_gov_stores.number == num %}
+                                                        <li class="page-item active"><a class="page-link" href="?page={{num}}">{{num}}</a></li>
+                                                        {% elif num > all_gov_stores.number|add:'-3' and num < all_gov_stores.number|add:'3' %}
+                                                        <li class="page-item"><a class="page-link" href="?page={{num}}">{{num}}</a></li>
+                                                        {%endif%}
+                                                        {%endfor%}
+                    
+                                                       {% if all_gov_stores.has_next %}
+                                                        <li class="page-item"><a class="page-link" href="?page={{all_gov_stores.next_page_number }}">Next</a></li>
+                                                        {% endif %}
+                                                    </ul><!-- .pagination -->
+                                                </div><!-- .card-inner -->
+                                               
+                                            </div><!-- .nk-block-between -->
+                                        </div>
+                                    </div><!-- .card-inner-group -->
+                                </div><!-- .card -->
+                            </div><!-- .nk-block -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- content @e -->
+{% endblock content %}
+
+              

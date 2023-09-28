@@ -1,0 +1,183 @@
+{% extends "marketers/base.html" %}
+{% load static humanize %}
+{% load i18n %}
+
+
+{% block content %}
+   <!-- content @s -->
+   <div class="nk-content ">
+    <div class="container-fluid">
+        <div class="nk-content-inner">
+            <div class="nk-content-body">
+                <div class="nk-block-head nk-block-head-sm">
+                    <div class="nk-block-between g-3">
+                        <div class="nk-block-head-content">
+                            <h3 class="nk-block-title page-title">User Details / <strong class="text-primary small">{{ user_details.name | title }}</strong></h3>
+                            <div class="nk-block-des text-soft">
+                                <ul class="list-inline">
+                                    <li>Wallet ID: <span class="text-base">{{ user_details.wallet_id  }}</span></li>
+                                    <li>Joined Date: <span class="text-base">{{ user_details.date_joined }}</span></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="nk-block-head-content">
+                            <button href="" onclick="history.back()" class="btn btn-outline-light bg-white d-none d-sm-inline-flex"><em class="icon ni ni-arrow-left"></em><span>Back</span></button>
+                            <a href="" onclick="history.back()" class="btn btn-icon btn-outline-light bg-white d-inline-flex d-sm-none"><em class="icon ni ni-arrow-left"></em></a>
+                        </div>
+                    </div>
+                </div><!-- .nk-block-head -->
+                <div class="nk-block">
+                    <div class="row gy-5">
+                        <div class="col-lg-5">
+                            <div class="nk-block-head">
+                                <div class="nk-block-head-content">
+                                    <h5 class="nk-block-title title">Application Info</h5>
+                                    <p>Submission date, approve date, status etc.</p>
+                                </div>
+                            </div><!-- .nk-block-head -->
+                            <div class="card card-bordered">
+                                <ul class="data-list is-compact">
+                                    <li class="data-item">
+                                        <div class="data-col">
+                                            <div class="data-label">Registered Date</div>
+                                            <div class="data-value">{{ user_details.date_joined }}</div>
+                                        </div>
+                                    </li>
+                                    <li class="data-item">
+                                        <div class="data-col">
+                                            <div class="data-label">KYC Submitted Date</div>
+                                            <div class="data-value">{{ user_details.kyc_complete_date }}</div>
+                                        </div>
+                                    </li>
+                                    <li class="data-item">
+                                        <div class="data-col">
+                                            <div class="data-label">Account Type</div>
+                                            <div class="data-value">  <span class="badge badge-dim badge-sm badge-outline-success">{{ user_details.account_type | title }}</span> </div>
+                                        </div>
+                                    </li>
+                                    <li class="data-item">
+                                        <div class="data-col">
+                                            <div class="data-label">Account Status</div>
+                                            <div class="data-value"> {%if user_details.is_active %} <span class="badge badge-dim badge-sm badge-outline-success">Active Account</span> {%else%} <span class="badge badge-dim badge-sm badge-outline-error">Deactivated Account</span> {%endif%}</div>
+                                        </div>
+                                    </li>
+                                    <li class="data-item">
+                                        <div class="data-col">
+                                            <div class="data-label">Contact Number Status</div>
+                                            <div class="data-value"> {%if user_details.contact_number_verified %} <span class="badge badge-dim badge-sm badge-outline-success">Verified</span> {%else%} <span class="badge badge-dim badge-sm badge-outline-error">Not Verified</span> {%endif%}</div>
+                                        </div>
+                                    </li>
+                                    <li class="data-item">
+                                        <div class="data-col">
+                                            <div class="data-label">KYC Status</div>
+                                            <div class="data-value">{{ user_details.kyc_status | title }}</div>
+                                        </div>
+                                    </li>
+                                    <li class="data-item">
+                                        <div class="data-col">
+                                            <div class="data-label">KYC Submitted</div>
+                                            <div class="data-value"> {%if user_details.kyc_submitted %} <span class="badge badge-dim badge-sm badge-outline-success">Submitted </span> {%else%} <span class="badge badge-dim badge-sm badge-outline-error">Not Submitted</span> {%endif%}</div>
+                                        </div>
+                                    </li>
+
+                                    <li class="data-item">
+                                        <div class="data-col">
+                                            <div class="data-label">Last Login</div>
+                                            <div class="data-value">{{ user_details.last_login }}</div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div><!-- .card -->
+
+                          
+                        </div><!-- .col -->
+                           
+                       
+                        <div class="col-lg-7">
+                            <div class="nk-block-head">
+                                <div class="nk-block-head-content">
+                                    <h5 class="nk-block-title title">Applicant Information</h5>
+                                    <p>Basic info, like name, phone, address, country etc.</p>
+                                </div>
+                            </div>
+                            <div class="card card-bordered">
+                                <ul class="data-list is-compact">
+                                    <li class="data-item">
+                                        <div class="data-col">
+                                            <div class="data-label">First Name</div>
+                                            <div class="data-value">{{ user_details.first_name |title }}</div>
+                                        </div>
+                                    </li>
+                                    <li class="data-item">
+                                        <div class="data-col">
+                                            <div class="data-label">Last Name</div>
+                                            <div class="data-value">{{ user_details.last_name | title }}</div>
+                                        </div>
+                                    </li>
+                                    <li class="data-item">
+                                        <div class="data-col">
+                                            <div class="data-label">Email Address</div>
+                                            <div class="data-value">{{ user_details.email }}</div>
+                                        </div>
+                                    </li>
+                                    <li class="data-item">
+                                        <div class="data-col">
+                                            <div class="data-label">Phone Number</div>
+                                            <div class="data-value text-soft">{{ user_details.contact_number }}</div>
+                                        </div>
+                                    </li>
+                                    <li class="data-item">
+                                        <div class="data-col">
+                                            <div class="data-label">Date of Birth</div>
+                                            <div class="data-value">{{ user_details.date_of_birth }}</div>
+                                        </div>
+                                    </li>
+                                    <li class="data-item">
+                                        <div class="data-col">
+                                            <div class="data-label">Gender</div>
+                                            <div class="data-value">{{ user_details.gender | title }}</div>
+                                        </div>
+                                    </li>
+                                    <li class="data-item">
+                                        <div class="data-col">
+                                            <div class="data-label">Country of Residence</div>
+                                            <div class="data-value">{{ user_details.country_of_residence }}</div>
+                                        </div>
+                                    </li>
+                                    <li class="data-item">
+                                        <div class="data-col">
+                                            <div class="data-label">Default Local Currency </div>
+                                            <div class="data-value text-break">{{ user_details.default_currency_id }}</div>
+                                        </div>
+                                    </li>
+                                    <li class="data-item">
+                                        <div class="data-col">
+                                            <div class="data-label">Wallet ID</div>
+                                            <div class="data-value">{{ user_details.wallet_id }}</div>
+                                        </div>
+                                    </li>
+                                   {%if user_details.account_type == 'merchant'%}
+                                    <li class="data-item">
+                                        <div class="data-col">
+                                            <div class="data-label">Business Name</div>
+                                            <div class="data-value">
+                                                <span>{{ user_details.merchant_business_name | title }}</span> 
+                                            </div>
+                                        </div>
+                                    </li>
+
+                                    {% endif %}
+                                </ul>
+                            </div>
+                        </div><!-- .col -->
+                    </div><!-- .row -->
+                </div><!-- .nk-block -->
+            </div>
+        </div>
+    </div>
+</div>
+<!-- content @e -->
+
+{% endblock %}
+
+

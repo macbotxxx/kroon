@@ -1,0 +1,113 @@
+{% load static  crispy_forms_tags %}
+
+<!DOCTYPE html>
+<html lang="zxx" class="js">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="author" content="Velvet Technologies Inc.">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Kroon Kiosk merchant dashboard helps in giving the merchant over all view on how his or her business is growiing , with a lot of benefits such as business planning and many more.">
+    <!-- Fav Icon  -->
+    <link rel="shortcut icon" href="{% static 'macbotadmin_v1/images/favicon.png' %}">
+    <!-- Page Title  -->
+    <title>Login | Merchant Dashboard</title>
+    <!-- StyleSheets  -->
+    <link rel="stylesheet" href="{% static 'macbotadmin_v1/assets/css/dashlite.css' %}">
+    <link id="skin-default" rel="stylesheet" href="{% static 'macbotadmin_v1/assets/css/theme.css' %}">
+</head>
+
+<body class="nk-body bg-white npc-default pg-auth">
+    <div class="nk-app-root">
+        <!-- main @s -->
+        <div class="nk-main ">
+            <!-- wrap @s -->
+            <div class="nk-wrap nk-wrap-nosidebar">
+                <!-- content @s -->
+                <div class="nk-content ">
+                    <div class="nk-split nk-split-page nk-split-md">
+                        <div class="nk-split-content nk-block-area nk-block-area-column nk-auth-container bg-white">
+                            <div class="absolute-top-right d-lg-none p-3 p-sm-5">
+                                <a href="#" class="toggle btn-white btn btn-icon btn-light" data-target="athPromo"><em class="icon ni ni-info"></em></a>
+                            </div>
+                            {% block content %}
+
+                           
+
+                            {% endblock %}
+                            <div class="nk-block nk-auth-footer">
+                                <div class="nk-block-between">
+                                    <ul class="nav nav-sm">
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="#">Terms & Condition</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="#">Privacy Policy</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="#">Help</a>
+                                        </li>
+                                       
+                                    </ul><!-- .nav -->
+                                </div>
+                                <div class="mt-3">
+                                    <p>&copy; 2022 Kiosk . All Rights Reserved.</p>
+                                </div>
+                            </div><!-- .nk-block -->
+                        </div><!-- .nk-split-content -->
+                        <div class="nk-split-content nk-split-stretch bg-lighter d-flex toggle-break-lg toggle-slide toggle-slide-right" data-toggle-body="true" data-content="athPromo" data-toggle-screen="lg" data-toggle-overlay="true">
+                            <div class="slider-wrap w-100 w-max-550px p-3 p-sm-5 m-auto">
+                                <div class="slider-init" data-slick='{"dots":true, "arrows":false}'>
+                                    <div class="slider-item">
+                                        <div class="nk-feature nk-feature-center">
+                                            <div class="nk-feature-img">
+                                                <img class="round" src="https://test-server-space.nyc3.digitaloceanspaces.com/kroon-kiosk-test-static/kiosk_auth_page_images/shopping.png" srcset="https://test-server-space.nyc3.digitaloceanspaces.com/kroon-kiosk-test-static/kiosk_auth_page_images/shopping.png" alt="">
+                                            </div>
+                                            <div class="nk-feature-content py-4 p-sm-5">
+                                                <h4>Easy inventory</h4>
+                                                <p>You can start to create your products easily with its user-friendly design & most completed responsive layout.</p>
+                                            </div>
+                                        </div>
+                                    </div><!-- .slider-item -->
+                                    <div class="slider-item">
+                                        <div class="nk-feature nk-feature-center">
+                                            <div class="nk-feature-img">
+                                                <img class="round" src="https://test-server-space.nyc3.digitaloceanspaces.com/kroon-kiosk-test-static/kiosk_auth_page_images/business%20plan.png" srcset="https://test-server-space.nyc3.digitaloceanspaces.com/kroon-kiosk-test-static/kiosk_auth_page_images/business%20plan.png" alt="">
+                                            </div>
+                                            <div class="nk-feature-content py-4 p-sm-5">
+                                                <h4>Business Plan With Ease</h4>
+                                                <p>You can start to create your products easily with its user-friendly design & most completed responsive layout.</p>
+                                            </div>
+                                        </div>
+                                    </div><!-- .slider-item -->
+                                    <div class="slider-item"> 
+                                        <div class="nk-feature nk-feature-center">
+                                            <div class="nk-feature-img">
+                                                <img class="round" src="https://test-server-space.nyc3.digitaloceanspaces.com/kroon-kiosk-test-static/kiosk_auth_page_images/workers.png" srcset="https://test-server-space.nyc3.digitaloceanspaces.com/kroon-kiosk-test-static/kiosk_auth_page_images/workers.png" alt="">
+                                            </div>
+                                            <div class="nk-feature-content py-4 p-sm-5">
+                                                <h4>My Workers</h4>
+                                                <p>You can start to create your products easily with its user-friendly design & most completed responsive layout.</p>
+                                            </div>
+                                        </div>
+                                    </div><!-- .slider-item -->
+                                </div><!-- .slider-init -->
+                                <div class="slider-dots"></div>
+                                <div class="slider-arrows"></div>
+                            </div><!-- .slider-wrap -->
+                        </div><!-- .nk-split-content -->
+                    </div><!-- .nk-split -->
+                </div>
+                <!-- wrap @e -->
+            </div>
+            <!-- content @e -->
+        </div>
+        <!-- main @e -->
+    </div>
+    <!-- app-root @e -->
+    <!-- JavaScript -->
+    <script src="{% static 'macbotadmin_v1/assets/js/bundle.js' %}"></script>
+    <script src="{% static 'macbotadmin_v1/assets/js/scripts.js' %}"></script>
+    <!-- select region modal -->
+  
+</html>

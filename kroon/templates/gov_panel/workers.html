@@ -1,0 +1,159 @@
+{% extends 'gov_panel/base.html' %}
+{% load static crispy_forms_tags humanize %}
+
+{% block content %}
+                <!-- content @s -->
+                <div class="nk-content ">
+                    <div class="container-fluid">
+                        <div class="nk-content-inner">
+                            <div class="nk-content-body">
+                              
+                               
+                                <div class="nk-block nk-block-lg">
+                                    <div class="nk-block-head">
+                                        <div class="nk-block-head-content">
+                                            <h4 class="title nk-block-title">All Government Worker List</h4>
+                                        
+                                        </div>
+                                    </div>
+                                    
+                                    {% if messages %}
+                                    <div class="alert alert-pro alert-primary">
+                                        <div class="alert-text">
+                                            <h6>Notification</h6>
+                                            {% for message in messages %}
+                                            <p>{{ message }}</p>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                    {% endif %}
+                                    <div class="row g-gs">
+                                        {% for i in worker %}
+                                            {% if i %}
+                                            <div class="col-sm-6 col-lg-4 col-xxl-3">
+                                                <div class="card">
+                                                    <div class="card-inner">
+                                                        <div class="team">
+                                                            
+                                                            <div class="user-card user-card-s2">
+                                                                <div class="user-avatar lg bg-primary">
+                                                                    <img src="https://test-server-space.nyc3.digitaloceanspaces.com/kroon-kiosk-test-static/3135715.png" alt="" srcset="">
+                                                                    <div class="status dot dot-lg dot-success"></div>
+                                                                </div>
+                                                                <div class="user-info">
+                                                                    <h6>{{i.name | title}}</h6>
+                                                                    <span class="sub-text">Worker</span>
+                                                                </div>
+                                                            </div>
+                                                            <ul class="team-info">
+                                                                <li><span>Join Date</span><span>{{ i.date_joined }}</span></li>
+                                                                <li><span>Contact</span><span>{{ i.contact_number }}</span></li>
+                                                                <li><span>Email</span><span>{{ i.email }}</span></li>
+                                                            </ul>
+                                                            <div class="team-view">
+                                                                <!-- <a href="{% url 'gov_remove_workers' i.email %}" class="btn btn-block btn-dim btn-danger"><span>Remove Worker</span></a> -->
+
+                                                                <button type="button" class="btn btn-block btn-dim btn-danger" data-bs-toggle="modal" data-bs-target="#modalAlert3" >Remove Worker Account</button>
+                                                            </div>
+                                                        </div><!-- .team -->
+                                                    </div><!-- .card-inner -->
+                                                </div><!-- .card -->
+                                            </div><!-- .col -->
+                                                
+
+
+                                          <!-- Modal Alert 2 -->
+                 <div class="modal fade" tabindex="-1" id="modalAlert3">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-body modal-body-lg text-center">
+                                <div class="nk-modal">
+                                  
+                                    <em class="nk-modal-icon icon icon-circle icon-circle-xxl ni ni-alert bg-danger"></em>
+                                    <h4 class="nk-modal-title">Are You Sure, You Want To Remove This  Account ?</h4> 
+                                    <div class="nk-modal-text">
+                                        <p class="lead">Removing this account will automatically remove all permissions this worker has to operate as a government worker on the Kroon Kiosk Government Dashboard . </p>
+                                        <p class="text-soft">If you need help please email us at <a href="mailto:support@mykroonapp.com">support@mykroonapp.com</a></p>
+                                    </div>
+                                   
+
+                                    <div class="nk-modal-action mt-5">
+                                        <a href="{% url 'gov_remove_workers' i.email %}" class="btn btn-lg btn-mw btn-danger" >I Agree , Remove  Government Worker</a>
+                                    </div>
+                                
+                                </div>
+                            </div><!-- .modal-body -->
+                        </div>
+                    </div>
+                </div>
+                                        <!-- content @s -->
+                                        {% else %}
+
+                                        <div class="nk-content center">
+                                            <div class="container-fluid">
+                                                <div class="nk-content-inner">
+                                                    <div class="nk-content-body">
+                                                        <div class="content-page wide-sm m-auto">
+                                                            <div class="nk-block-head nk-block-head-lg wide-xs mx-auto">
+                                                                <div class="nk-block-head-content text-center">
+                                                                    <div class="nk-block-head-sub"><span>No Gov Worker </span></div>
+                                                                    <h2 class="nk-block-title fw-normal">You dont have any worker associated with your government.</h2>
+                                                                
+                                                                </div>
+                                                            </div><!-- .nk-block-head -->
+                                                            <div class="nk-block nk-block-lg">
+                                                            
+                                                                <div class="card card-bordered">
+                                                                    <div class="card-inner">
+                                                                       
+                                                                        <div class="row g-3">
+                                                                            <div class="col-lg-10 offset-lg-3">
+                                                                                <div class="form-group mt-4">
+                                                                                    <a href="{% url 'verify_worker_email' %}"  class="btn btn-lg btn-primary">Click To Add Workers To Your Account</a>
+                                                                                    
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div><!-- card -->
+                                                            </div><!-- .nk-block -->
+                                                            
+                                                        </div><!-- .content-page -->
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- content @e -->
+                                        {% endif %}
+
+                                        {% endfor %}
+                                        
+                                    </div>
+                                </div><!-- .nk-block -->
+                            </div>
+                        </div>
+                        <br>
+                        <div class="nk-block-head-content">
+                            <div class="toggle-wrap nk-block-tools-toggle">
+                                <a href="{% url 'verify_gov_worker' %}" class="btn btn-icon btn-trigger toggle-expand me-n1" ><em class="icon ni ni-more-v"></em></a>
+                                <div class="toggle-expand-content" data-content="pageMenu">
+                                    <ul class="nk-block-tools g-3">
+                                       
+                                        <li class="nk-block-tools-opt">
+                                            <a href="{% url 'verify_gov_worker' %}" class=" btn btn-icon btn-primary d-md-none"><em class="icon ni ni-plus"></em></a>
+                                            <a href="{% url 'verify_gov_worker' %}"  class=" btn btn-primary d-none d-md-inline-flex"><em class="icon ni ni-plus"></em><span>Register More Workers </span></a>
+                                            
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div><!-- .nk-block-head-content -->
+                    </div>
+                    
+                </div>
+                <!-- content @e -->
+
+
+               
+                
+{% endblock %}

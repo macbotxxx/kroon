@@ -1,0 +1,85 @@
+{% extends "gov_panel/base.html" %}
+{% load static humanize %}
+{% load i18n crispy_forms_tags %}
+ 
+{% block content %}
+    <!-- content @s -->
+    <div class="nk-content ">
+        <div class="container-fluid">
+            <div class="nk-content-inner">
+                <div class="nk-content-body">
+                    <div class="components-preview wide-md mx-auto">
+                        <div class="nk-block-head nk-block-head-lg wide-sm">
+                            
+                            <div class="nk-block-head-content">
+                                
+                                <h2 class="nk-block-title fw-normal">On Boarding User </h2>
+                                <div class="nk-block-des">
+                                    <p class="lead">User onboarding is the process by which new users become proficient in an application. User onboarding encompasses the initial experience in the application, online or offline training, goal-setting, and the organization's customer success process.</p>
+                                </div>
+                            </div>
+                        </div><!-- .nk-block-head -->
+                       
+                        <div class="nk-block nk-block-lg">
+                            <div class="nk-block-head">
+                                <div class="nk-block-head-content">
+                                    <h4 class="title nk-block-title">Merchants Onboarding Guild</h4>
+                                    <div class="nk-block-des">
+                                        <p>Kroon Kiosk gives the ability to on-board merchants using the Kroon Kiosk Bulk Registration , this process is been handled using the CSV formating which is provided by the platform . <br> <a href="{% static 'kiosk_onboarding_format.csv' %}">CLICK TO DOWNLOAD ONBOARDING CSV FORMAT</a> </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {% if messages %}
+                            <div class="alert alert-pro alert-danger">
+                                <div class="alert-text">
+                                    <h6>Notifications</h6>
+                                    {% for message in messages %}
+                                    <p>{{ message }}</p>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            {% endif %}
+
+                            <div class="card card-bordered card-preview">
+                                <div class="card-inner">
+                                    <div class="preview-block">
+                                        <div class="row gy-4">
+                                            <div class="col-sm-12">
+                                               
+                                                <div class="form-group">
+                                                    <form method="POST" enctype="multipart/form-data">
+                                                        {% csrf_token %}
+                                                    <div class="form-control-wrap">
+                                                        <div class="form-file">
+                                                           {{ form | crispy }}
+                                                           
+                                                        </div>
+                                                    </div>
+                                                    <br>
+                                                    <button type="submit" class="btn btn-wider btn-info"><span> Click To On-Board Users </span><em class="icon ni ni-arrow-right"></em></button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                           
+                                        </div>
+                                    </div>
+                                </div>
+                            </div><!-- .card-preview -->
+                            <div class="nk-block nk-block-lg">
+                            
+                            </div>
+                           
+
+
+                        </div><!-- .nk-block -->
+                    
+                    </div><!-- .components-preview -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- content @e -->
+{% endblock content %}
+
+             

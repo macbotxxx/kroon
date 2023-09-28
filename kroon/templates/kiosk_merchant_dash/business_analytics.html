@@ -1,0 +1,110 @@
+
+      
+{% extends 'kiosk_merchant_dash/base.html' %}
+{% load static crispy_forms_tags humanize %}
+
+{% block content %}
+                <!-- content @s -->
+                <div class="nk-content ">
+                    <div class="container-fluid">
+                        <div class="nk-content-inner">
+                            <div class="nk-content-body">
+                                <div class="nk-block-head nk-block-head-sm">
+                                    <div class="nk-block-between">
+                                        <div class="nk-block-head-content">
+                                            <h3 class="nk-block-title page-title">Business Analytics - {{ request.user.merchant_business_name  }}</h3>
+                                        </div><!-- .nk-block-head-content -->
+                                        <div class="nk-block-head-content">
+                                            <div class="toggle-wrap nk-block-tools-toggle">
+                                                <a href="#" class="btn btn-icon btn-trigger toggle-expand mr-n1" data-target="pageMenu"><em class="icon ni ni-more-v"></em></a>
+                                                <div class="toggle-expand-content" data-content="pageMenu">
+                                                    <ul class="nk-block-tools g-3">
+                                                        <li class="nk-block-tools-opt"><a href="{% url 'create_business_plan' %}" class="btn btn-primary"><em class="icon ni ni-reports"></em><span>Generate Business Reports</span></a></li>
+
+                                                        <li class="nk-block-tools-opt"><a href="#" class="btn btn-primary"><em class="icon ni ni-reports"></em><span>Print Reports</span></a></li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div><!-- .nk-block-head-content -->
+                                    </div><!-- .nk-block-between -->
+                                </div><!-- .nk-block-head -->
+                              
+                               
+
+                                <div class="nk-block">
+                                    <div class="row g-gs">
+                                        <div class="col-lg-7 col-xxl-6">
+                                            <figure class="highcharts-figure">
+                                                <div id="container6"></div>
+                                               
+                                            </figure>
+                                        </div><!-- .col -->
+                                        
+                                        <div class="col-lg-7 col-xxl-6">
+                                            
+                                             {% if user_plan.plan.default_plan %}
+                                             <div class="card text-white bg-primary">
+                                                <div class="card-header center">Kiosk Plus Plan</div>
+                                                <div class="card-inner">
+                                                    <h3 class="card-title center">Kiosk Plus Plan</h3>
+                                                    <p class="card-text center">You are currently using the Basic Plan of Kroon Kiosk. Upgrade your plan to a Kiosk Plus or Kiosk Plus+
+                                                        Plan to enjoy more benefits of Kroon Kiosk</p>
+                                                </div>
+                                                <a href="{% url 'all_plans' %}" type="submit" class=" btn btn-lg btn-warning center">UPGRADE YOUR PLAN</a>
+                                            </div>
+                                             {% else %}
+
+                                                <figure class="highcharts-figure">
+                                                    <div id="container7"></div>
+                                                </figure>
+
+                                              {% endif %}
+
+                                        
+
+                                        </div><!-- .col -->
+                                       
+                                        {% if user_plan.plan.plan_name != "Kiosk Pro" %}
+
+                                        <div class="card text-white bg-primary" >
+                                            <div class="card-header center">more informtions about  Kiosk Pro </div>
+                                            <div class="card-inner">
+                                                <h3 class="card-title center">Kiosk Pro</h3>
+                                                <p class="card-text center">This feature is available to our Kiosk Plus+ users. Upgrade your plan to the Kiosk Plus+ Plan to enjoy full
+                                                    access to Kroon Kiosk.
+                                                </p>
+                                            </div>
+                                            <a href="{% url 'all_plans' %}" type="submit" class=" btn btn-lg btn-warning center">UPGRADE YOUR PLAN</a>
+                                        </div>
+
+                                        {% else %}
+                                        <div class="col-lg-7 col-xxl-6">
+                                           
+                                            <figure class="highcharts-figure">
+                                                <div id="container1"></div>
+                                            </figure>
+
+                                            
+                                        </div><!-- .col -->
+                                        <div class="col-lg-7 col-xxl-6">
+                                            <figure class="highcharts-figure">
+                                                <div id="container2"></div>
+                                                
+                                            </figure>
+                                        </div><!-- .col -->
+                                        <div class="col-lg-7 col-xxl-12">
+                                            <figure class="highcharts-figure">
+                                                <div id="container"></div>
+                                            </figure>
+                                        </div>
+                                        {% endif %}
+                                      
+                                    </div><!-- .row -->
+                                </div><!-- .nk-block -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+               
+{% endblock %}
+            

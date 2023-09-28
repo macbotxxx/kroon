@@ -1,0 +1,144 @@
+{% extends 'kiosk_merchant_dash/base.html' %}
+{% load static crispy_forms_tags humanize %}
+
+{% block content %}
+                <!-- content @s -->
+                <div class="nk-content ">
+                    <div class="container">
+                        <div class="nk-content-inner">
+                            <div class="nk-content-body">
+                                <div class="nk-block-head nk-block-head-sm">
+                                    <div class="nk-block-between g-3">
+                                        <div class="nk-block-head-content">
+                                            <h3 class="nk-block-title page-title">Choose Suitable Plan</h3>
+                                            <div class="nk-block-des text-soft">
+                                                <p>You can change your plan any time by upgrade your plan</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div><!-- .nk-block-head -->
+                                <div class="nk-block">
+                                    <div class="row g-gs">
+                                        {% for p in plans  %}
+                                       
+                                       
+                                        <div class="col-md-6 col-xxl-3">
+                                            <div class="card card-bordered pricing recommend">
+                                                {% if user_plan.plan.plan_name == p.plan_name  %}
+                                                <span class="pricing-badge badge bg-warning">Active</span>
+                                                {% endif %}
+
+
+                                                {% if p.plan_name == 'Kiosk Pro' %}
+                                                <span class="pricing-badge badge bg-primary">Recommend</span>
+                                                {% endif %}
+                                                {% if p.plan_name == 'Basic' %}
+                                                <span class="pricing-badge badge bg-danger">Default</span>
+                                                {% endif %}
+                                                <!-- Monthly Plans  -->
+                                                <div class="pricing-head">
+                                                    <div class="pricing-title">
+                                                        <h4 class="card-title title">{{ p.plan_name | title }}</h4>
+                                                        {% if p.plan_name == 'Kiosk Plus' %}
+                                                        <p class="sub-text">For Merchants with many products to sell.</p>
+                                                        {% elif p.plan_name == 'Kiosk Pro' %}
+                                                        <p class="sub-text">For the growing Small Business</p>
+                                                        <br>
+                                                        {% else %}
+                                                        <p class="sub-text">The introduction plan to the Kroon Kiosk Platform</p>
+                                                        {% endif %}
+                                                    </div>
+                                                    <div class="card-text">
+                                                        <div class="row">
+                                                            <div class="col-6">
+                                                                <span class="h4 fw-500">{{ p.plan_fee | intcomma }} {{ p.plan_default_currency }} </span>
+                                                                <span class="sub-text">Amount</span>
+                                                            </div>
+                                                            <div class="col-6">
+                                                                <span class="h4 fw-500">{{ p.plan_duration }} Days</span>
+                                                                <span class="sub-text">Duration</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                {% if  user_plan.plan.plan_name == p.plan_name and not user_plan.yearly_plan   %}
+                                                <div class="form-group">
+                                                    <a class="btn btn-lg btn-primary btn-block" type="submit">Your Current Plan</a>
+                                                </div>
+                                                {% elif p.plan_name == 'Basic'  %}
+                                                <div class="form-group">
+                                                    <a class="btn btn-lg btn-danger btn-block" type="submit">Default Plan Used</a>
+                                                </div>
+                                                {% else %}
+                                                <div class="form-group">
+                                                    <a href="{% url 'plans_details' p.id 'month' %}" class="btn btn-lg btn-warning btn-block" type="submit">Choose This Plan</a>
+                                                </div>
+
+                                                {% endif %}
+                                                <!-- Monthly Plans End Here  -->
+
+
+                                                {% if p.yearly_plan %}
+                                                <!-- Yearly Plans  -->
+
+                                                <div class="pricing-head">
+                                                    <div class="pricing-title">
+                                                        <h4 class="card-title title">{{ p.plan_name | title }}</h4>
+                                                        {% if p.plan_name == 'Kiosk Plus' %}
+                                                        <p class="sub-text">For Merchants with many products to sell.</p>
+                                                        {% else %}
+                                                        <p class="sub-text">For the growing Small Business</p>
+                                                        {% endif %}
+                                                    </div>
+                                                    <div class="card-text">
+                                                        <div class="row">
+                                                            <div class="col-6">
+                                                                <span class="h4 fw-500">{{ p.yearly_plan_fee | intcomma }} {{ p.plan_default_currency }} </span>
+                                                                <span class="sub-text">Amount</span>
+                                                            </div>
+                                                            <div class="col-6">
+                                                                <span class="h4 fw-500">{{ p.yearly_plan_duration }} Days</span>
+                                                                <span class="sub-text">Duration</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                {% if  user_plan.plan.plan_name == p.plan_name and user_plan.yearly_plan   %}
+                                                <div class="form-group">
+                                                    <a class="btn btn-lg btn-primary btn-block" type="submit">Your Current Plan</a>
+                                                </div>
+                                                {% elif p.plan_name == 'Basic'  %}
+                                                <div class="form-group">
+                                                    <a class="btn btn-lg btn-danger btn-block" type="submit">Default Plan Used</a>
+                                                </div>
+                                                {% else %}
+                                                <div class="form-group">
+                                                    <a href="{% url 'plans_details' p.id 'yearly' %}" class="btn btn-lg btn-warning btn-block" type="submit">Choose This Plan</a>
+                                                </div>
+
+                                                {% endif %}
+                                                
+                                                <!-- Yearly Plan Ends Here -->
+                                                {% endif %}
+                                                <div class="pricing-body">
+                                                    <ul class="pricing-features">
+                                                     <b> {{ p.plan_content | safe}} </b>
+                                                    </ul>
+                                                </div>
+                                               
+                                            </div>
+                                            
+                                        </div><!-- .col -->
+                                         
+                                        {% endfor %}
+
+                                    </div>
+                                </div><!-- .nk-block -->
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- content @e -->
+{% endblock %}
+               

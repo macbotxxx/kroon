@@ -1,0 +1,1086 @@
+{% load static i18n humanize %}
+
+<!DOCTYPE html>
+<html lang="zxx" class="js">
+
+<head>
+    <base href="">
+    <meta charset="utf-8">
+    <meta name="author" content="Softnio">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="A governmental panal to monitor merchants in their given province">
+    <!-- Fav Icon  -->
+    <link rel="shortcut icon" href="{% static 'gov_panel/images/favicon.png' %}">
+    <!-- Page Title  -->
+    <title>Government Panel </title>
+    <!-- StyleSheets  -->
+    <link rel="stylesheet" href="{% static 'gov_panel/assets/css/dashlite.css' %}">
+    <link id="skin-default" rel="stylesheet" href="{% static 'gov_panel/assets/css/theme.css' %}">
+  
+</head>
+
+<body class="nk-body bg-lighter npc-general has-sidebar ">
+    <div class="nk-app-root">
+        <!-- main @s -->
+        <div class="nk-main ">
+            <!-- sidebar @s -->
+            <div class="nk-sidebar nk-sidebar-fixed is-dark " data-content="sidebarMenu" style="color: yellowgreen;">
+                <div class="nk-sidebar-element nk-sidebar-head">
+                    <div class="nk-menu-trigger">
+                        <a href="#" class="nk-nav-toggle nk-quick-nav-icon d-xl-none" data-target="sidebarMenu"><em class="icon ni ni-arrow-left"></em></a>
+                        <a href="#" class="nk-nav-compact nk-quick-nav-icon d-none d-xl-inline-flex" data-target="sidebarMenu"><em class="icon ni ni-menu"></em></a>
+                    </div>
+                    <div class="nk-sidebar-brand">
+                        <a href="{% url 'gov_panel_home' %}" class="logo-link nk-sidebar-logo">
+                            <img class="logo-light logo-img" src="https://test-server-space.nyc3.digitaloceanspaces.com/kroon-kiosk-test-static/kiosk_auth_page_images/Kroon%20Kiosk%20logo.png" srcset="https://test-server-space.nyc3.digitaloceanspaces.com/kroon-kiosk-test-static/kiosk_auth_page_images/Kroon%20Kiosk%20logo.png 2x" alt="logo">
+                            <img class="logo-dark logo-img" src="https://test-server-space.nyc3.digitaloceanspaces.com/kroon-kiosk-test-static/kiosk_auth_page_images/Kroon%20Kiosk%20logo.png" srcset="https://test-server-space.nyc3.digitaloceanspaces.com/kroon-kiosk-test-static/kiosk_auth_page_images/Kroon%20Kiosk%20logo.png 2x" alt="logo-dark">
+                        </a>
+                    </div>
+                </div><!-- .nk-sidebar-element -->
+                <div class="nk-sidebar-element nk-sidebar-body">
+                    <div class="nk-sidebar-content">
+                        <div class="nk-sidebar-menu" data-simplebar>
+                            <ul class="nk-menu">
+                                <li class="nk-menu-heading">
+                                    <h6 class="overline-title text-primary-alt">Dashboards</h6>
+                                </li><!-- .nk-menu-item -->
+                                <li class="nk-menu-item">
+                                    <a href="{% url 'gov_panel_home' %}" class="nk-menu-link">
+                                        <span class="nk-menu-icon"><em class="icon ni ni-home"></em></span>
+                                        <span class="nk-menu-text">Dashboard</span>
+                                    </a>
+                                </li><!-- .nk-menu-item -->
+                                
+                                {% if request.user.country_of_residence.iso2 == "NG" %}
+                                        
+                                {% else %}
+                                <li class="nk-menu-heading">
+                                    <h6 class="overline-title text-primary-alt">Onboarding and Notification </h6>
+                                </li><!-- .nk-menu-item -->
+                                <li class="nk-menu-item has-sub">
+                                    <a href="#" class="nk-menu-link nk-menu-toggle">
+                                        <span class="nk-menu-icon"><em class="icon ni ni-user-add"></em></span>
+                                       
+                                        <span class="nk-menu-text">Onboarding </span>
+
+                                    </a>
+                                    <ul class="nk-menu-sub">
+                                       
+                                        <li class="nk-menu-item">
+                                            <a href="{% url 'gov_users_on_boarding' %}" class="nk-menu-link"><span class="nk-menu-text">Onboard Merchants</span></a>
+                                        </li>
+                                        <li class="nk-menu-item">
+                                            <a href="{% url 'gov_onboarding_progess' %}" class="nk-menu-link"><span class="nk-menu-text">Onboarding Progress</span></a>
+                                        </li>
+                                       
+                                        
+                                    </ul>
+                                </li><!-- .nk-menu-item -->
+                                <li class="nk-menu-item has-sub">
+                                    <a href="#" class="nk-menu-link nk-menu-toggle">
+                                        <span class="nk-menu-icon"><em class="icon ni ni-bell"></em></span>
+                                        <span class="nk-menu-text">Notification </span>
+                                    </a>
+                                    <ul class="nk-menu-sub">
+                                       
+                                        <li class="nk-menu-item">
+                                            <a href="{% url 'gov_push_notification' %}" class="nk-menu-link"><span class="nk-menu-text">Push Notification </span></a>
+                                        </li>
+                                        <li class="nk-menu-item">
+                                            <a href="{% url 'gov_push_ads' %}" class="nk-menu-link"><span class="nk-menu-text">Push Advertisements</span></a>
+                                        </li>
+                                        <li class="nk-menu-item">
+                                            <a href="{% url 'gov_push_ads_list' %}" class="nk-menu-link"><span class="nk-menu-text">Advertisements List</span></a>
+                                        </li>
+                                       
+                                        
+                                    </ul>
+                                </li><!-- .nk-menu-item -->
+                              
+                               
+                                {% endif %}
+                             
+                               
+
+                                <li class="nk-menu-heading">
+                                    <h6 class="overline-title text-primary-alt">Merchants and Stores Report </h6>
+                                </li>
+                                 <li class="nk-menu-item">
+                                    <a href="{% url 'gov_users_list' %}" class="nk-menu-link ">
+                                        <span class="nk-menu-icon"><em class="icon ni ni-users"></em></span>
+                                        <span class="nk-menu-text">All Merchants</span>
+                                    </a>
+
+                                </li>
+                                <li class="nk-menu-item">
+                                    <a href="{% url 'gov_store_list' %}" class="nk-menu-link ">
+                                        <span class="nk-menu-icon"><em class="icon ni ni-building"></em></span>
+                                        <span class="nk-menu-text">All Stores</span>
+                                    </a>
+
+                                </li>
+                                <li class="nk-menu-item has-sub">
+                                    <a href="#" class="nk-menu-link nk-menu-toggle">
+                                        <span class="nk-menu-icon"><em class="icon ni ni-user-list"></em></span>
+                                        <span class="nk-menu-text"> Merchants By {% if state  %} State {% else %} Province {% endif %} </span>
+                                    </a>
+                                    <ul class="nk-menu-sub">
+                                       
+                                        {% for p in all_country_province %}
+                                        <li class="nk-menu-item">
+                                            <a href="{% url 'users_by_province' p.id %}" class="nk-menu-link"><span class="nk-menu-text">{{ p.province | title }} Merchants</span></a>
+                                        </li>
+                                        {% endfor %}
+                                       
+                                        
+                                    </ul>
+                                </li><!-- .nk-menu-item -->
+                               
+                                <li class="nk-menu-item has-sub">
+                                    <a href="#" class="nk-menu-link nk-menu-toggle">
+                                        <span class="nk-menu-icon"><em class="icon ni ni-building-fill"></em></span>
+                                        <span class="nk-menu-text"> Stores By {% if state  %} State {% else %} Province {% endif %} </span>
+                                    </a>
+                                    <ul class="nk-menu-sub">
+                                       
+                                        {% for p in all_country_province %}
+                                        <li class="nk-menu-item">
+                                            <a href="{% url 'store_by_province' p.id %}" class="nk-menu-link"><span class="nk-menu-text">{{ p.province | title }} Stores</span></a>
+                                        </li>
+                                        {% endfor %}
+                                       
+                                        
+                                    </ul>
+                                </li><!-- .nk-menu-item -->
+                                {% if request.user.country_of_residence.iso2 == "NG" %}
+                                <li class="nk-menu-item has-sub">
+                                    <a href="#" class="nk-menu-link nk-menu-toggle">
+                                        <span class="nk-menu-icon"><em class="icon ni ni-reports"></em></span>
+                                        <span class="nk-menu-text">NASME Organizations</span>
+                                    </a>
+                                    <ul class="nk-menu-sub">
+                                       
+                                        {% for p in nasme_orgs %}
+                                        <li class="nk-menu-item">
+                                            <a href="{% url 'nasme_users_list' p.id %}" class="nk-menu-link"><span class="nk-menu-text">{{ p.government_organization  }}</span></a>
+                                        </li>
+                                        {% endfor %}
+                                       
+                                        
+                                    </ul>
+                                </li><!-- .nk-menu-item -->
+                                {% else %}
+                                <li class="nk-menu-item has-sub">
+                                    <a href="{% url 'gov_merchant_report' %}" class="nk-menu-link ">
+                                      <!-- <a href="{% static 'gov_panel/gov_report.pdf' %}" class="nk-menu-link ">   -->
+                                      <span class="nk-menu-icon"><em class="icon ni ni-report-profit"></em></span>
+                                        <span class="nk-menu-text"> Merchants Report </span>
+                                    </a>
+                                </li><!-- .nk-menu-item -->
+                                <li class="nk-menu-item has-sub">
+                                    <a href="#" class="nk-menu-link nk-menu-toggle">
+                                        <span class="nk-menu-icon"><em class="icon ni ni-reports"></em></span>
+                                        <span class="nk-menu-text">{% if state  %} State {% else %} Province {% endif %} Reports </span>
+                                    </a>
+                                    <ul class="nk-menu-sub">
+                                       
+                                        {% for p in all_country_province %}
+                                        <li class="nk-menu-item">
+                                            <a href="{% url 'gov_province_report' p.id %}" class="nk-menu-link"><span class="nk-menu-text">{{ p.province | title }}</span></a>
+                                        </li>
+                                        {% endfor %}
+                                       
+                                        
+                                    </ul>
+                                </li><!-- .nk-menu-item -->
+                                <li class="nk-menu-item has-sub">
+                                    <!-- <a href="{% url 'national_report' %}" class="nk-menu-link "> -->
+                                      <a href="{% static 'gov_panel/gov_report.pdf' %}" class="nk-menu-link ">  
+                                      <span class="nk-menu-icon"><em class="icon ni ni-text-rich"></em></span>
+                                        <span class="nk-menu-text">Generate Report</span>
+                                    </a>
+                                 </li><!-- .nk-menu-item -->
+                                 {% endif %}
+                                {% if request.user.groups.first.name == 'Gov_Super_Admin' %}
+
+                                <li class="nk-menu-heading">
+                                    <h6 class="overline-title text-primary-alt"> Government Workers And Logs </h6>
+                                </li><!-- .nk-menu-item -->
+                                <li class="nk-menu-item has-sub">
+                                    <a href="{% url 'gov_workers' %}" class="nk-menu-link ">
+                                        <span class="nk-menu-icon"><em class="icon ni ni-user-circle"></em></span>
+                                        <span class="nk-menu-text">Government Workers</span>
+                                    </a>
+                                </li><!-- .nk-menu-item -->
+
+                                <!-- <li class="nk-menu-item has-sub">
+                                    <a href="{% url 'broswer_logs' %}" class="nk-menu-link ">
+                                        <span class="nk-menu-icon"><em class="icon ni ni-account-setting"></em></span>
+                                        <span class="nk-menu-text">Broswer Logs</span>
+                                    </a>
+                                </li>.nk-menu-item -->
+                                <li class="nk-menu-item has-sub">
+                                    <a href="{% url 'gov_actions_logs' %}" class="nk-menu-link ">
+                                        <span class="nk-menu-icon"><em class="icon ni ni-account-setting"></em></span>
+                                        <span class="nk-menu-text">Action Logs</span>
+                                    </a>
+                                </li><!-- .nk-menu-item -->
+
+                               
+                                {% endif %}
+
+
+                                 <li class="nk-menu-heading">
+                                    <h6 class="overline-title text-primary-alt"> Account Settings </h6>
+                                </li><!-- .nk-menu-item -->
+                               
+                                <li class="nk-menu-item">
+                                    <a href="{% url 'gov_account_settings' %}" class="nk-menu-link">
+                                        <span class="nk-menu-icon"><em class="icon ni ni-setting-alt-fill"></em></span>
+                                        <span class="nk-menu-text">Settings</span>
+                                    </a>
+                                </li><!-- .nk-menu-item -->
+                               
+                            </ul><!-- .nk-menu -->
+                        </div><!-- .nk-sidebar-menu -->
+                    </div><!-- .nk-sidebar-content -->
+                </div><!-- .nk-sidebar-element -->
+            </div>
+            <!-- sidebar @e -->
+            <!-- wrap @s -->
+            <div class="nk-wrap ">
+                <!-- main header @s -->
+                <div class="nk-header nk-header-fixed is-light">
+                    <div class="container-fluid">
+                        <div class="nk-header-wrap">
+                            <div class="nk-menu-trigger d-xl-none ms-n1">
+                                <a href="#" class="nk-nav-toggle nk-quick-nav-icon" data-target="sidebarMenu"><em class="icon ni ni-menu"></em></a>
+                            </div>
+                            <div class="nk-header-brand d-xl-none">
+                                <a href="{% url 'gov_panel_home' %}" class="logo-link">
+                                    <img class="logo-light logo-img" src="https://test-server-space.nyc3.digitaloceanspaces.com/kroon-kiosk-test-static/kiosk_auth_page_images/Kroon%20Kiosk%20logo.png" srcset="https://test-server-space.nyc3.digitaloceanspaces.com/kroon-kiosk-test-static/kiosk_auth_page_images/Kroon%20Kiosk%20logo.png 2x" alt="logo">
+                                    <img class="logo-dark logo-img" src="https://test-server-space.nyc3.digitaloceanspaces.com/kroon-kiosk-test-static/kiosk_auth_page_images/Kroon%20Kiosk%20logo.png" srcset="https://test-server-space.nyc3.digitaloceanspaces.com/kroon-kiosk-test-static/kiosk_auth_page_images/Kroon%20Kiosk%20logo.png 2x" alt="logo-dark">
+                                </a>
+                            </div><!-- .nk-header-brand -->
+                            <div class="nk-header-news d-none d-xl-block">
+                                <div class="nk-news-list">
+                                    <a class="nk-news-item" href="{% static 'kiosk_onboarding_format.csv' %}">
+                                        <div class="nk-news-icon">
+                                            <em class="icon ni ni-card-view"></em>
+                                        </div>
+                                        <div class="nk-news-text">
+                                            <p>Do you have the latest update onboarding CSV format? <span> A overview of our onboarding format is now available  . click to download </span></p>
+                                            <em class="icon ni ni-external"></em>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div><!-- .nk-header-news -->
+                            <div class="nk-header-tools">
+                                <ul class="nk-quick-nav">
+                                   
+                                    <li class="dropdown user-dropdown">
+                                        <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown">
+                                            <div class="user-toggle">
+                                                <div class="user-avatar sm">
+                                                    <em class="icon ni ni-user-alt"></em>
+                                                </div>
+                                                <div class="user-info d-none d-md-block">
+                                                    <div class="user-status">Government Worker</div>
+                                                    <div class="user-name dropdown-indicator">{{ request.user.name | title }}</div>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        <div class="dropdown-menu dropdown-menu-md dropdown-menu-end dropdown-menu-s1">
+                                            <div class="dropdown-inner user-card-wrap bg-lighter d-none d-md-block">
+                                                <div class="user-card">
+                                                    <div class="user-avatar">
+                                                        <span>AB</span>
+                                                    </div>
+                                                    <div class="user-info">
+                                                        <span class="lead-text">{{ request.user.name | title }}</span>
+                                                        <span class="sub-text">{{ request.user.email }}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="dropdown-inner">
+                                                <ul class="link-list">
+                                                   
+                                                    <li><a href="{% url 'gov_account_settings' %}"><em class="icon ni ni-setting-alt"></em><span>Account Setting</span></a></li>
+                                                   
+                                                   
+                                                </ul>
+                                            </div>
+                                            <div class="dropdown-inner">
+                                                <ul class="link-list">
+                                                    <li><a href="{% url 'account_logout' %}"><em class="icon ni ni-signout"></em><span>Sign out</span></a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </li><!-- .dropdown -->
+                                   
+                                </ul><!-- .nk-quick-nav -->
+                            </div><!-- .nk-header-tools -->
+                        </div><!-- .nk-header-wrap -->
+                    </div><!-- .container-fliud -->
+                </div>
+                <!-- main header @e -->
+               {% block content %}
+
+               {% endblock content %}
+
+
+              
+            </div>
+            <!-- wrap @e -->
+        </div>
+        <!-- main @e -->
+    </div>
+    <!-- app-root @e -->
+   
+    <!-- JavaScript -->
+    <script src="{% static 'gov_panel/assets/js/bundle.js' %}"></script>
+    <script src="{% static 'gov_panel/assets/js/scripts.js' %}"></script>
+    <script src="{% static 'gov_panel/assets/js/charts/chart-crm.js' %}"></script>
+    <script src="{% static 'gov_panel/assets/js/charts/gd-default.js' %}"></script>
+    <script src="{% static 'gov_panel/assets/js/example-chart.js' %}"></script>
+
+    <script src="{% static 'gov_panel/assets/js/charts/chart-hotel.js' %}"></script>
+
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="https://www.google.com/jsapi"></script>
+     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCsXhMECWd3uz5bEPi-1wWKZ_s6sRCAWzs"></script>
+     <script src="https://code.highcharts.com/highcharts.js"></script>
+      <script src="https://code.highcharts.com/modules/exporting.js"></script>
+      <script src="https://code.highcharts.com/modules/export-data.js"></script>
+      <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+
+      <!-- Flag sprites service provided by Martijn Lafeber,
+          https://github.com/lafeber/world-flags-sprite/blob/master/LICENSE -->
+      <link rel="stylesheet" type="text/css"
+            href="https://github.s3.amazonaws.com/downloads/lafeber/world-flags-sprite/flags32.css" />
+
+   
+            <script>
+              Highcharts.chart('container10', {
+    chart: {
+        type: 'column'
+    },
+    title: {
+        text: 'Efficiency Optimization by Province'
+    },
+    xAxis: {
+        categories: [
+            {% for p in province %}
+              '{{p.province}}',
+            {% endfor %}
+        ]
+    },
+    yAxis: [{
+        min: 0,
+        title: {
+            text: 'Employees'
+        }
+    }, {
+        title: {
+            text: 'Profit (millions)'
+        },
+        opposite: true
+    }],
+    legend: {
+        shadow: false
+    },
+    tooltip: {
+        shared: true
+    },
+    plotOptions: {
+        column: {
+            grouping: false,
+            shadow: false,
+            borderWidth: 0
+        }
+    },
+    series: [{
+        name: 'Male Merchants',
+        color: 'rgba(165,170,217,1)',
+        data: [{% for d in province %}{{d.male}}, {%endfor%}],
+        pointPadding: 0.3,
+        pointPlacement: -0.2
+    },
+    {
+        name: 'Female Merchants',
+        color: 'rgba(165,170,217,1)',
+        data: [{% for d in province %}{{d.female}}, {%endfor%}],
+        pointPadding: 0.3,
+        pointPlacement: -0.2
+    }, {
+        name: 'Merchants Total Sales ',
+        color: 'rgba(126,86,134,.9)',
+        data: [{% for d in province %}{{d.province_merchant_sales}}, {%endfor%}],
+        pointPadding: 0.4,
+        pointPlacement: -0.2
+    }, {
+        name: 'Stocks Total Cost Price',
+        color: 'rgba(248,161,63,1)',
+        data: [{% for d in province %}{{d.cost_of_sales_province}}, {%endfor%}],
+        tooltip: {
+            valuePrefix: '{{request.user.default_currency_id}}  ',
+            valueSuffix: ''
+        },
+        pointPadding: 0.3,
+        pointPlacement: 0.2,
+        yAxis: 1
+    },
+    {
+        name: 'Stocks Total Selling Price',
+        color: 'blue',
+        data: [{% for d in province %}{{d.sales}}, {%endfor%}],
+        tooltip: {
+            valuePrefix: '{{request.user.default_currency_id}}  ',
+            valueSuffix: ''
+        },
+        pointPadding: 0.4,
+        pointPlacement: 0.2,
+        yAxis: 1
+    }, {
+        name: 'Total Stocks',
+        color: 'black',
+        data: [{% for d in province %}{{d.m_products}}, {%endfor%}],
+        pointPadding: 0.4,
+        pointPlacement: 0.2,
+        yAxis: 1
+    }]
+});
+            </script>
+
+
+    <script>
+    var totalBooking = {
+        labels : ["01 Jan", "02 Jan", "03 Jan", "04 Jan", "05 Jan", "06 Jan", "07 Jan"],
+        dataUnit : 'Room',
+        stacked : true,
+        datasets : [{
+            label : "User",
+            color : [NioApp.hexRGB("#816bff", .2), NioApp.hexRGB("#816bff", .2), NioApp.hexRGB("#816bff", .2), NioApp.hexRGB("#816bff", .2), NioApp.hexRGB("#816bff", .2), NioApp.hexRGB("#816bff", .2), "#816bff"],  // @v2.0
+            data: [120, 150, 80, 69, 50, 105, 75]
+        }]
+    };
+
+    var salesOverviewNewEdit = {
+    labels: ["01", "02", "03", "04", "05"],
+    dataUnit: 'ZAR',
+    lineTension: 0.3,
+    datasets: [{
+      label: "Sales Overview",
+      color: "#798bff",
+      background: NioApp.hexRGB('#798bff', .5),
+      data: [200, 700, 9500, 100, 382]
+    }]
+  };
+
+  function polarAreaChart(selector, set_data) {
+    var $selector = selector ? $(selector) : $('.polar-chart');
+    $selector.each(function () {
+      var $self = $(this),
+          _self_id = $self.attr('id'),
+          _get_data = typeof set_data === 'undefined' ? eval(_self_id) : set_data;
+
+      var selectCanvas = document.getElementById(_self_id).getContext("2d");
+      var chart_data = [];
+
+      for (var i = 0; i < _get_data.datasets.length; i++) {
+        chart_data.push({
+          backgroundColor: _get_data.datasets[i].background,
+          borderWidth: 2,
+          borderColor: _get_data.datasets[i].borderColor,
+          hoverBorderColor: _get_data.datasets[i].borderColor,
+          data: _get_data.datasets[i].data
+        });
+      }
+
+      var chart = new Chart(selectCanvas, {
+        type: 'polarArea',
+        data: {
+          labels: _get_data.labels,
+          datasets: chart_data
+        },
+        options: {
+          legend: {
+            display: _get_data.legend ? _get_data.legend : false,
+            rtl: NioApp.State.isRTL,
+            labels: {
+              boxWidth: 12,
+              padding: 20,
+              fontColor: '#6783b8'
+            }
+          },
+          maintainAspectRatio: false,
+          tooltips: {
+            enabled: true,
+            rtl: NioApp.State.isRTL,
+            callbacks: {
+              title: function title(tooltipItem, data) {
+                return data['labels'][tooltipItem[0]['index']];
+              },
+              label: function label(tooltipItem, data) {
+                return data.datasets[tooltipItem.datasetIndex]['data'][tooltipItem['index']] + ' ' + _get_data.dataUnit;
+              }
+            },
+            backgroundColor: '#eff6ff',
+            titleFontSize: 13,
+            titleFontColor: '#6783b8',
+            titleMarginBottom: 6,
+            bodyFontColor: '#9eaecf',
+            bodyFontSize: 12,
+            bodySpacing: 4,
+            yPadding: 10,
+            xPadding: 10,
+            footerMarginTop: 0,
+            displayColors: false
+          }
+        }
+      });
+    });
+  } // init line chart
+
+
+//   Total Merchants By Province
+  polarAreaChart();
+  var doughnutChartData2 = {
+    labels: [{% for p in province %} "{{ p.province | title }}", {% endfor %}],
+    dataUnit: 'Merchant',
+    legend: false,
+    datasets: [{
+      borderColor: "#fff",
+      background: ["#9eaecf", "#f4aaa4", "#9785FF", "#E85347", "#9cabf3", "#9eaecf", "#9cabf3", "#9785FF", "#E85347", "#9cabf3", ],
+      data: [{% for p in province %} {{p.province_count}}, {% endfor %}]
+    }]
+  };
+
+  function doughnutChart(selector, set_data) {
+    var $selector = selector ? $(selector) : $('.doughnut-chart');
+    $selector.each(function () {
+      var $self = $(this),
+          _self_id = $self.attr('id'),
+          _get_data = typeof set_data === 'undefined' ? eval(_self_id) : set_data;
+
+      var selectCanvas = document.getElementById(_self_id).getContext("2d");
+      var chart_data = [];
+
+      for (var i = 0; i < _get_data.datasets.length; i++) {
+        chart_data.push({
+          backgroundColor: _get_data.datasets[i].background,
+          borderWidth: 2,
+          borderColor: _get_data.datasets[i].borderColor,
+          hoverBorderColor: _get_data.datasets[i].borderColor,
+          data: _get_data.datasets[i].data
+        });
+      }
+
+      var chart = new Chart(selectCanvas, {
+        type: 'doughnut',
+        data: {
+          labels: _get_data.labels,
+          datasets: chart_data
+        },
+        options: {
+          legend: {
+            display: _get_data.legend ? _get_data.legend : false,
+            rtl: NioApp.State.isRTL,
+            labels: {
+              boxWidth: 12,
+              padding: 20,
+              fontColor: '#6783b8'
+            }
+          },
+          rotation: 1,
+          cutoutPercentage: 40,
+          maintainAspectRatio: false,
+          tooltips: {
+            enabled: true,
+            rtl: NioApp.State.isRTL,
+            callbacks: {
+              title: function title(tooltipItem, data) {
+                return data['labels'][tooltipItem[0]['index']];
+              },
+              label: function label(tooltipItem, data) {
+                return data.datasets[tooltipItem.datasetIndex]['data'][tooltipItem['index']] + ' ' + _get_data.dataUnit;
+              }
+            },
+            backgroundColor: '#eff6ff',
+            titleFontSize: 13,
+            titleFontColor: '#6783b8',
+            titleMarginBottom: 6,
+            bodyFontColor: '#9eaecf',
+            bodyFontSize: 12,
+            bodySpacing: 4,
+            yPadding: 10,
+            xPadding: 10,
+            footerMarginTop: 0,
+            displayColors: false
+          }
+        }
+      });
+    });
+  } // init doughnut chart
+
+
+  doughnutChart();
+//   Total Merchants By Province
+    </script>
+
+    <!-- Province Merchants Sales Records -->
+    <script>
+        // Province Merchants Sales Records
+        var solidLineChart1 = {
+            labels: [ {%for i in province %} "{{ i.province }}", {%endfor %}],
+            dataUnit: 'Merchants Sales',
+            lineTension: .4,
+            legend: true,
+            datasets: [
+            
+            {
+              label: "",
+              color: "#5ce0aa",
+              background: 'transparent',
+              data: [{%for i in province %} {{ i.province_merchant_sales }}, {% endfor %}]
+            }, 
+        
+        ]
+          };
+
+        var solidLineChart2 = {
+            labels: [ {%for i in days %} "{{ i }}", {%endfor %}].reverse(),
+            dataUnit: 'Merchants Daily Sales',
+            lineTension: .4,
+            legend: true,
+            datasets: [
+            
+            {
+              label: "",
+              color: "#5ce0aa",
+              background: 'transparent',
+              data: [{%for i in daily_sales %} {{ i }}, {% endfor %}].reverse()
+            }, 
+        
+        ]
+          };
+
+        var solidLineChart3 = {
+            labels: [ {%for i in days %} "{{ i }}", {%endfor %}].reverse(),
+            dataUnit: '{{ request.user.default_currency_id }}',
+            lineTension: .5,
+            // legend: true,
+            datasets: [
+            
+            {
+            //   label: "",
+              color: "#5ce0aa",
+              background: 'transparent',
+              data: [{%for i in daily_sales %} {{ i }}, {% endfor %}].reverse()
+            }, 
+        
+        ]
+          };
+
+        
+        function lineChart(selector, set_data) {
+            var $selector = selector ? $(selector) : $('.line-chart');
+            $selector.each(function () {
+              var $self = $(this),
+                  _self_id = $self.attr('id'),
+                  _get_data = typeof set_data === 'undefined' ? eval(_self_id) : set_data;
+        
+              var selectCanvas = document.getElementById(_self_id).getContext("2d");
+              var chart_data = [];
+        
+              for (var i = 0; i < _get_data.datasets.length; i++) {
+                chart_data.push({
+                  label: _get_data.datasets[i].label,
+                  tension: _get_data.lineTension,
+                  backgroundColor: _get_data.datasets[i].background,
+                  borderWidth: 2,
+                  borderColor: _get_data.datasets[i].color,
+                  pointBorderColor: _get_data.datasets[i].color,
+                  pointBackgroundColor: '#fff',
+                  pointHoverBackgroundColor: "#fff",
+                  pointHoverBorderColor: _get_data.datasets[i].color,
+                  pointBorderWidth: 2,
+                  pointHoverRadius: 4,
+                  pointHoverBorderWidth: 2,
+                  pointRadius: 4,
+                  pointHitRadius: 4,
+                  data: _get_data.datasets[i].data
+                });
+              }
+        
+              var chart = new Chart(selectCanvas, {
+                type: 'line',
+                data: {
+                  labels: _get_data.labels,
+                  datasets: chart_data
+                },
+                options: {
+                  legend: {
+                    display: _get_data.legend ? _get_data.legend : false,
+                    rtl: NioApp.State.isRTL,
+                    labels: {
+                      boxWidth: 12,
+                      padding: 20,
+                      fontColor: '#6783b8'
+                    }
+                  },
+                  maintainAspectRatio: false,
+                  tooltips: {
+                    enabled: true,
+                    rtl: NioApp.State.isRTL,
+                    callbacks: {
+                      title: function title(tooltipItem, data) {
+                        return data['labels'][tooltipItem[0]['index']];
+                      },
+                      label: function label(tooltipItem, data) {
+                        return data.datasets[tooltipItem.datasetIndex]['data'][tooltipItem['index']] + ' ' + _get_data.dataUnit;
+                      }
+                    },
+                    backgroundColor: '#eff6ff',
+                    titleFontSize: 13,
+                    titleFontColor: '#6783b8',
+                    titleMarginBottom: 6,
+                    bodyFontColor: '#9eaecf',
+                    bodyFontSize: 12,
+                    bodySpacing: 4,
+                    yPadding: 10,
+                    xPadding: 10,
+                    footerMarginTop: 0,
+                    displayColors: false
+                  },
+                  scales: {
+                    yAxes: [{
+                      display: true,
+                      position: NioApp.State.isRTL ? "right" : "left",
+                      ticks: {
+                        beginAtZero: false,
+                        fontSize: 12,
+                        fontColor: '#9eaecf',
+                        padding: 10
+                      },
+                      gridLines: {
+                        color: NioApp.hexRGB("#526484", .2),
+                        tickMarkLength: 0,
+                        zeroLineColor: NioApp.hexRGB("#526484", .2)
+                      }
+                    }],
+                    xAxes: [{
+                      display: true,
+                      ticks: {
+                        fontSize: 12,
+                        fontColor: '#9eaecf',
+                        source: 'auto',
+                        padding: 5,
+                        reverse: NioApp.State.isRTL
+                      },
+                      gridLines: {
+                        color: "transparent",
+                        tickMarkLength: 10,
+                        zeroLineColor: NioApp.hexRGB("#526484", .2),
+                        offsetGridLines: true
+                      }
+                    }]
+                  }
+                }
+              });
+            });
+          } // init line chart
+        
+        
+          lineChart();
+        
+        // end Province Merchants Sales Records
+    </script>
+
+ <script>
+
+    // users sales revenue chart 
+
+    var PaymentDoughnutData23 = {
+    labels : [{% for m in merchant_revenue %}  "{{ m.payment_method}}", {% endfor %}],
+    dataUnit : '{{ request.user.default_currency_id  }}',
+    legend: false,
+    datasets : [{
+        borderColor : "#fff",
+        background : ["#798bff","#b8acff","#ffa9ce","#f9db7b"],
+        data: [{% for m in merchant_revenue %} {{ m.total_revenue }}, {% endfor %}]
+    }]
+};
+
+function analyticsDoughnut(selector, set_data){
+    var $selector = (selector) ? $(selector) : $('.analytics-doughnut');
+    $selector.each(function(){
+        var $self = $(this), _self_id = $self.attr('id'), _get_data = (typeof set_data === 'undefined') ? eval(_self_id) : set_data;
+        var selectCanvas = document.getElementById(_self_id).getContext("2d");
+
+        var chart_data = [];
+        for (var i = 0; i < _get_data.datasets.length; i++) {
+            chart_data.push({
+                backgroundColor: _get_data.datasets[i].background,
+                borderWidth:2,
+                borderColor: _get_data.datasets[i].borderColor,
+                hoverBorderColor: _get_data.datasets[i].borderColor,
+                data: _get_data.datasets[i].data,
+            });
+        } 
+        var chart = new Chart(selectCanvas, {
+            type: 'doughnut',
+            data: {
+                labels: _get_data.labels,
+                datasets: chart_data,
+            },
+            options: {
+                legend: {
+                    display: (_get_data.legend) ? _get_data.legend : false,
+                    labels: {
+                        boxWidth:12,
+                        // padding:20,
+                        fontColor: '#6783b8',
+                    }
+                },
+                rotation: -1.5,
+                cutoutPercentage:70,
+                maintainAspectRatio: false,
+                tooltips: {
+                    enabled: true,
+                    rtl: NioApp.State.isRTL,
+                    callbacks: {
+                        title: function(tooltipItem, data) {
+                            return data['labels'][tooltipItem[0]['index']];
+                        },
+                        label: function(tooltipItem, data) {
+                            return data.datasets[tooltipItem.datasetIndex]['data'][tooltipItem['index']] + ' ' + _get_data.dataUnit;
+                        }
+                    },
+                    backgroundColor: '#fff',
+                    borderColor:'#eff6ff',
+                    borderWidth:2,
+                    titleFontSize: 13,
+                    titleFontColor: '#6783b8',
+                    titleMarginBottom: 6,
+                    bodyFontColor: '#9eaecf',
+                    bodyFontSize: 12,
+                    bodySpacing:4,
+                    yPadding: 10,
+                    xPadding: 10,
+                    footerMarginTop: 0,
+                    displayColors: false
+                },
+            }
+        });
+    })
+}
+
+    // users sales revenue chart end here 
+
+ </script>
+ 
+    <!-- Province Merchants Sales Records -->
+
+   <script>
+      google.charts.load('current', {
+      'packages': ['map'],
+      // Note: you will need to get a mapsApiKey for your project.
+      // See: https://developers.google.com/chart/interactive/docs/basic_load_libs#load-settings
+      'mapsApiKey': 'AIzaSyCsXhMECWd3uz5bEPi-1wWKZ_s6sRCAWzs'
+      
+      });
+      google.charts.setOnLoadCallback(drawMap);
+  
+      function drawMap() {
+        var data = google.visualization.arrayToDataTable([
+          ['Province', 'Population'],
+          {% for p in province %}
+          ['{{ p.province | title }}', '{{ p.province | title }}: {{p.province_count}}'],
+          {% endfor %}
+         
+        ]);
+  
+      var options = {
+        showTooltip: true,
+        showInfoWindow: true
+      };
+  
+      var map = new google.visualization.Map(document.getElementById('xmap'));
+  
+      map.draw(data, options);
+    };
+    </script>
+
+    <script>
+    // Data retrieved from https://netmarketshare.com/
+// Radialize the colors
+Highcharts.setOptions({
+    colors: Highcharts.map(Highcharts.getOptions().colors, function (color) {
+        return {
+            radialGradient: {
+                cx: 0.5,
+                cy: 0.3,
+                r: 0.7
+            },
+            stops: [
+                [0, color],
+                [1, Highcharts.color(color).brighten(-0.3).get('rgb')] // darken
+            ]
+        };
+    })
+});
+
+// Build the chart
+Highcharts.chart('containergender', {
+    chart: {
+        plotBackgroundColor: null,
+        plotBorderWidth: null,
+        plotShadow: false,
+        type: 'pie'
+    },
+    title: {
+        text: ' Gender Split',
+        align: 'left'
+    },
+    tooltip: {
+        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+    },
+    accessibility: {
+        point: {
+            valueSuffix: '%'
+        }
+    },
+    plotOptions: {
+        pie: {
+            allowPointSelect: true,
+            cursor: 'pointer',
+            dataLabels: {
+                enabled: true,
+                format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                connectorColor: 'silver'
+            }
+        }
+    },
+    series: [{
+        name: 'Share',
+        data: [
+
+            { name: 'Male', y: {{country_gender_male}} },
+            { name: 'Female', y: {{country_gender_female}} },
+           
+        ]
+    }]
+});
+
+</script>
+
+    <script>
+      Highcharts.chart('containerprovince', {
+    chart: {
+        zoomType: 'xy'
+    },
+    title: {
+        text: 'Regional Merchants',
+        align: 'left'
+    },
+    subtitle: {
+        text: 'Source: ' +
+            ''
+    },
+    xAxis: [{
+        categories: [ {% for p in province %}
+              '{{p.province}}',
+            {% endfor %}],
+        crosshair: true
+    }],
+    yAxis: [{ // Primary yAxis
+        labels: {
+            format: '{value}°C',
+            style: {
+                color: Highcharts.getOptions().colors[1]
+            }
+        },
+        title: {
+            text: 'Total Merchants',
+            style: {
+                color: Highcharts.getOptions().colors[1]
+            }
+        }
+    }, { // Secondary yAxis
+        title: {
+            text: '',
+            style: {
+                color: Highcharts.getOptions().colors[0]
+            }
+        },
+        labels: {
+            format: '{value} merchants',
+            style: {
+                color: Highcharts.getOptions().colors[0]
+            }
+        },
+        opposite: true
+    }],
+    tooltip: {
+        shared: true
+    },
+    legend: {
+        align: 'left',
+        x: 80,
+        verticalAlign: 'top',
+        y: 80,
+        floating: true,
+        backgroundColor:
+            Highcharts.defaultOptions.legend.backgroundColor || // theme
+            'rgba(255,255,255,0.25)'
+    },
+    series: [{
+        name: 'Total Merchants Per Province',
+        type: 'column',
+        yAxis: 1,
+        data: [{% for p in province %}
+              {{p.province_count}},
+            {% endfor %}],
+        tooltip: {
+            valueSuffix: ' merchants'
+        }
+
+    }, ]
+});
+    </script>
+
+   
+<!-- 
+    <script>
+        function initMap() {
+          var locations = [
+            {lat: 40.7128, lng: -74.0060, title: 'New York City'},
+            {lat: 34.0522, lng: -118.2437, title: 'Los Angeles'},
+            {lat: 51.5074, lng: -0.1278, title: 'London'}
+          ];
+          var map = new google.maps.Map(document.getElementById('my_map'), {
+            center: {lat: 37.7749, lng: -122.4194},
+            zoom: 3
+          });
+          for (var i = 0; i < locations.length; i++) {
+            var location = locations[i];
+            var marker = new google.maps.Marker({
+              position: location,
+              map: map,
+              title: location.title
+            });
+          }
+        }
+        initMap();
+      </script>
+
+
+     -->
+
+
+
+</body>
+
+</html>

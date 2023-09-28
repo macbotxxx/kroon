@@ -1,0 +1,4 @@
+# bugs list
+-payment record on checkout
+-
+-inapp subscription default theme color

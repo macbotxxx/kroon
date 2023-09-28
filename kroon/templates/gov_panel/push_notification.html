@@ -1,0 +1,161 @@
+{% extends "gov_panel/base.html" %}
+{% load static humanize %}
+{% load i18n crispy_forms_tags %}
+ 
+{% block content %}
+              
+ <!-- content @s -->
+ <div class="nk-content ">
+    <div class="container-fluid">
+        <div class="nk-content-inner">
+            <div class="nk-content-body">
+                <div class="nk-block-head nk-block-head-sm">
+                    <div class="nk-block-between">
+                        <div class="nk-block-head-content">
+                            <h3 class="nk-block-title page-title">Send Push Notifications</h3>
+                            <div class="nk-block-des text-soft">
+                                <p>User onboarding is the process by which new users become proficient in an application. User onboarding encompasses the initial experience in the application,<br> online or offline training, goal-setting, and the organization's customer success process.</p>
+                            </div>
+                        </div><!-- .nk-block-head-content -->
+                        <div class="nk-block-head-content">
+                            <div class="toggle-wrap nk-block-tools-toggle">
+                                <a href="#" class="btn btn-icon btn-trigger toggle-expand me-n1" data-target="pageMenu"><em class="icon ni ni-menu-alt-r"></em></a>
+                                <div class="toggle-expand-content" data-content="pageMenu">
+                                    <ul class="nk-block-tools g-3">
+                                       
+                                        <li class="nk-block-tools-opt">
+                                            <a href="{% url 'gov_publish_notification' %}" class="btn btn-primary" ><em class="icon ni ni-plus"></em>
+                                                <span>Publish A News Feed </span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div><!-- .toggle-wrap -->
+                        </div><!-- .nk-block-head-content -->
+                    </div><!-- .nk-block-between -->
+                </div><!-- .nk-block-head -->
+                {% if messages %}
+                <div class="alert alert-pro alert-danger">
+                    <div class="alert-text">
+                        <h6>Notifications</h6>
+                        {% for message in messages %}
+                        <p>{{ message }}</p>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+                <div class="nk-block">
+                    <div class="card card-bordered card-stretch">
+                        <div class="card-inner-group">
+                            <div class="card-inner p-0">
+                                <table class="nk-tb-list nk-tb-ulist">
+                                    <thead>
+                                        <tr class="nk-tb-item nk-tb-head">
+                                            
+                                            <th class="nk-tb-col"><span class="sub-text">Subject</span></th>
+                                            <th class="nk-tb-col tb-col-xxl"><span class="sub-text">Content</span></th>
+                                            <th class="nk-tb-col tb-col-sm"><span class="sub-text">Submitted Date</span></th>
+                                            <th class="nk-tb-col tb-col-lg"><span class="sub-text">Approved Date </span></th>
+                                            <th class="nk-tb-col tb-col-xxl"><span class="sub-text">Published Date</span></th>
+                                            <th class="nk-tb-col tb-col-sm"><span class="sub-text">Publisher</span></th>
+                                            <th class="nk-tb-col tb-col-md"><span class="sub-text">Status</span></th>
+                                           
+                                        </tr><!-- .nk-tb-item -->
+                                    </thead>
+                                    <tbody>
+                                        {% for n in newsfeed %}
+
+                                        <tr class="nk-tb-item">
+                                           
+                                            <td class="nk-tb-col">
+                                                <a href="#" class="project-title">
+                                                    <h6 class="text-ellipsis title w-max-200px">{{ n.title }}</h6>
+                                                </a>
+                                            </td>
+                                            <td class="nk-tb-col tb-col-xxl">
+                                                <p class="text-ellipsis w-max-300px">{{n.content}}</p>
+                                            </td>
+                                            <td class="nk-tb-col tb-col-sm">
+                                                <span>{{ n.created_date }}</span>
+
+                                            </td>
+                                            <td class="nk-tb-col tb-col-lg">
+                                                <span>{{ n.approved_date }}</span>
+                                            </td>
+                                            <td class="nk-tb-col tb-col-xxl">
+                                                <span>{{ n.publishing_time }}</span>
+                                            </td>
+                                            <td class="nk-tb-col tb-col-sm">
+                                                <span>{{ n.publisher | title  }}</span>
+                                            </td>
+                                            <td class="nk-tb-col tb-col-md">
+                                                <ul class="d-flex flex-wrap g-1">
+                                                    {% if n.status %}
+                                                    <li><span class="badge badge-dim bg-info">Published</span></li>
+                                                    {% else %}
+                                                    <li><span class="badge badge-dim bg-danger">Processing </span></li>
+                                                    {% endif %}
+                                                </ul>
+                                            </td>
+                                            <td class="nk-tb-col nk-tb-col-tools">
+                                                <ul class="nk-tb-actions gx-1">
+                                                    <li>
+                                                        <div class="drodown">
+                                                            <a href="#" class="dropdown-toggle btn btn-sm btn-icon btn-trigger" data-bs-toggle="dropdown"><em class="icon ni ni-more-h"></em></a>
+                                                            <div class="dropdown-menu dropdown-menu-end">
+                                                                <ul class="link-list-opt no-bdr">
+                                                                    <li><a href="{% url 'gov_edit_newsfeed' n.id %}" ><em class="icon ni ni-edit"></em><span>Edit Task</span></a></li>
+                                                                   
+                                                                    {% if request.user.groups.first.name == 'Gov_Super_Admin' %}
+
+                                                                    <li><a href="{% url 'gov_newsfeed_approval' n.id %}"><em class="icon ni ni-check-circle"></em><span>Approve Feed</span></a></li>
+                                                                    <li><a href="{% url 'gov_newsfeed_delete' n.id %}" ><em class="icon ni ni-delete"></em><span>Delete Task</span></a></li>
+
+                                                                    {% endif %}
+
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                            </td>
+                                        </tr><!-- .nk-tb-item -->
+
+                                        {% endfor %}
+                                    </tbody>
+                                </table><!-- .nk-tb-list -->
+                            </div><!-- .card-inner -->
+                            <div class="card-inner">
+                                <div class="nk-block-between-md g-3">
+                                    <div class="card-inner">
+                                        <ul class="pagination justify-content-center justify-content-md-start">
+                                            {% if newsfeed.has_previous %}
+                                            <li class="page-item"><a class="page-link" href="?page={{ newsfeed.previous_page_number }}">Prev</a></li>
+                                            {% endif %}
+                                            
+                                            {%for num in newsfeed.paginator.page_range %}
+                                            {%if newsfeed.number == num %}
+                                            <li class="page-item active"><a class="page-link" href="?page={{num}}">{{num}}</a></li>
+                                            {% elif num > newsfeed.number|add:'-3' and num < newsfeed.number|add:'3' %}
+                                            <li class="page-item"><a class="page-link" href="?page={{num}}">{{num}}</a></li>
+                                            {%endif%}
+                                            {%endfor%}
+        
+                                           {% if newsfeed.has_next %}
+                                            <li class="page-item"><a class="page-link" href="?page={{newsfeed.next_page_number }}">Next</a></li>
+                                            {% endif %}
+                                        </ul><!-- .pagination -->
+                                    </div><!-- .card-inner -->
+                                   
+                                </div><!-- .nk-block-between -->
+                            </div>
+                        </div><!-- .card-inner-group -->
+                    </div><!-- .card -->
+                </div><!-- .nk-block -->
+            </div>
+        </div>
+    </div>
+</div>
+<!-- content @e -->
+{% endblock  %}
+              

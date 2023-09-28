@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Credo Inline Payment</title>
+    <meta charset="UTF-8" />
+  </head>
+
+  <body>
+    <form>
+      <script src="https://credocentral.com/inline.js"></script>
+      <button type="button" onClick="makePayment()">Pay Now</button>
+    </form>
+
+    <script>
+      const generateRandomNumber = (min, max) => Math.floor(Math.random() * (max - min) + min);
+
+      const transRef = `iy67f${generateRandomNumber(10,60)}hvc${generateRandomNumber(10, 90)}`;
+
+      function makePayment() {
+        CredoCheckout({
+          transRef, //Please generate your own transRef that is unique for each transaction
+          amount: 2700,
+          redirectUrl: "https://merchant-test-line.netlify.app/successful",
+          paymentOptions: ["CARDS", "BANK"],
+          currency: "NGN",
+          customerName: "Ciroma Chukwuma Adekunle",
+          customerEmail: "cirochwukunle@example.com",
+          customerPhoneNo: "08032698425",
+          onClose: function(){
+              console.log("Modal closed")
+          },
+          callback: function(){
+              console.log("Payment Successful");
+          },
+          publicKey: "0PUB0347HBi1jfpy9vJ5xXr2pHnB" // You should store your API key as an environment variable
+        });
+      }
+    </script>
+  </body>
+</html>

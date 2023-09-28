@@ -1,0 +1,400 @@
+<!-- {% load static humanize %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <!--  This file has been downloaded from bootdey.com @bootdey on twitter -->
+    <!--  All snippets are MIT license http://bootdey.com/license -->
+    <title>Kroon Invoice issued to {{ user.email }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <link href="https://netdna.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+	<script src="https://netdna.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+</head>
+<body onload="printPromot()">
+
+<div class="container bootstrap snippets bootdey">
+	<div class="panel panel-default">
+		<div class="panel-body">
+			<div class="row">
+				<div class="col-md-6 col-sm-6 text-left">
+					<h4><strong>Client</strong> Details</h4>
+					<ul class="list-unstyled">
+						<li><strong>First Name:</strong> {{ user.first_name | title }}</li>
+						<li><strong>Last Name:</strong>  {{ user.last_name | title }}</li>
+						<li><strong>Country:</strong>  {{ user.country_of_residence | title }}</li>
+						<li><strong>Account Type:</strong>  {{ user.account_type | title }} </li>
+					</ul>
+				</div>
+
+				<div class="col-md-6 col-sm-6 text-right">
+					<h4><strong>Payment</strong> Details</h4>
+					<ul class="list-unstyled">
+						<li><strong>Wallet Provider :</strong> Kroon </li>
+						<li><strong>Wallet ID :</strong>  {{ user.wallet_id  }}</li>
+						<li><strong>Wallet Currency :</strong> K¢ </li>
+						<li><strong>User Local Currency</strong>  {{ user.default_currency_id  }}</li>
+					</ul>
+
+				</div>
+
+			</div>
+
+			<div class="table-responsive">
+				<table class="table table-condensed nomargin">
+					<thead>
+						<tr>
+							<th>Date</th>
+							<th>Narration</th>
+							<th>Credit</th>
+							<th>Debit</th>
+							<th>Balance</th>
+							<th>Status</th>
+						</tr>
+					</thead>
+					<tbody>
+                        {%for i in statement_account %}
+						<tr>
+							<td>
+								{{ i.created_date }}
+							</td>
+							<td>{{ i.narration }}</td>
+							<td>{{ i.credited_kroon_amount | intcomma }}</td>
+							<td>{{ i.debited_kroon_amount | intcomma }}</td/>
+							<td>{{ i.kroon_balance | intcomma }}</td>
+							<td>{{ i.status | title }}</td>
+						</tr>
+
+                        {% endfor %}
+					
+					</tbody>
+				</table>
+			</div>
+
+			<hr class="nomargin-top">
+			<div class="row">
+				<div class="col-sm-6 text-left">
+					<h4><strong>Any Issues ?</strong></h4>
+					<p class="nomargin nopadding">
+						
+					message us on support@mykroonapp.com
+					</p><br><!-- no P margin for printing - use <br> instead -->
+
+					
+				</div>
+
+				<div class="col-sm-6 text-right">
+					<ul class="list-unstyled">
+						<li><strong>Successful Total Credited :</strong> K¢ {{ total_credit | intcomma }}</li>
+						<li><strong>Successful Total Debitted :</strong>K¢ {{ total_debitted | intcomma }}</li>
+						<li><strong>Grand Total:</strong> K¢ {{ user.kroon_token | intcomma }}</li>
+					</ul>     
+					
+				</div>
+			</div>
+		</div>
+	</div>
+
+	
+</div>
+
+<style type="text/css">
+
+body{margin-top:20px;
+background:#eee;
+}
+
+
+
+
+/**    17. Panel
+ *************************************************** **/
+/* pannel */
+.panel {
+	position:relative;
+
+	background:transparent;
+
+	-webkit-border-radius: 0;
+	   -moz-border-radius: 0;
+			border-radius: 0;
+
+	-webkit-box-shadow: none;
+	   -moz-box-shadow: none;
+			box-shadow: none;
+}
+.panel.fullscreen .accordion .panel-body,
+.panel.fullscreen .panel-group .panel-body {
+	position:relative !important;
+	top:auto !important;
+	left:auto !important;
+	right:auto !important;
+	bottom:auto !important;
+}
+	
+.panel.fullscreen .panel-footer {
+	position:absolute;
+	bottom:0;
+	left:0;
+	right:0;
+}
+
+
+.panel>.panel-heading {
+	text-transform: uppercase;
+
+	-webkit-border-radius: 0;
+	   -moz-border-radius: 0;
+			border-radius: 0;
+}
+.panel>.panel-heading small {
+	text-transform:none;
+}
+.panel>.panel-heading strong {
+	font-family:Arial,Helvetica,Sans-Serif;
+}
+.panel>.panel-heading .buttons {
+	display:inline-block;
+	margin-top:-3px;
+	margin-right:-8px;
+}
+.panel-default>.panel-heading {
+	padding: 15px 15px;
+	background:#fff;
+}
+.panel-default>.panel-heading small {
+	color:#9E9E9E;
+	font-size:12px;
+	font-weight:300;
+}
+.panel-clean {
+	border: 1px solid #ddd;
+	border-bottom: 3px solid #ddd;
+
+	-webkit-border-radius: 0;
+	   -moz-border-radius: 0;
+			border-radius: 0;
+}
+.panel-clean>.panel-heading {
+	padding: 11px 15px;
+	background:#fff !important;
+	color:#000;	
+	border-bottom: #eee 1px solid;
+}
+.panel>.panel-heading .btn {
+	margin-bottom: 0 !important;
+}
+
+.panel>.panel-heading .progress {
+	background-color:#ddd;
+}
+
+.panel>.panel-heading .pagination {
+	margin:-5px;
+}
+
+.panel-default {
+	border:0;
+}
+
+.panel-light {
+	border:rgba(0,0,0,0.1) 1px solid;
+}
+.panel-light>.panel-heading {
+	padding: 11px 15px;
+	background:transaprent;
+	border-bottom:rgba(0,0,0,0.1) 1px solid;
+}
+
+.panel-heading a.opt>.fa {
+    display: inline-block;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: normal;
+    margin-right: 2px;
+    padding: 5px;
+    position: relative;
+    text-align: right;
+    top: -1px;
+}
+
+.panel-heading>label>.form-control {
+	display:inline-block;
+	margin-top:-8px;
+	margin-right:0;
+	height:30px;
+	padding:0 15px;
+}
+.panel-heading ul.options>li>a {
+	color:#999;
+}
+.panel-heading ul.options>li>a:hover {
+	color:#333;
+}
+.panel-title a {
+	text-decoration:none;
+	display:block;
+	color:#333;
+}
+
+.panel-body {
+	background-color:#fff;
+	padding: 15px;
+
+	-webkit-border-radius: 0;
+	   -moz-border-radius: 0;
+			border-radius: 0;
+}
+.panel-body.panel-row {
+	padding:8px;
+}
+
+.panel-footer {
+	font-size:12px;
+	border-top:rgba(0,0,0,0.02) 1px solid;
+	background-color:rgba(0255,255,255,1);
+
+	-webkit-border-radius: 0;
+	   -moz-border-radius: 0;
+			border-radius: 0;
+}
+
+</style>
+
+
+<script>
+    function printPromot() {
+        window.print();
+    }
+</script>
+</body>
+</html> -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+
+  <mati-button type="submit" clientid="6380ec23ce018a001d50725f"
+flowId="6380ec23ce018a001d50725e"
+metadata='{"user_kyc_id": "32049384832ehijd3o4"}' > click me </mati-button>
+
+
+<form>
+  <script src="https://checkout.flutterwave.com/v3.js"></script>
+  <button type="button" onClick="makePayment()">Pay Flutterwave</button>
+</form>
+
+============================
+<form>
+  <script src="https://js.paystack.co/v1/inline.js"></script>
+  <button type="button" onclick="payWithPaystack()"> Pay Pay Stack</button> 
+</form>
+
+================================================================
+
+<script src="https://www.paypal.com/sdk/js?client-id=Acf-VAuyB6NmUCxEPA4u9Y8Ft_TKXFDQqxDunQW4JZ1ae0oDYPZBE597m58zvSUFkEocqBE2PTWxN1xm&vault=true&intent=subscription">
+</script> 
+
+<div id="paypal-button-container"></div>
+
+
+
+
+  <script>
+    paypal.Buttons({
+      createSubscription: function(data, actions) {
+        return actions.subscription.create({
+          'plan_id': 'P-7K745519T69848130MLJNSKQ' // Creates the subscription
+        });
+      },
+      onApprove: function(data, actions) {
+        alert('You have successfully created subscription ' + data.subscriptionID); // Optional message given to subscriber
+      }
+    }).render('#paypal-button-container'); // Renders the PayPal button
+  </script>
+
+
+<script src="https://web-button.getmati.com/button.js">
+</script>
+
+
+
+<script>
+  function makePayment() {
+    FlutterwaveCheckout({
+      public_key: "FLWPUBK-3765fc83a1734bce0f55e79cf1e5f39a-X",
+      tx_ref: "KOK_VIRTUAL_CARD_H5W3D7YNNNGCIBQDV8H48PC5HZPO8R",
+      amount: 500,
+      currency: "NGN",
+      country: "NG",
+      payment_options: " ",
+      customer: {
+        email: "assanamamichael@gmail.com",
+
+        phone_number: "08102909304",
+        name: "michael asa",
+      },
+      callback: function (data) { // specified callback function
+        console.log(data);
+      },
+      customizations: {
+        title: "My store",
+        description: "Payment for items in cart",
+        logo: "https://assets.piedpiper.com/logo.png",
+      },
+    });
+  }
+</script>
+<!-- place below the html form -->
+<script>
+  function payWithPaystack(){
+    var handler = PaystackPop.setup({
+      key: 'pk_test_7fda6da95c68c2739ac62c1b9ec70415fa374d29',
+      email: 'naija_guy@gmail.com',
+      amount: 400000,
+      ref: 'KROON_2XIORG9FJAEWQMGWQSXSMDSOG75T7M', // generates a pseudo-unique reference. Please replace with a reference you generated. Or remove the line entirely so our API will generate one for you
+      currency: 'NGN',
+      metadata: {
+         custom_fields: [
+            {
+                display_name: "Naija Guy",
+                variable_name: "mobile_number",
+                value: "+2348012345678"
+            }
+         ]
+      },
+
+      callback: function(response){
+          alert('success. transaction ref is ' + response.reference);
+          console.log(response);
+      },
+      
+      onClose: function(){
+          alert('window closed');
+      }
+    });
+    handler.openIframe();
+  }
+</script>
+
+
+</body>
+</html>

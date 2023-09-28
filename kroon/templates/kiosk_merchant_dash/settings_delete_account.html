@@ -1,0 +1,111 @@
+{% extends 'kiosk_merchant_dash/base.html' %}
+{% load static crispy_forms_tags humanize %}
+
+{% block content %}
+                <!-- content @s -->
+                <div class="nk-content ">
+                    <div class="container-fluid">
+                        <div class="nk-content-inner">
+                            <div class="nk-content-body">
+                                <div class="nk-block-head nk-block-head-sm">
+                                    <div class="nk-block-between">
+                                        <div class="nk-block-head-content">
+                                            <h3 class="nk-block-title page-title">Change Language</h3>
+                                        </div><!-- .nk-block-head-content -->
+                                    </div><!-- .nk-block-between -->
+                                </div><!-- .nk-block-head -->
+                                {% if messages %}
+                                <div class="alert alert-pro alert-primary">
+                                    <div class="alert-text">
+                                        <h6>Notification</h6>
+                                        {% for message in messages %}
+                                        <p>{{ message }}</p>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                {% endif %}
+                                <div class="nk-block nk-block-lg">
+                                    <div class="card">
+                                        <ul class="nav nav-tabs nav-tabs-mb-icon nav-tabs-card">
+                                            <li class="nav-item">
+                                                <a class="nav-link " href="{% url 'account_settings' %}"><em class="icon ni ni-laptop"></em><span>Business profile settings</span></a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" href="{% url 'account_settings_theme' %}"><em class="icon ni ni-color-palette-fill"></em><span>Theme setting </span>
+                                                </a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link"  href="{% url 'delete_my_account' %}"><em class="icon ni ni-user-fill"></em><span>Delete My Account</span>
+                                                </a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" href="{% url 'account_settings_language' %}"><em class="icon ni ni-user-fill"></em><span>Change language </span>
+                                                </a>
+                                            </li>
+                                          
+                                            <li class="nav-item">
+                                                <a class="nav-link " href="{% url 'account_settings_password' %}"><em class="icon ni ni-lock-fill"></em><span>Password change </span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                        <div class="card-inner">
+                                            <div class="tab-content">
+                                               
+                                                <div >
+                                                    <div class="nk-block-head">
+                                                        <div class="nk-block-head-content">
+                                                            <h4 class="title nk-block-title">Delete My Account</h4>
+                                                            <p>This section will delete your saved informations and records , click on the delete button to delete your account from kroon kiosk platform.</p>
+                                                        </div>
+                                                    </div>
+                                                  
+                                                   
+                                                    <div class="row g-3">
+                                                        <div class="col-lg-7">
+                                                            <div class="form-group mt-2">
+                                                                <button type="button" class="btn btn-lg btn-primary" data-bs-toggle="modal" data-bs-target="#modalAlert2" >Delete My Account</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                               
+                                                </div>
+                                               
+                                            </div>
+                                        </div>
+                                        <!--card inner-->
+                                    </div>
+                                    <!--card-->
+                                </div>
+                                <!--nk-block-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- content @e -->
+                <!-- Modal Alert 2 -->
+                <div class="modal fade" tabindex="-1" id="modalAlert2">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-body modal-body-lg text-center">
+                                <div class="nk-modal">
+                                  
+                                    <em class="nk-modal-icon icon icon-circle icon-circle-xxl ni ni-alert bg-danger"></em>
+                                    <h4 class="nk-modal-title">Are You Sure, You Want To Delete Your Account ?</h4> 
+                                    <div class="nk-modal-text">
+                                        <p class="lead">Deleting your account from kroon kiosk , will automatically delete your information , which includes personal information , sales and financial information as well.</p>
+                                        <p class="text-soft">If you need help please email us at <a href="mailto:support@mykroonapp.com">support@mykroonapp.com</a></p>
+                                    </div>
+                                    <form action="" method="post">
+                                        {% csrf_token %}
+
+                                    <div class="nk-modal-action mt-5">
+                                        <button type = "submit" class="btn btn-lg btn-mw btn-danger" data-bs-dismiss="modal">Delete My Account</button>
+                                    </div>
+                                </form>
+                                </div>
+                            </div><!-- .modal-body -->
+                        </div>
+                    </div>
+                </div>
+{% endblock %}
+               

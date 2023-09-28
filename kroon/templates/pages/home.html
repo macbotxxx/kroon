@@ -1,0 +1,39 @@
+
+
+{% block content %}
+<script src="https://checkout.flutterwave.com/v3.js"></script>
+
+<form>
+  <script src="https://checkout.flutterwave.com/v3.js"></script>
+  <button type="button" onClick="makePayment()">Pay Nowc</button>
+</form>
+
+<script>
+  function makePayment() {
+    FlutterwaveCheckout({
+      public_key: "FLWPUBK_TEST-718944017db844e5289d7a4a41f9a3f0-X",
+      tx_ref: "KROON_F2ECIVO8LSHA0VF5RVOGKFXUF5BMGK",
+      amount: 1000,
+      currency: "NGN",
+      country: "NG",
+      payment_options: " ",
+      customer: {
+        email: "assanamamichael@gmail.com",
+        phone_number: "08102909304",
+        name: "michael asa",
+      },
+      callback: function (data) { // specified callback function
+        console.log(data);
+      },
+      customizations: {
+        title: "My store",
+        description: "Payment for items in cart",
+        logo: "https://assets.piedpiper.com/logo.png",
+      },
+    });
+  }
+</script>
+
+
+
+{% endblock content %}

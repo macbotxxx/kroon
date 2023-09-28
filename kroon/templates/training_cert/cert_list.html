@@ -1,0 +1,245 @@
+{% extends "training_cert/base.html" %}
+{% load static humanize %}
+{% load i18n crispy_forms_tags %}
+ 
+{% block content %}
+            <!-- content @s -->
+            <div class="nk-content ">
+                <div class="container-fluid">
+                    <div class="nk-content-inner">
+                        <div class="nk-content-body">
+                            <div class="nk-block-head nk-block-head-sm">
+                                <div class="nk-block-between">
+                                    <div class="nk-block-head-content">
+                                        <h3 class="nk-block-title page-title">{{ qs.province | title}} Merchants Store Lists</h3>
+                                        <div class="nk-block-des text-soft">
+                                            <p>Total of {{user_count | intcomma }} Stores.</p>
+                                        </div>
+                                    </div>
+
+                                </div><!-- .nk-block-between -->
+                            </div><!-- .nk-block-head -->
+                          
+                            <div class="nk-block">
+                                <div class="card card-bordered card-stretch">
+                                    <div class="card-inner-group">
+                                        <div class="card-inner position-relative card-tools-toggle">
+                                            <div class="card-title-group">
+                                               <div class="card-tools me-n1">
+                                                    <ul class="btn-toolbar gx-1">
+                                                      
+                                                        <li>
+                                                            <div class="toggle-wrap">
+                                                               
+                                                                <div class="toggle-content" data-content="cardTools">
+                                                                    <ul class="btn-toolbar gx-1">
+                                                                      
+                                                                        <li>
+                                                                            <div class="dropdown">
+                                                                                <!-- <a href="#" class="btn btn-trigger btn-icon dropdown-toggle" data-bs-toggle="dropdown">
+                                                                                    <div class="dot dot-primary"></div>
+                                                                                    <em class="icon ni ni-filter-alt"></em>
+                                                                                </a> -->
+                                                                                <div class="filter-wg dropdown-menu dropdown-menu-xl dropdown-menu-end">
+                                                                                    <div class="dropdown-head">
+                                                                                        <span class="sub-title dropdown-title">Filter Users</span>
+                                                                                        <div class="dropdown">
+                                                                                            <a href="#" class="btn btn-sm btn-icon">
+                                                                                                <em class="icon ni ni-more-h"></em>
+                                                                                            </a>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="dropdown-body dropdown-body-rg">
+                                                                                        <div class="row gx-6 gy-3">
+                                                                                            <div class="col-6">
+                                                                                                <div class="custom-control custom-control-sm custom-checkbox">
+                                                                                                    <input type="checkbox" class="custom-control-input" id="hasBalance">
+                                                                                                    <label class="custom-control-label" for="hasBalance"> Have Balance</label>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <div class="col-6">
+                                                                                                <div class="custom-control custom-control-sm custom-checkbox">
+                                                                                                    <input type="checkbox" class="custom-control-input" id="hasKYC">
+                                                                                                    <label class="custom-control-label" for="hasKYC"> KYC Verified</label>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <div class="col-6">
+                                                                                                <div class="form-group">
+                                                                                                    <label class="overline-title overline-title-alt">Role</label>
+                                                                                                    <select class="form-select js-select2">
+                                                                                                        <option value="any">Any Role</option>
+                                                                                                        <option value="investor">Investor</option>
+                                                                                                        <option value="seller">Seller</option>
+                                                                                                        <option value="buyer">Buyer</option>
+                                                                                                    </select>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <div class="col-6">
+                                                                                                <div class="form-group">
+                                                                                                    <label class="overline-title overline-title-alt">Status</label>
+                                                                                                    <select class="form-select js-select2">
+                                                                                                        <option value="any">Any Status</option>
+                                                                                                        <option value="active">Active</option>
+                                                                                                        <option value="pending">Pending</option>
+                                                                                                        <option value="suspend">Suspend</option>
+                                                                                                        <option value="deleted">Deleted</option>
+                                                                                                    </select>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <div class="col-12">
+                                                                                                <div class="form-group">
+                                                                                                    <button type="button" class="btn btn-secondary">Filter</button>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="dropdown-foot between">
+                                                                                        <a class="clickable" href="#">Reset Filter</a>
+                                                                                        <a href="#">Save Filter</a>
+                                                                                    </div>
+                                                                                </div><!-- .filter-wg -->
+                                                                            </div><!-- .dropdown -->
+                                                                        </li><!-- li -->
+                                                                        <li>
+                                                                            <div class="dropdown">
+                                                                                <!-- <a href="#" class="btn btn-trigger btn-icon dropdown-toggle" data-bs-toggle="dropdown">
+                                                                                    <em class="icon ni ni-setting"></em>
+                                                                                </a> -->
+                                                                                <div class="dropdown-menu dropdown-menu-xs dropdown-menu-end">
+                                                                                    <!-- <ul class="link-check">
+                                                                                        <li><span>Show</span></li>
+                                                                                        <li class="active"><a href="#">10</a></li>
+                                                                                        <li><a href="#">20</a></li>
+                                                                                        <li><a href="#">50</a></li>
+                                                                                    </ul> -->
+                                                                                    <!-- <ul class="link-check">
+                                                                                        <li><span>Order</span></li>
+                                                                                        <li class="active"><a href="#">DESC</a></li>
+                                                                                        <li><a href="#">ASC</a></li>
+                                                                                    </ul> -->
+                                                                                </div>
+                                                                            </div><!-- .dropdown -->
+                                                                        </li><!-- li -->
+                                                                    </ul><!-- .btn-toolbar -->
+                                                                </div><!-- .toggle-content -->
+                                                            </div><!-- .toggle-wrap -->
+                                                        </li><!-- li -->
+                                                    </ul><!-- .btn-toolbar -->
+                                                </div>
+                                            </div><!-- .card-title-group -->
+                                            <div class="card-search search-wrap" data-search="search">
+                                                <div class="card-body">
+                                                    <!-- <div class="search-content">
+                                                        <a href="#" class="search-back btn btn-icon toggle-search" data-target="search"><em class="icon ni ni-arrow-left"></em></a>
+                                                        <input type="text" class="form-control border-transparent form-focus-none" placeholder="Search by user or email">
+                                                        <button class="search-submit btn btn-icon"><em class="icon ni ni-search"></em></button>
+                                                    </div> -->
+                                                </div>
+                                            </div><!-- .card-search -->
+                                        </div><!-- .card-inner -->
+                                        <div class="card-inner p-0">
+                                            <div class="nk-tb-list nk-tb-ulist is-compact">
+                                                <div class="nk-tb-item nk-tb-head">
+                                                   
+                                                    <div class="nk-tb-col"><span class="sub-text">Cert Number</span></div>
+                                                    <div class="nk-tb-col tb-col-md"><span class="sub-text">Cert Bearer Name</span></div>
+                                                    <div class="nk-tb-col tb-col-sm"><span class="sub-text">Location</span></div>
+                                                    <div class="nk-tb-col tb-col-md"><span class="sub-text">Training Platform</span></div>
+                                                    <div class="nk-tb-col tb-col-xxl"><span class="sub-text"> Completed Date</span></div>
+                                                   
+                                                  
+                                                   
+                                                </div><!-- .nk-tb-item -->
+                                                {% for u in all_cert %}
+                                               
+                                                <div class="nk-tb-item">
+                                                  
+                                                    <div class="nk-tb-col">
+                                                        <div class="user-card">
+                                                           
+                                                            <div class="user-name">
+                                                                <span class="tb-lead" style="color:red">{{ u.cert_number  }}</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                   
+                                                    <div class="nk-tb-col tb-col-sm">
+                                                        <span class="tb-lead">{{ u.user.name | title }}</span>
+                                                        <span class="sub-text">{{ u.cert_bearer_first_name }}</span>
+                                                        <span class="sub-text">{{ u.cert_bearer_last_name }}</span>
+                                                    </div>
+                                                    <div class="nk-tb-col tb-col-lg">
+                                                        <span>{{ u.cert_bearer_country }}</span>
+                                                    </div>
+                                                    <div class="nk-tb-col tb-col-lg">
+                                                        <ul class="list-status">
+                                                            <li> <span>{{u.traning_platform}}</span></li>
+                                                        </ul>
+                                                    </div>
+                                                    <div class="nk-tb-col tb-col-lg">
+                                                        <ul class="list-status">
+                                                            <li> <span>{{u.date_of_completion}}</span></li>
+                                                        </ul>
+                                                    </div>
+                                                  
+                                                    <div class="nk-tb-col nk-tb-col-tools">
+                                                        <ul class="nk-tb-actions gx-2">
+                                                            <!-- <li class="nk-tb-action-hidden">
+                                                                <a href="#" class="btn btn-sm btn-icon btn-trigger" data-bs-toggle="tooltip" data-bs-placement="top" title="Send Email">
+                                                                    <em class="icon ni ni-mail-fill"></em>
+                                                                </a>
+                                                            </li> -->
+                                                            <!-- <li>
+                                                                <div class="drodown">
+                                                                    <a href="#" class="btn btn-sm btn-icon btn-trigger dropdown-toggle" data-bs-toggle="dropdown"><em class="icon ni ni-more-h"></em></a>
+                                                                    <div class="dropdown-menu dropdown-menu-end">
+                                                                        <ul class="link-list-opt no-bdr">
+                                                                            <li><a href="{% url 'gov_store_details' u.id %}"><em class="icon ni ni-eye"></em><span>View Details</span></a></li>
+                                                                           
+                                                                           
+                                                                        </ul>
+                                                                    </div>
+                                                                </div>
+                                                            </li> -->
+                                                        </ul>
+                                                    </div>
+                                                </div><!-- .nk-tb-item -->
+                                                {% endfor %}
+                                               
+                                            </div><!-- .nk-tb-list -->
+                                        </div><!-- .card-inner -->
+                                        <div class="card-inner">
+                                            <div class="nk-block-between-md g-3">
+                                                <div class="card-inner">
+                                                    <ul class="pagination justify-content-center justify-content-md-start">
+                                                        {% if all_gov_stores.has_previous %}
+                                                        <li class="page-item"><a class="page-link" href="?page={{ all_gov_stores.previous_page_number }}">Prev</a></li>
+                                                        {% endif %}
+                                                        
+                                                        {%for num in all_gov_stores.paginator.page_range %}
+                                                        {%if all_gov_stores.number == num %}
+                                                        <li class="page-item active"><a class="page-link" href="?page={{num}}">{{num}}</a></li>
+                                                        {% elif num > all_gov_stores.number|add:'-3' and num < all_gov_stores.number|add:'3' %}
+                                                        <li class="page-item"><a class="page-link" href="?page={{num}}">{{num}}</a></li>
+                                                        {%endif%}
+                                                        {%endfor%}
+                    
+                                                       {% if all_gov_stores.has_next %}
+                                                        <li class="page-item"><a class="page-link" href="?page={{all_gov_stores.next_page_number }}">Next</a></li>
+                                                        {% endif %}
+                                                    </ul><!-- .pagination -->
+                                                </div><!-- .card-inner -->
+                                               
+                                            </div><!-- .nk-block-between -->
+                                        </div>
+                                    </div><!-- .card-inner-group -->
+                                </div><!-- .card -->
+                            </div><!-- .nk-block -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- content @e -->
+{% endblock content %}
+
+              

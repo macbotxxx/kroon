@@ -1,0 +1,294 @@
+{% extends "gov_panel/base.html" %}
+{% load static humanize %}
+{% load i18n crispy_forms_tags %}
+ 
+{% block content %}
+
+ <!-- content @s -->
+ <div class="nk-content ">
+    <div class="container-fluid">
+        <div class="nk-content-inner">
+            <div class="nk-content-body">
+                <div class="nk-block-head nk-block-head-sm">
+                    <div class="nk-block-between">
+                        <div class="nk-block-head-content">
+                            <h3 class="nk-block-title page-title">Dashboard Overview</h3>
+                            
+                            <div class="nk-block-des text-soft">
+                                <p>Welcome to Government Onbarding and merchants monitoring system.</p>
+                            </div>
+                        </div><!-- .nk-block-head-content -->
+                        <div class="nk-block-head-content">
+                            <div class="toggle-wrap nk-block-tools-toggle">
+                                <a href="#" class="btn btn-icon btn-trigger toggle-expand me-n1" data-target="pageMenu"><em class="icon ni ni-more-v"></em></a>
+                                <div class="toggle-expand-content" data-content="pageMenu">
+                                    <ul class="nk-block-tools g-3">
+                                        {% if request.user.country_of_residence.iso2 == "NG" %}
+                                        <li><a href="#" class="btn btn-white btn-dim btn-outline-primary"><em class="icon ni ni-download-cloud"></em><span>Generate Government Report</span></a></li>
+                                        {% else  %}
+                                        <li><a href="{% static 'gov_panel/gov_report.pdf' %}" class="btn btn-white btn-dim btn-outline-primary"><em class="icon ni ni-download-cloud"></em><span>Generate Government Report</span></a></li>
+                                        {% endif %}
+                                       
+                                        
+                                    </ul>
+                                </div>
+                            </div>
+                        </div><!-- .nk-block-head-content -->
+                    </div><!-- .nk-block-between -->
+                </div><!-- .nk-block-head -->
+                <div class="nk-block">
+                    <div class="row g-gs">
+                        <div class="col-lg-6 col-xxl-12">
+                            <div class="row g-gs">
+                                <div class="col-xxl-3 col-sm-6">
+                                    <div class="card card-bordered">
+                                        <div class="card-inner">
+                                            <div class="card-title-group align-start mb-2">
+                                                <div class="card-title">
+                                                    <h6 class="title">Total Merchants</h6>
+                                                </div>
+                                                <div class="card-tools">
+                                                    <em class="card-hint icon ni ni-help-fill" data-bs-toggle="tooltip" data-bs-placement="left" title="Total active merchant onboarded by the government"></em>
+                                                </div>
+                                            </div>
+                                            <div class="align-end flex-sm-wrap g-4 flex-md-nowrap">
+                                                <div class="nk-sale-data">
+                                                    <span class="amount">{{ all_active_user | intcomma }} </span>
+                                                    <span class="sub-title"><span class="change down text-danger"></span>Total count of all merchants </span>
+                                                </div>
+                                                <div class="nk-sales-ck">
+                                                    
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div><!-- .card -->
+                                </div><!-- .col -->
+                                <div class="col-xxl-3 col-sm-6">
+                                    <div class="card card-bordered">
+                                        <div class="card-inner">
+                                            <div class="card-title-group align-start mb-2">
+                                                <div class="card-title">
+                                                    <h6 class="title">Active Merchants  </h6>
+                                                </div>
+                                                <div class="card-tools">
+                                                    <em class="card-hint icon ni ni-help-fill" data-bs-toggle="tooltip" data-bs-placement="left" title="Active merchants  "></em>
+                                                </div>
+                                            </div>
+                                            <div class="align-end flex-sm-wrap g-4 flex-md-nowrap">
+                                                <div class="nk-sale-data">
+                                                    <span class="amount">{{all_active_user | intcomma }}</span>
+                                                    <span class="sub-title"><span class="change up text-success"></span>Total Active Merchant</span>
+                                                </div>
+                                                <div class="nk-sales-ck">
+                                                   
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div><!-- .card -->
+                                </div><!-- .col -->
+                                <div class="col-xxl-3 col-sm-6">
+                                    <div class="card card-bordered">
+                                        <div class="card-inner">
+                                            <div class="card-title-group align-start mb-2">
+                                                <div class="card-title">
+                                                    <h6 class="title">Total Sales </h6>
+                                                </div>
+                                                <div class="card-tools">
+                                                    <em class="card-hint icon ni ni-help-fill" data-bs-toggle="tooltip" data-bs-placement="left" title="Total merchants sales "></em>
+                                                </div>
+                                            </div>
+                                            <div class="align-end flex-sm-wrap g-4 flex-md-nowrap">
+                                                <div class="nk-sale-data">
+                                                    <span class="amount">NGN {{ total_revenue_ZAR | intcomma }}</span>
+                                                    <span class="sub-title"><span class="change up text-success"></span>total merchant sales</span>
+                                                </div>
+                                                <div class="nk-sales-ck">
+                                                   
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div><!-- .card -->
+                                </div><!-- .col -->
+                                <div class="col-xxl-3 col-sm-6">
+                                    <div class="card card-bordered">
+                                        <div class="card-inner">
+                                            <div class="card-title-group align-start mb-2">
+                                                <div class="card-title">
+                                                    <h6 class="title">Jobs Created </h6>
+                                                </div>
+                                                <div class="card-tools">
+                                                    <em class="card-hint icon ni ni-help-fill" data-bs-toggle="tooltip" data-bs-placement="left" title="Total Jobs Created "></em>
+                                                </div>
+                                            </div>
+                                            <div class="align-end flex-sm-wrap g-4 flex-md-nowrap">
+                                                <div class="nk-sale-data">
+                                                    <span class="amount">{{ job_created_count | intcomma }}</span>
+                                                    <span class="sub-title"><span class="change up text-success"></span>Total jobs created by merchant</span>
+                                                </div>
+                                                <div class="nk-sales-ck">
+                                                   
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div><!-- .card -->
+                                </div><!-- .col -->
+                            </div><!-- .row -->
+                        </div><!-- .col -->
+                        <div class="col-lg-12">
+                            <div class="card card-bordered h-100">
+                                <div class="card-inner">
+                                    <div class="card-title-group align-start mb-3">
+                                        <div class="card-title">
+                                            <h6 class="title">Global Revenue Overview</h6>
+                                            <p>In last 15 days of merchants sales overview. <a href="#" class="link link-sm">Merchants Stats</a></p>
+                                        </div>
+                                        
+                                    </div><!-- .card-title-group -->
+                                    <div class="nk-order-ovwg">
+                                        <div class="row g-4 align-end">
+                                            <div class="col-xxl-8">
+                                                <div class="nk-order-ovwg-ck">
+                                                    <canvas class="sales-overview-chart" id="salesOverviewNewEdit"></canvas>
+                                                </div>
+                                            </div><!-- .col -->
+                                            <div class="col-xxl-4">
+                                                <div class="row g-4">
+                                                    <div class="col-sm-6 col-xxl-12">
+                                                        <div class="nk-order-ovwg-data buy">
+                                                            <div class="amount">{{ total_revenue_ZAR | intcomma }} <small class="currenct currency-usd">{{ request.user.default_currency_id }}</small></div>
+                                                            <div class="info"> Amount in local currency <strong> <span class="currenct currency-usd">{{ request.user.default_currency_id }}</span></strong></div>
+                                                            <div class="title"><em class="icon ni ni-arrow-up-right"></em> Total Revenue</div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-6 col-xxl-12">
+                                                        <div class="nk-order-ovwg-data sell">
+                                                            <div class="amount">{{ total_revenue_USD | intcomma }} <small class="currenct currency-usd">USD</small></div>
+                                                            <div class="info">Local currency converted to <strong> <span class="currenct currency-usd">USD</span></strong></div>
+                                                            <div class="title"><em class="icon ni ni-arrow-up-right"></em> Total Revenue In USD</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div><!-- .col -->
+                                        </div>
+                                    </div><!-- .nk-order-ovwg -->
+                                </div><!-- .card-inner -->
+                            </div><!-- .card -->
+                        </div><!-- .col -->
+                       
+                        <!-- <div class="col-lg-4">
+                            <div class="row g-gs">
+                                <div class="col-md-6 col-lg-12">
+                                    <div class="card card-bordered card-full">
+                                        <div class="card-inner">
+                                            <div class="card-title-group align-start mb-2">
+                                                <div class="card-title">
+                                                    <h6 class="title">Total Merchants By {% if state  %} State {% else %} Province {% endif %}</h6>
+                                                    <p>This holds the total merchant by {% if state  %} State {% else %} Province {% endif %}.</p>
+                                                </div>
+                                                
+                                            </div>
+                                            <div class="nk-coin-ovwg">
+                                                <div class="nk-ck-s">
+                                                    <canvas class="doughnut-chart" id="doughnutChartData2"></canvas>
+                                                </div>
+                                                <ul class="nk-coin-ovwg-legends">
+                                                    {% for p in province %}
+                                                    <li><span class="dot dot-lg sq"></span><span>{{ p.province | title }}</span></li>
+                                                    {% endfor %}
+                                                   
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                               
+                            </div>
+                        </div>
+                        -->
+                        <div class="col-xxl-12">
+                            <div class="row g-gs">
+                      
+                               
+
+                                <figure class="highcharts-figure">
+                                    <div id="containergender"></div>
+                                   
+                                </figure>
+
+                                <figure class="highcharts-figure">
+                                    <div id="containerprovince"></div>
+                                   
+                                </figure>
+                        </div>
+                        </div>
+                        <div class="nk-block">
+                            <div class="nk-block-head">
+                                <div class="nk-block-head-content">
+                                    <h4 class="nk-block-title">{% if state  %} State {% else %} Province {% endif %} Merchants Sales Records
+                                        
+                                    </h4>
+                                    <div class="nk-block-des">
+                                        <p>A line chart is a way of plotting data points on a line.  it is used to show trend data of a {% if state  %} State {% else %} Province {% endif %} merchant sales records .</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="card card-bordered card-preview">
+                                <div class="card-inner">
+                                    <div class="nk-ck">
+                                        <canvas class="line-chart" id="solidLineChart1"></canvas>
+                                    </div>
+                                </div>
+                            </div><!-- .card-preview -->
+
+                           
+                          
+                            <div class="card card-bordered card-preview">
+                                <div class="card-inner">
+                                    <div class="col-12">
+                                        <!-- <div id="xmap"></div> -->
+                                       <iframe src="https://www.google.com/maps/d/u/0/embed?mid=18RP-cY_zPL5LYNylcE0tLmCOEC6WlRE&ehbc=2E312F" width="1240" height="480"></iframe>
+                                    </div><!-- .col -->
+                                </div>
+                            </div><!-- .card-preview -->
+
+                            <div class="nk-block-head">
+                                <div class="nk-block-head-content">
+                                    <h4 class="nk-block-title">{% if state  %} State {% else %} Province {% endif %} Merchants  Records</h4>
+                                    <div class="nk-block-des">
+                                       
+                                    </div>
+                                </div>
+                            </div>
+                            <table class="table" style="border: 1px solid black;">
+                                <thead>
+                                  <tr>
+                                    <th scope="col">{% if state  %} State {% else %} Province {% endif %}</th>
+                                    <th scope="col">Merchants</th>
+                                    <th scope="col">Sales</th>
+                                    <th scope="col">Cost Of Sales</th>
+                                    <th scope="col">Active Merchants</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                {% for i in province %}
+                                  <tr>
+                                    <td>{{i.province | title}}</td>
+                                    <td>{{i.province_count | intcomma}}</td>
+                                    <td>{{ request.user.default_currency_id }} {{i.sales | intcomma}}</td>
+                                    <td>{{ request.user.default_currency_id }} {{i.cost_of_sales_province | intcomma}}</td>
+                                    <td>{{i.province_count | intcomma}}</td>
+                                  </tr>
+                                {% endfor %}
+                                </tbody>
+                              </table>
+                        </div>
+                        
+                    </div><!-- .row -->
+                </div><!-- .nk-block -->
+            </div>
+        </div>
+    </div>
+</div>
+<!-- content @e -->
+{% endblock content %}

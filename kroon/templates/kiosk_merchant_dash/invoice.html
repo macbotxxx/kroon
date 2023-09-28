@@ -1,0 +1,128 @@
+
+{% load static crispy_forms_tags humanize %}
+
+
+<!DOCTYPE html>
+<html lang="zxx" class="js">
+
+<head>
+    <base href=".{% static 'macbotadmin_v1/">
+    <meta charset="utf-8">
+    <meta name="author" content="Velvet Tech">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="an invoice for the current sale">
+    <!-- Fav Icon  -->
+    <link rel="shortcut icon" href="{% static 'macbotadmin_v1/images/favicon.png' %}">
+    <!-- Page Title  -->
+    <title>Invoice Print | {{ request.user.merchant_business_name | title }}</title>
+    <!-- StyleSheets  -->
+    <link rel="stylesheet" href="{% static 'macbotadmin_v1/assets/css/dashlite.css' %}">
+    <link id="skin-default" rel="stylesheet" href="{% static 'macbotadmin_v1/assets/css/theme.css' %}">
+</head>
+
+
+<body class="bg-white" onload="printPromot()">
+    <div class="nk-block">
+        <div class="invoice invoice-print">
+            <div class="invoice-wrap">
+                <div class="container">
+                    <div class="row" style="font-size: 15px;">
+                        <div class="col"><img src="{% if  business_profile.business_logo %}{{ business_profile.business_logo.url }} {% else %} https://test-server-space.nyc3.digitaloceanspaces.com/kroon-kiosk-test-static/Screenshot%202022-06-02%20at%201.11.41%20PM.png {% endif %}" alt="" srcset="" style="width:40%;"></div>
+                        <div class="col">Invoice ID : <b>{{ total.order_number }}</b> <br> Date : <b>{{ total.created_date }}</b>   </div>
+                   
+                        <div class="col">Business Name : <b>{{ business_profile.business_name  }}</b> <br> Contact Number : <b>{{ business_profile.business_contact_number }}</b>  </div> <br>
+                        <div class="col">Registeration Number : <b> {{ business_profile.business_registration_number }} </b> <br>Business Address : <b>{{ business_profile.business_address }}</b>  </div>
+                        
+                      
+                    </div>
+                   
+                  </div>
+              <hr>
+               
+                <div class="invoice-bills">
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th class="w-150px">Item SKU</th>
+                                    <th class="w-60">Product Description</th>
+                                    <th>Price</th>
+                                    <th>Qty</th>
+                                    <th>Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for s in sale%}
+
+                                <tr>
+                                    <td>{{ s.product.product_sku }}</td>
+                                    <td>{{ s.product.product_name | title }}<br />
+                                        {% if s.variation.all %}
+                                            {% for v in s.variation.all %}
+                                                {{ v.variations_category }} : {{ v.variation_value }} ,
+                                            {% endfor %}
+                                        {% endif %}</td>
+                                    <td>{{ s.product_price | intcomma }} {{ request.user.default_currency_id }}
+                                        
+                                    </td>
+
+                                    {% if s.product.charge_by_weight %}
+                                    <td>{{ s.weight_quantity }} {{ s.weight_unit }}</td>
+                                    {% else %}
+                                    <td>{{ s.quantity }}</td>
+                                    {% endif %}
+
+                                    <td>{{ s.product_total_price | intcomma }} {{ request.user.default_currency_id }}</td>
+                                </tr>
+                                {% endfor %}
+                            
+                               
+                            </tbody>
+                            <tfoot>
+                                {% if total.payment.payment_method == "cash_payment" %}
+                                <tr>
+
+                                    <td colspan="2"></td>
+                                    <td colspan="2">Total Cash Collected </td>
+                                    <td>{{ total.payment.cash_collected }} {{ request.user.default_currency_id }}</td>
+                                
+                                </tr>
+                                <tr>
+
+                                    <td colspan="2"></td>
+                                    <td colspan="2">Total Customers Change</td>
+                                    <td>{{ total.payment.customers_change }} {{ request.user.default_currency_id }}</td>
+
+                                </tr>
+                                {% endif %}
+                                <tr>
+                                    
+                                    <td colspan="2"></td>
+                                    <td colspan="2">Payment Method</td>
+                                    <td>{{ total.payment.payment_method }}</td>
+                                    
+                                </tr>
+                                
+                                <tr>
+                                    
+                                    <td colspan="2"></td>
+                                    <td colspan="2">Grand Total</td>
+                                    <td>{{ total.order_total | intcomma }}  {{ request.user.default_currency_id }}</td>
+                                    
+                                </tr>
+                            </tfoot>
+                        </table>
+                        <div class="nk-notes ff-italic fs-12px text-soft"> Invoice was created on a computer and is valid without the signature and seal. </div>
+                    </div>
+                </div><!-- .invoice-bills -->
+            </div><!-- .invoice-wrap -->
+        </div><!-- .invoice -->
+    </div><!-- .nk-block -->
+    <script>
+        function printPromot() {
+            window.print();
+        }
+    </script>
+</body>
+
+</html>

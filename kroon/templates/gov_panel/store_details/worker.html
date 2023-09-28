@@ -1,0 +1,92 @@
+{% extends 'gov_panel/store_details/base.html' %}
+{% load static crispy_forms_tags humanize %}
+
+{% block details %}
+ <!-- content @s -->
+<div class="card-inner card-inner-lg">
+  <!-- content @s -->
+  
+              
+               
+                <div class="nk-block nk-block-lg card">
+                    <div class="nk-block-head">
+                        <div class="nk-block-head-content">
+                            <h4 class="title nk-block-title">All Merchant Workers List And Information</h4>
+                        </div>
+                    </div>
+                    
+                   
+                    <div class="row g-gs">
+                        {% for w in worker %}
+                            {%if w.workers.all %}
+                                {%for i in w.workers.all %}
+                                    <div class="col-sm-6 col-lg-4 col-xxl-5 ">
+                                        <div class="card">
+                                            <div class="card-inner">
+                                                <div class="team">
+                                                    
+                                                    <div class="user-card user-card-s2">
+                                                        <div class="user-avatar lg bg-primary">
+                                                            <img src="https://test-server-space.nyc3.digitaloceanspaces.com/kroon-kiosk-test-static/3135715.png" alt="" srcset="">
+                                                            <div class="status dot dot-lg dot-success"></div>
+                                                        </div>
+                                                        <div class="user-info">
+                                                            <h6>{{i.name | title}}</h6>
+                                                            <span class="sub-text">Worker</span>
+                                                        </div>
+                                                    </div>
+                                                    <ul class="team-info">
+                                                        <li><span>Join Date</span><span>{{ i.date_joined }}</span></li>
+                                                        <li><span>Contact</span><span>{{ i.contact_number }}</span></li>
+                                                        <li><span>Email</span><span>{{ i.email }}</span></li>
+                                                        <li><span>Country Of Residence</span><span>{{ i.country_of_residence }}</span></li>
+                                                        <li><span>DOB</span><span>{{ i.date_of_birth }}</span></li>
+                                                        <li><span>Gender</span><span>{{ i.gender }}</span></li>
+                                                    </ul>
+                                                    <div class="team-view">
+                                                    
+                                                    
+                                                    </div>
+                                                </div><!-- .team -->
+                                            </div><!-- .card-inner -->
+                                        </div><!-- .card -->
+                                    </div><!-- .col -->
+                                
+                        {% endfor %}
+                                        
+
+                       
+                        {% else %}
+
+                        <div class="nk-content center">
+                            <div class="container-fluid">
+                                <div class="nk-content-inner">
+                                    <div class="nk-content-body">
+                                        <div class="content-page wide-sm m-auto">
+                                            <div class="nk-block-head nk-block-head-lg wide-xs mx-auto">
+                                                <div class="nk-block-head-content text-center">
+                                                    <div class="nk-block-head-sub"><span></span></div>
+                                                    <h6 class="nk-block-title fw-normal">The current merchant has no worker associated to his or her store account.</h6>
+                                                
+                                                </div>
+                                            </div><!-- .nk-block-head -->
+                                           
+                                        </div><!-- .content-page -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- content @e -->
+                        {% endif %}
+
+                        {% endfor %}
+                        
+                    </div>
+                </div><!-- .nk-block -->
+            
+</div>
+<!-- content @e -->
+                                   
+</div><!-- .card-inner -->
+                                              
+{% endblock %}

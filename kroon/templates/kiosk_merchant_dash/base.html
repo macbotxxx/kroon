@@ -1,0 +1,860 @@
+{% load static humanize %}
+<!DOCTYPE html>
+<html lang="zxx" class="js">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="author" content="Michael Asa">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="kiosk merchant dashboard">
+    <!-- Fav Icon  -->
+    <link rel="shortcut icon" href="{% static 'macbotadmin_v1/images/favicon.png' %}">
+    <!-- Page Title  -->
+    <title> Kroon Kiosk Merchant Dashboard </title>
+    <!-- StyleSheets  -->
+    <link rel="stylesheet" href="{% static 'macbotadmin_v1/assets/css/dashlite.css' %}">
+    <link id="skin-default" rel="stylesheet" href="{% static 'macbotadmin_v1/assets/css/theme.css' %}">
+    <style type="text/css">iframe.goog-te-banner-frame{ display: none !important;}</style>
+    <style type="text/css">body {position: static !important; top:0px !important;}</style>
+
+</head>
+
+<body class="nk-body bg-lighter npc-default has-sidebar {% if not user_profile.web_light_mode %} dark-mode {% endif %}">
+    <div class="nk-app-root">
+        <!-- main @s -->
+        
+        <div class="nk-main ">
+            <!-- sidebar @s -->
+            <div class="nk-sidebar nk-sidebar-fixed is-light " data-content="sidebarMenu">
+                <div class="nk-sidebar-element nk-sidebar-head">
+                    <div class="nk-sidebar-brand">
+                        <a href="{% url 'index_page'%}" class="logo-link nk-sidebar-logo">
+                            <img class="logo-light logo-img" src="https://test-server-space.nyc3.digitaloceanspaces.com/kroon-kiosk-test-static/kiosk_auth_page_images/Kroon%20Kiosk%20logo.png" srcset="https://test-server-space.nyc3.digitaloceanspaces.com/kroon-kiosk-test-static/kiosk_auth_page_images/Kroon%20Kiosk%20logo.png" alt="logo">
+                            <img class="logo-dark logo-img" src="https://test-server-space.nyc3.digitaloceanspaces.com/kroon-kiosk-test-static/kiosk_auth_page_images/Kroon%20Kiosk%20logo.png" srcset="https://test-server-space.nyc3.digitaloceanspaces.com/kroon-kiosk-test-static/kiosk_auth_page_images/Kroon%20Kiosk%20logo.png" alt="logo-dark">
+                            <img class="logo-small logo-img logo-img-small" src="https://test-server-space.nyc3.digitaloceanspaces.com/kroon-kiosk-test-static/kiosk_auth_page_images/Kroon%20Kiosk%20logo.png" srcset="https://test-server-space.nyc3.digitaloceanspaces.com/kroon-kiosk-test-static/kiosk_auth_page_images/Kroon%20Kiosk%20logo.png" alt="logo-small">
+                        </a>
+                    </div>
+                    <div class="nk-menu-trigger me-n2">
+                        <a href="#" class="nk-nav-toggle nk-quick-nav-icon d-xl-none" data-target="sidebarMenu"><em class="icon ni ni-arrow-left"></em></a>
+                        <a href="#" class="nk-nav-compact nk-quick-nav-icon d-none d-xl-inline-flex" data-target="sidebarMenu"><em class="icon ni ni-menu"></em></a>
+                    </div>
+                </div><!-- .nk-sidebar-element -->
+                <div class="nk-sidebar-element">
+                    <div class="nk-sidebar-content">
+                        <div class="nk-sidebar-menu" data-simplebar>
+                            <ul class="nk-menu">
+                                <!-- <li class="nk-menu-heading">
+                                    <h6 class="overline-title text-primary-alt">My Businesses </h6>
+                                </li> -->
+                                <!-- .nk-menu-item -->
+                         
+                             
+
+                                <li class="nk-menu-heading">
+                                    <h6 class="overline-title text-primary-alt">My Business Account</h6>
+                                </li><!-- .nk-menu-item -->
+                                {% if user.is_authenticated %}
+                                    {% if my_business_profile %}
+                                        {% for b in my_business_profile %}
+                                        <li class="nk-menu-item">
+                                           
+                                            <a  {% if b.active %} {% else %} href="{% url 'my_business_account' b.id %}" {% endif %} class="nk-menu-link">
+                                                <span class="nk-menu-icon"> <img src=" {% if  b.business_logo %} {{ b.business_logo.url }} {% endif %}" alt="" srcset=""></span>
+                                                <span class="nk-menu-text">{{b.business_name | title }}
+                                                {% if b.active %}
+                                                <span class="nk-menu-badge">ACTIVE</span></span>
+                                                {% endif %}
+                                            </a>
+                                        </li>
+                                        {% endfor %}
+
+                                    {% endif %}
+                                {% endif %}
+
+                                
+
+                                <li class="nk-menu-heading">
+                                    <h6 class="overline-title text-primary-alt">My Dashboard</h6>
+                                </li><!-- .nk-menu-item -->
+                                <li class="nk-menu-item">
+                                    <a href="{% url 'index_page' %}" class="nk-menu-link">
+                                        <span class="nk-menu-icon"><em class="icon ni ni-bag"></em></span>
+                                        <span class="nk-menu-text">Dashboard</span>
+                                    </a>
+                                </li>
+                                
+                                <li class="nk-menu-item">
+                                    <a href="{% url 'all_plans' %}" class="nk-menu-link">
+                                      <span class="nk-menu-icon"><em class="icon ni ni-cc-mc"></em></span>
+                                      <span class="nk-menu-text">Pricing</span><span class="nk-menu-badge">NEW</span>
+                                  </a>  
+                                </li><!-- .nk-menu-item -->
+                              
+
+                                <li class="nk-menu-heading">
+                                    <h6 class="overline-title text-primary-alt">Analytics And Business Plan</h6>
+                                </li><!-- .nk-menu-item -->
+                                <li class="nk-menu-item">
+                                    <a href="{% url 'business_analytics' %}" class="nk-menu-link">
+                                        <span class="nk-menu-icon"><em class="icon ni ni-growth-fill"></em></span>
+                                        <span class="nk-menu-text">Business Analytics</span>
+                                    </a>
+                                </li>
+                                <li class="nk-menu-item">
+                                    <a href="{% url 'financial_analytics' %}" class="nk-menu-link">
+                                      <span class="nk-menu-icon"><em class="icon ni ni-invest"></em></span>
+                                      <span class="nk-menu-text">Financial Analytics</span>
+                                    </a>
+                                       
+                                </li><!-- .nk-menu-item -->
+                                <li class="nk-menu-item has-sub">
+                                    <a href="#" class="nk-menu-link nk-menu-toggle">
+                                        <span class="nk-menu-icon"><em class="icon ni ni-users-fill"></em></span>
+                                        <span class="nk-menu-text">Business Report</span>
+                                    </a>
+                                    <ul class="nk-menu-sub">
+                                        <li class="nk-menu-item">
+                                            <a href="{% url 'create_business_plan' %}" class="nk-menu-link"><span class="nk-menu-text">Create New Business Report</span></a>
+                                        </li>
+                                        <li class="nk-menu-item">
+                                            <a href="{% url 'my_business_record' %}" class="nk-menu-link"><span class="nk-menu-text">My Business Report</span></a>
+                                        </li>
+                                        
+                                    </ul><!-- .nk-menu-sub -->
+                                </li><!-- .nk-menu-item -->
+
+                                <li class="nk-menu-heading">
+                                  <h6 class="overline-title text-primary-alt">My Sales And Products</h6>
+                                </li><!-- .nk-menu-item -->
+                                
+                                <li class="nk-menu-item">
+                                  <a href="{% url 'all_sales' %}" class="nk-menu-link">
+                                      <span class="nk-menu-icon"><em class="icon ni ni-coin-alt-fill"></em></span>
+                                      <span class="nk-menu-text">All Sales</span>
+                                  </a>
+                                </li>
+                                <li class="nk-menu-item">
+
+                                  <a href="{% url 'all_products' %}" class="nk-menu-link">
+                                      <span class="nk-menu-icon"><em class="icon ni ni-grid-add-fill-c"></em></span>
+                                      <span class="nk-menu-text">All Products</span><span class="nk-menu-badge">NEW</span>
+                                  </a>     
+                                  </li><!-- .nk-menu-item -->
+
+                              <li class="nk-menu-heading">
+                                <h6 class="overline-title text-primary-alt">Workers And Subscriptions</h6>
+                              </li><!-- .nk-menu-item -->
+
+                              <li class="nk-menu-item has-sub">
+                                <a href="#" class="nk-menu-link nk-menu-toggle">
+                                    <span class="nk-menu-icon"><em class="icon ni ni-users-fill"></em></span>
+                                    <span class="nk-menu-text">My Workers</span>
+                                </a>
+                                <ul class="nk-menu-sub">
+                                    <li class="nk-menu-item">
+                                        <a href="{% url 'verify_worker_email' %}" class="nk-menu-link"><span class="nk-menu-text">Create New Profile</span></a>
+                                    </li>
+                                    <li class="nk-menu-item">
+                                        <a href="{% url 'workers' %}" class="nk-menu-link"><span class="nk-menu-text">All Workers </span></a>
+                                    </li>
+                                    
+                                </ul><!-- .nk-menu-sub -->
+                            </li><!-- .nk-menu-item -->
+                              <li class="nk-menu-item">
+                               
+                                <a href="{% url 'my_subscriptions' %}" class="nk-menu-link">
+                                  <span class="nk-menu-icon"><em class="icon ni ni-swap-alt-fill"></em></span>
+                                  <span class="nk-menu-text">My Subscription</span><span class="nk-menu-badge">NEW</span>
+                              </a>     
+                            </li><!-- .nk-menu-item -->
+                            <li class="nk-menu-heading">
+                              <h6 class="overline-title text-primary-alt">Security And Report</h6>
+                            </li><!-- .nk-menu-item -->
+                            <li class="nk-menu-item">
+                              <a href="{% url 'account_settings' %}" class="nk-menu-link">
+                                  <span class="nk-menu-icon"><em class="icon ni ni-opt-dot-fill"></em></span>
+                                  <span class="nk-menu-text">Settings</span>
+                              </a>
+                              <!-- <a href="#" class="nk-menu-link">
+                                <span class="nk-menu-icon"><em class="icon ni ni-chat-circle-fill"></em></span>
+                                <span class="nk-menu-text">Any Issues ?</span>
+                            </a> -->
+                              </li>
+                            <li class="nk-menu-heading">
+                                <h6 class="overline-title text-primary-alt">Coming Soon</h6>
+                            </li><!-- .nk-menu-item -->
+                            <li class="nk-menu-item">
+                                <a href="#" class="nk-menu-link">
+                                    <span class="nk-menu-icon"><em class="icon ni ni-cloud-fill"></em></span>
+                                    <span class="nk-menu-text">Add Another Business </span>
+                                </a>
+                            </li>
+                            </ul><!-- .nk-menu -->
+                        </div><!-- .nk-sidebar-menu -->
+                    </div><!-- .nk-sidebar-content -->
+                </div><!-- .nk-sidebar-element -->
+            </div>
+            <!-- sidebar @e -->
+            <!-- wrap @s -->
+            <div class="nk-wrap ">
+                <!-- main header @s -->
+                <div class="nk-header nk-header-fixed is-light">
+                    <div class="container-fluid">
+                        <div class="nk-header-wrap">
+                            <div class="nk-menu-trigger d-xl-none ms-n1">
+                                <a href="#" class="nk-nav-toggle nk-quick-nav-icon" data-target="sidebarMenu"><em class="icon ni ni-menu"></em></a>
+                            </div>
+
+                            <div class="nk-header-brand d-xl-none">
+                                <a href="{% url 'index_page'%}" class="logo-link">
+                                    <img class="logo-light logo-img" src="https://test-server-space.nyc3.digitaloceanspaces.com/kroon-kiosk-test-static/kiosk_auth_page_images/Kroon%20Kiosk%20logo.png" srcset="https://test-server-space.nyc3.digitaloceanspaces.com/kroon-kiosk-test-static/kiosk_auth_page_images/Kroon%20Kiosk%20logo.png" alt="logo">
+                                    <img class="logo-dark logo-img" src="https://test-server-space.nyc3.digitaloceanspaces.com/kroon-kiosk-test-static/kiosk_auth_page_images/Kroon%20Kiosk%20logo.png" srcset="https://test-server-space.nyc3.digitaloceanspaces.com/kroon-kiosk-test-static/kiosk_auth_page_images/Kroon%20Kiosk%20logo.png" alt="logo-dark">
+                                </a>
+                            </div><!-- .nk-header-brand -->
+                           
+                            <div class="nk-header-tools">
+                                <ul class="nk-quick-nav">
+                                   
+                                    <li class="dropdown user-dropdown">
+                                        <a href="#" class="dropdown-toggle me-n1" data-bs-toggle="dropdown">
+                                            <div class="user-toggle">
+                                                <div class="user-avatar sm">
+                                                    <img src="https://test-server-space.nyc3.digitaloceanspaces.com/kroon-kiosk-test-static/3135715.png" alt="" srcset="">
+                                                </div>
+                                                <div class="user-info d-none d-xl-block">
+                                                    <div class="user-status user-status-unverified">Verified</div>
+                                                    <div class="user-name dropdown-indicator">{{ request.user.name | title }}</div>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        <div class="dropdown-menu dropdown-menu-md dropdown-menu-end">
+                                            <div class="dropdown-inner user-card-wrap bg-lighter d-none d-md-block">
+                                                <div class="user-card">
+                                                    <div class="user-avatar">
+                                                        <img src="https://test-server-space.nyc3.digitaloceanspaces.com/kroon-kiosk-test-static/3135715.png" alt="" srcset="">
+                                                    </div>
+                                                    <div class="user-info">
+                                                        <span class="lead-text">{{ request.user.name | title }}</span>
+                                                        <span class="sub-text">{{ request.user }}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="dropdown-inner">
+                                                <ul class="link-list">
+                                                    <li><a href="{% url 'account_settings' %}"><em class="icon ni ni-user-alt"></em><span>Profile Settings</span></a></li>
+                                                    <li><a href="{% url 'account_settings_language' %}"><em class="icon ni ni-setting-alt"></em><span>Change Language </span></a></li>
+                                                    <li><a href="{% url 'account_settings_password' %}"><em class="icon ni ni-lock"></em><span>Change Password</span></a></li>
+
+                                                    {% if user_profile.web_light_mode  %}
+                                                    <li><a href="{% url 'activate_theme' %}"><em class="icon ni ni-moon-fill"></em><span>Activate Dark Mode</span></a></li>
+                                                    {% else %}
+                                                    <li><a href="{% url 'activate_theme' %}"><em class="icon ni ni-moon"></em><span>Activate Light Mode</span></a></li>
+                                                    {% endif %}
+
+                                                </ul>
+                                            </div>
+                                            <div class="dropdown-inner">
+                                                <ul class="link-list">
+                                                    <li><a href="{% url 'account_logout' %}"><em class="icon ni ni-signout"></em><span>Sign out</span></a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div><!-- .nk-header-wrap -->
+                    </div><!-- .container-fliud -->
+                </div>
+                <!-- main header @e -->
+                {% block content %}
+               
+                {% endblock %}
+                <!-- footer @s -->
+                <div class="nk-footer">
+                    <div class="container-fluid">
+                        <div class="nk-footer-wrap">
+                            <div class="nk-footer-copyright"> &copy; 2022 Kroon Kiosk. Awesome by <a href="https://velvettechnologies.co.za/" target="_blank">Velvet Tech</a>
+                            </div>
+                           
+                        </div>
+                    </div>
+                </div>
+                <!-- footer @e -->
+            </div>
+            <!-- wrap @e -->
+        </div>
+        <!-- main @e -->
+    </div>
+    <!-- app-root @e -->
+  
+    <!-- JavaScript -->
+    <script src="{% static 'macbotadmin_v1/assets/js/bundle.js' %}"></script>
+    <script src="{% static 'macbotadmin_v1/assets/js/scripts.js' %}"></script>
+    <script src="{% static 'macbotadmin_v1/assets/js/charts/chart-ecommerce.js' %}"></script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/series-label.js"></script>
+    <script src="https://code.highcharts.com/highcharts-3d.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
+    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+   
+<!--Start of Tawk.to Script-->
+<script type="text/javascript">
+    var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+    (function(){
+    var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+    s1.async=true;
+    s1.src='https://embed.tawk.to/5e342556298c395d1ce58816/default';
+    s1.charset='UTF-8';
+    s1.setAttribute('crossorigin','*');
+    s0.parentNode.insertBefore(s1,s0);
+    })();
+    </script>
+    <!--End of Tawk.to Script-->
+
+<script type="text/javascript">
+    function googleTranslateElementInit() {
+        setCookie('googtrans', '/en/{{user_profile.business_default_language}}', 1);
+        new google.translate.TranslateElement({ pageLanguage: 'EN', layout: google.translate.TranslateElement.InlineLayout.SIMPLE }, 'google_translate_element');
+    }
+    function setCookie(key, value, expiry) {
+        var expires = new Date();
+        expires.setTime(expires.getTime() + (expiry * 24 * 60 * 60 * 1000));
+        document.cookie = key + '=' + value + ';expires=' + expires.toUTCString();
+    }
+</script>
+
+<script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit" type="text/javascript"></script>
+
+        
+  <script>
+
+
+ Highcharts.chart('container', {
+    chart: {
+        type: 'pie',
+        options3d: {
+            enabled: true,
+            alpha: 45
+        }
+    },
+    title: {
+        text: 'Best Selling Products'
+    },
+    subtitle: {
+        text: 'These are the best selling items of {{request.user.merchant_business_name | title}} '
+    },
+    plotOptions: {
+        pie: {
+            innerSize: 100,
+            depth: 45
+        }
+    },
+    series: [{
+        name: 'Quantity',
+        data: [
+            {% for s in best_sale %}
+
+            ['{{s.product__product_name | title }}', {{s.total}}],
+
+            {% endfor %}
+            
+        ]
+    }]
+});
+// Data retrieved from http://vikjavev.no/ver/index.php?spenn=2d&sluttid=16.06.2015.
+
+Highcharts.chart('container1', {
+    chart: {
+        type: 'spline',
+        scrollablePlotArea: {
+            minWidth: 600,
+            scrollPositionX: 1
+        }
+    },
+    title: {
+        text: 'Payment Method Analytics',
+        align: 'center'
+    },
+    subtitle: {
+        text: 'this holds the record of most used payment method for the pass 10 days.',
+        align: 'center'
+    },
+
+    plotOptions: {
+        pie: {
+            innerSize: 100,
+            depth: 45
+        }
+    },
+    
+    xAxis: {
+        categories: [
+        {% for i in days %}
+        '{{ i }}',
+        {% endfor %}
+        ].reverse(),
+        
+    },
+    yAxis: {
+        title: {
+            text: 'Fruit units'
+        }
+    },
+    
+    
+    tooltip: {
+        valueSuffix: ''
+    },
+  
+    series: [{
+        name: 'Kroon Payment',
+        data: [
+            {% for k in kroon_daily_payment_sale %} {{k}}, {% endfor %}
+        ].reverse()
+
+    },
+    {
+        name: 'Card Payment',
+        data: [
+        {% for k in card_daily_payment_sale %} {{k}}, {% endfor %}
+        ].reverse()
+
+    },
+    {
+        name: 'Mobile Money Payment',
+        data: [
+        {% for k in mobile_money_daily_payment_sale %} {{k}}, {% endfor %}
+        ].reverse()
+
+    }, 
+     {
+        name: 'Cash Payment',
+        data: [
+        {% for k in cash_daily_payment_sale %} {{k}}, {% endfor %}
+        ].reverse()
+    }],
+    navigation: {
+        menuItemStyle: {
+            fontSize: '10px'
+        }
+    }
+});
+
+Highcharts.chart('container2', {
+    chart: {
+        type: 'pie',
+        options3d: {
+            enabled: true,
+            alpha: 45,
+            beta: 0
+        }
+    },
+    title: {
+        text: 'Commonly Used Payment Method '
+    },
+    accessibility: {
+        point: {
+            valueSuffix: '%'
+        }
+    },
+    tooltip: {
+        pointFormat: '{series.name}:  <b>{point.percentage:.1f}%</b>'
+    },
+    subtitle: {
+        text: 'this records shows the most commonly used payment method during checkout for {{ request.user.merchant_business_name | title }}',
+        align: 'center'
+    },
+    plotOptions: {
+        pie: {
+            allowPointSelect: true,
+            cursor: 'pointer',
+            depth: 35,
+            dataLabels: {
+                enabled: true,
+                format: '{point.name}'
+            }
+        }
+    },
+    series: [{
+        type: 'pie',
+        name: 'Total Sales',
+        data: [
+            {% for p in merchant_revenue %}
+            ['{{ p.payment_method}} {{p.total_revenue}}', {{ p.total}}],
+            {% endfor %}
+            // ['Cash Payment Method', {{cash_count}}],
+            // ['Kroon Payment Method', {{kroon_count}}],
+            // ['Mobile Money Payment Method', {{mobile_money_count}}],
+        ]
+    }]
+});
+
+</script>
+
+<script>
+
+Highcharts.chart('container6', {
+    chart: {
+        type: 'spline'
+    },
+    title: {
+        text: 'Lastest  Daily Sales'
+    },
+    
+    xAxis: {
+        categories: [{% for i in days %}
+        '{{ i }}',
+        {% endfor %}].reverse(),
+        
+    },
+    yAxis: {
+        title: {
+            text: 'Total sales'
+        }
+    },
+    tooltip: {
+        shared: true,
+        valueSuffix: ' sales'
+    },
+    
+    
+    series: [ {
+        name: 'Daily Report',
+        data: [{% for d in daily_sales %} {{d}},{% endfor %}].reverse()
+    }]
+});
+
+
+
+Highcharts.chart('container7', {
+    chart: {
+        type: 'areaspline'
+    },
+    title: {
+        text: 'Last 10 Month Total Sales Report'
+    },
+    legend: {
+        layout: 'vertical',
+        align: 'left',
+        verticalAlign: 'top',
+        x: 150,
+        y: 100,
+        floating: true,
+        borderWidth: 1,
+        backgroundColor:
+            Highcharts.defaultOptions.legend.backgroundColor || '#FFFFFF'
+    },
+    xAxis: {
+        categories: [
+        {% for m in monthly_sales %} '{{m.created}}',{% endfor %}
+        ].reverse(),
+        plotBands: [{ // visualize the weekend
+            from: 4.5,
+            to: 6.5,
+            color: 'rgba(68, 170, 213, .2)'
+        }]
+    },
+    yAxis: {
+        title: {
+            text: 'Total Sales'
+        }
+    },
+    tooltip: {
+        shared: true,
+        valueSuffix: ' Sales'
+    },
+    credits: {
+        enabled: false
+    },
+    plotOptions: {
+        areaspline: {
+            fillOpacity: 0.5
+        }
+    },
+    series: [{
+        name: 'Monthly Report',
+        data: [{% for m in monthly_sales %} {{m.created_count}},{% endfor %}].reverse()
+    }]
+});
+
+
+
+  </script>
+
+<script>
+ Highcharts.chart('container3', {
+    chart: {
+        type: 'pie',
+        options3d: {
+            enabled: true,
+            alpha: 45
+        }
+    },
+    title: {
+        text: 'Most Used Payment Method With Total Amount'
+    },
+    subtitle: {
+        text: 'The are the payment methods used most commonly during checkout at {{ request.user.merchant_business_name | title }}'
+    },
+    plotOptions: {
+        pie: {
+            innerSize: 100,
+            depth: 45
+        }
+    },
+    series: [{
+        name: 'Amount Generated',
+        data: [
+            {% for t in total_sales_revenue %}
+
+            ['{{ t.payment_method | title }}', {{ t.total_revenue }}],
+            
+            {% endfor %}
+           
+        ]
+    }]
+});
+
+
+
+Highcharts.chart('container4', {
+    chart: {
+        zoomType: 'xy'
+    },
+    title: {
+        text: 'Monthly Financial Sales Report'
+    },
+    subtitle: {
+        text: 'Source: mykroonapp.com'
+    },
+    xAxis: [{
+        categories: [{% for m in monthly_sales %} '{{m.created}}', {% endfor %}].reverse(),
+        crosshair: true
+    }],
+    yAxis: [{ // Primary yAxis
+        labels: {
+            format: '{value}°C',
+            style: {
+                color: Highcharts.getOptions().colors[1]
+            }
+        },
+        title: {
+            text: 'Profit',
+            style: {
+                color: Highcharts.getOptions().colors[1]
+            }
+        }
+    }, { // Secondary yAxis
+        title: {
+            text: 'Total Amount',
+            style: {
+                color: Highcharts.getOptions().colors[0]
+            }
+        },
+        labels: {
+            format: '{value} {{ request.user.default_currency_id }}',
+            style: {
+                color: Highcharts.getOptions().colors[0]
+            }
+        },
+        opposite: true
+    }],
+    tooltip: {
+        shared: true
+    },
+    legend: {
+        layout: 'vertical',
+        align: 'left',
+        x: 120,
+        verticalAlign: 'top',
+        y: 100,
+        floating: true,
+        backgroundColor:
+            Highcharts.defaultOptions.legend.backgroundColor || // theme
+            'rgba(255,255,255,0.25)'
+    },
+    series: [{
+        name: 'Total Amount',
+        type: 'column',
+        yAxis: 1,
+        data: [{% for m in monthly_sales %} {{m.created_count }}, {% endfor %}].reverse(),
+        tooltip: {
+            valueSuffix: ' {{ request.user.default_currency_id }}'
+        }
+
+    }]
+});
+
+
+Highcharts.chart('container5', {
+    chart: {
+        type: 'areaspline'
+    },
+    title: {
+        text: 'Recent Sales Paid Amount '
+    },
+    legend: {
+        layout: 'vertical',
+        align: 'left',
+        verticalAlign: 'top',
+        x: 150,
+        y: 100,
+        floating: true,
+        borderWidth: 1,
+        backgroundColor:
+            Highcharts.defaultOptions.legend.backgroundColor || '#FFFFFF'
+    },
+    xAxis: {
+        categories: [
+        {% for r in days %} '{{r}}', {% endfor %}
+        ].reverse(),
+        plotBands: [{ // visualize the weekend
+            from: 4.5,
+            to: 6.5,
+            color: 'rgba(68, 170, 213, .2)'
+        }]
+    },
+    yAxis: {
+        title: {
+            text: 'Total Sales Amount'
+        }
+    },
+    tooltip: {
+        shared: true,
+        valueSuffix: ' {{request.user.default_currency_id}}'
+    },
+    credits: {
+        enabled: false
+    },
+    plotOptions: {
+        areaspline: {
+            fillOpacity: 0.5
+        }
+    },
+    series: [{
+        name: 'Recent Sales',
+        data: [{% for r in recent_sale %} {{r}}, {% endfor %}].reverse()
+    }]
+});    
+
+Highcharts.chart('container6', {
+    chart: {
+        type: 'areaspline'
+    },
+    title: {
+        text: 'Average fruit consumption during one week'
+    },
+    legend: {
+        layout: 'vertical',
+        align: 'left',
+        verticalAlign: 'top',
+        x: 150,
+        y: 100,
+        floating: true,
+        borderWidth: 1,
+        backgroundColor:
+            Highcharts.defaultOptions.legend.backgroundColor || '#FFFFFF'
+    },
+    xAxis: {
+        categories: [
+            
+        ],
+        plotBands: [{ // visualize the weekend
+            from: 4.5,
+            to: 6.5,
+            color: 'rgba(68, 170, 213, .2)'
+        }]
+    },
+    yAxis: {
+        title: {
+            text: 'Fruit units'
+        }
+    },
+    tooltip: {
+        shared: true,
+        valueSuffix: ' units'
+    },
+    credits: {
+        enabled: false
+    },
+    plotOptions: {
+        areaspline: {
+            fillOpacity: 0.5
+        }
+    },
+    series: [{
+        name: 'John',
+        data: [3, 4, 3, 5, 4, 10, 12]
+    }, {
+        name: 'Jane',
+        data: [1, 3, 4, 3, 3, 5, 4]
+    }]
+});
+
+</script>
+
+
+
+<script>
+
+Highcharts.chart('worker1', {
+    chart: {
+        type: 'areaspline'
+    },
+    title: {
+        text: '28 Latest Sales Report For The Worker '
+    },
+    legend: {
+        layout: 'vertical',
+        align: 'left',
+        verticalAlign: 'top',
+        x: 150,
+        y: 100,
+        floating: true,
+        borderWidth: 1,
+        backgroundColor:
+            Highcharts.defaultOptions.legend.backgroundColor || '#FFFFFF'
+    },
+    xAxis: {
+        categories: [
+            {% for d in worker_sales %} '{{d.day}}', {% endfor %}
+        ],
+        plotBands: [{ // visualize the weekend
+            from: 4.5,
+            to: 6.5,
+            color: 'rgba(68, 170, 213, .2)'
+        }]
+    },
+    yAxis: {
+        title: {
+            text: 'Fruit units'
+        }
+    },
+    tooltip: {
+        shared: true,
+        valueSuffix: ' sales'
+    },
+    credits: {
+        enabled: false
+    },
+    plotOptions: {
+        areaspline: {
+            fillOpacity: 0.5
+        }
+    },
+    series: [ {
+        name: '{{ user_profile.name | title }}',
+        data: [ {% for d in worker_sales %} {{d.sales_total}}, {% endfor %}]
+    }]
+});
+
+</script>
+
+
+
+
+
+</body>
+
+</html>

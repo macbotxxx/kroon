@@ -1,0 +1,167 @@
+{% load static crispy_forms_tags %}
+<!DOCTYPE html>
+<html lang="zxx" class="js">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="author" content="Softnio">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="A powerful and conceptual apps base dashboard template that especially build for developers and programmers.">
+    <!-- Fav Icon  -->
+    <link rel="shortcut icon" href="{% static 'macbotadmin_v1/images/favicon.png' %}">
+    <!-- Page Title  -->
+    <title> Kroon Kiosk Merchant Dashboard </title>
+    <!-- StyleSheets  -->
+    <link rel="stylesheet" href="{% static 'macbotadmin_v1/assets/css/dashlite.css' %}">
+    <link id="skin-default" rel="stylesheet" href="{% static 'macbotadmin_v1/assets/css/theme.css' %}">
+</head>
+
+<body class="nk-body bg-lighter npc-default  ">
+    <div class="nk-app-root">
+        <!-- main @s -->
+        <div class="nk-main ">
+            <div class="nk-wrap ">
+
+                <!-- main header @s -->
+                <div class="nk-header nk-header-fluid nk-header-fixed is-light">
+                    <div class="container-fluid">
+                        <div class="nk-header-wrap">
+                            <div class="nk-menu-trigger d-xl-none ms-n1">
+                                <a href="#" class="nk-nav-toggle nk-quick-nav-icon" data-target="sidebarMenu"><em class="icon ni ni-menu"></em></a>
+                            </div>
+                            <div class="nk-header-brand d-xl-none">
+                                <a href="html/crypto/index.html" class="logo-link">
+                                    <img class="logo-light logo-img" src="./images/logo.png" srcset="./images/logo2x.png 2x" alt="logo">
+                                    <img class="logo-dark logo-img" src="./images/logo-dark.png" srcset="./images/logo-dark2x.png 2x" alt="logo-dark">
+                                    <span class="nio-version">Crypto</span>
+                                </a>
+                            </div>
+                            <div class="nk-header-news d-none d-xl-block">
+                                <div class="nk-news-list">
+                                    <a class="nk-news-item" href="#">
+                                        <div class="nk-news-icon">
+                                            <em class="icon ni ni-card-view"></em>
+                                        </div>
+                                        <div class="nk-news-text">
+                                            <p>Do you know the latest update of 2022? <span> A overview of our is now available on YouTube</span></p>
+                                            <em class="icon ni ni-external"></em>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="nk-header-tools">
+                                <ul class="nk-quick-nav">
+                                    
+                                    <li class="dropdown user-dropdown">
+                                        <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown">
+                                            <div class="user-toggle">
+                                                <div class="user-avatar sm">
+                                                    <em class="icon ni ni-user-alt"></em>
+                                                </div>
+                                                <div class="user-info d-none d-md-block">
+                                                    <div class="user-status user-status-unverified">Business Unverified</div>
+                                                    <div class="user-name dropdown-indicator">{{ request.user.name | title }}</div>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        <div class="dropdown-menu dropdown-menu-md dropdown-menu-end dropdown-menu-s1">
+                                            <div class="dropdown-inner user-card-wrap bg-lighter d-none d-md-block">
+                                                <div class="user-card">
+                                                    <div class="user-avatar">
+                                                        <span><em class="icon ni ni-light-fill"></em></span>
+                                                    </div>
+                                                    <div class="user-info">
+                                                        <span class="lead-text">{{ request.user.name | title }}</span>
+                                                        <span class="sub-text">{{ request.user }}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                          
+                                           
+                                            <div class="dropdown-inner">
+                                                <ul class="link-list">
+                                                    <li><a href="{% url 'account_logout' %}"><em class="icon ni ni-signout"></em><span>Sign out</span></a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </li>
+                                   
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- main header @e -->
+                <!-- content @s -->
+                <div class="nk-content ">
+                    <div class="container-xl wide-lg">
+                        <div class="nk-content-body">
+                            <div class="kyc-app wide-sm m-auto">
+                                <div class="nk-block-head nk-block-head-lg wide-xs mx-auto">
+                                    <div class="nk-block-head-content text-center">
+                                        <h2 class="nk-block-title fw-normal">Welcome , {{ request.user.name | title }} </h2>
+                                        <div class="nk-block-des">
+                                            <p>To continue with Kroon Kiosk merchant dashboard, you need to submit your business information , so to help in to provide essential business plan for your business and many more. <br> <b> We are excited that you made it to this point , complete the below form to experience more benefits using KROON KIOSK  </b> </p>
+                                        </div>
+                                    </div>
+                                </div><!-- nk-block-head -->
+                                <div class="card card-bordered card-preview">
+                                    <div class="card-inner">
+                                        <div class="preview-block">
+                                            <form action="" method="POST" enctype="multipart/form-data" >
+                                                {% csrf_token %}
+                                            <span class="preview-title-lg overline-title">Register My Business Account</span>
+                                            <div class="row gy-4">
+                                                <div class="col-11">
+                                                    <div class="form-group">
+                                                       {{ form.business_name | as_crispy_field }}
+                                                       {{ form.business_logo | as_crispy_field }}
+                                                       {{ form.business_registration_number | as_crispy_field }}
+                                                       {{ form.business_contact_number | as_crispy_field }}
+                                                       {{ form.business_address | as_crispy_field }}
+                                                       {{ form.business_category | as_crispy_field }}
+                                                       {{ form.business_type | as_crispy_field }}
+                                                       {{ form.default | as_crispy_field }}
+                                                    </div>
+                                                </div>
+                                                
+                                               
+                                               
+                                            </div>
+                                            <!-- <hr class="preview-hr">
+                                            <span class="preview-title-lg overline-title">subscriptional code - optional</span>
+                                            <div class="row gy-4">
+                                                <div class="col-11">
+                                                    <div class="form-group">
+                                                        {{ form.subscription_code | as_crispy_field }}
+                                                    </div>
+                                                </div>
+                                               
+                                            </div> -->
+                                            <hr class="preview-hr">
+
+                                            <div class="form-group">
+                                                <button class="btn btn-lg btn-warning btn-block" type="submit">Create Business Profile</button>
+                                            </div>
+                                        </form>
+                                            
+                                        </div>
+                                    </div>
+                                </div><!-- .card-preview -->
+                            </div><!-- kyc-app -->
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+            <script src="{% static 'macbotadmin_v1/assets/js/bundle.js' %}"></script>
+            <script src="{% static 'macbotadmin_v1/assets/js/scripts.js' %}"></script>
+            <script src="{% static 'macbotadmin_v1/assets/js/charts/chart-ecommerce.js' %}"></script>
+
+        </body>
+
+        </html>
+              

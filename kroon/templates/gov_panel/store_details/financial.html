@@ -1,0 +1,307 @@
+{% extends 'gov_panel/store_details/base.html' %}
+{% load static crispy_forms_tags humanize %}
+
+{% block details %}
+ <!-- content @s -->
+<div class="card-inner card-inner-lg">
+
+  <div class="nk-block-head">
+    <div class="nk-block-head-content">
+        <h5 class="nk-block-title title">Merchant Revenue</h5>
+        <p>this hold the merchants revenue details which includes products Information and sales report</p>
+    </div>
+</div>
+
+<br>
+<div class="col-lg-6 col-xxl-12">
+    <div class="row g-gs">
+        <div class="col-sm-6 col-lg-12 col-xxl-6">
+            <div class="card card-bordered">
+                <div class="card-inner">
+                    <div class="card-title-group align-start mb-2">
+                        <div class="card-title">
+                            <h6 class="title">Total Sales Amount</h6>
+                        </div>
+                        <div class="card-tools">
+                            <em class="card-hint icon ni ni-help-fill" data-bs-toggle="tooltip" data-bs-placement="left" title="this indicates the total products that belongs to the merchant"></em>
+                        </div>
+                    </div>
+                    <div class="align-end flex-sm-wrap g-4 flex-md-nowrap">
+                        <div class="nk-sale-data">
+                            <span class="amount">{{total_amount | intcomma }} {{currency}}</span>
+                           
+                        </div>
+                        
+                    </div>
+                </div>
+            </div><!-- .card -->
+        </div><!-- .col -->
+        <div class="col-sm-6 col-lg-12 col-xxl-6">
+            <div class="card card-bordered">
+                <div class="card-inner">
+                    <div class="card-title-group align-start mb-2">
+                        <div class="card-title">
+                            <h6 class="title">Total Cost Price </h6>
+                        </div>
+                        <div class="card-tools">
+                            <em class="card-hint icon ni ni-help-fill" data-bs-toggle="tooltip" data-bs-placement="left" title="this section calculates the total cost price of the merchants uploaded products"></em>
+                        </div>
+                    </div>
+                    <div class="align-end flex-sm-wrap g-4 flex-md-nowrap">
+                        <div class="nk-sale-data">
+                            <span class="amount">{{cost_of_sales_province | intcomma }} {{currency}}</span>
+                            
+                        </div>
+                        
+                    </div>
+                </div>
+            </div><!-- .card -->
+        </div><!-- .col -->
+    </div><!-- .row -->
+</div><!-- .col -->
+<br>
+<div class="col-lg-6 col-xxl-12">
+    <div class="row g-gs">
+        <div class="col-sm-6 col-lg-12 col-xxl-6">
+            <div class="card card-bordered">
+                <div class="card-inner">
+                    <div class="card-title-group align-start mb-2">
+                        <div class="card-title">
+                            <h6 class="title">Total Selling Price </h6>
+                        </div>
+                        <div class="card-tools">
+                            <em class="card-hint icon ni ni-help-fill" data-bs-toggle="tooltip" data-bs-placement="left" title="Total active subscription"></em>
+                        </div>
+                    </div>
+                    <div class="align-end flex-sm-wrap g-4 flex-md-nowrap">
+                        <div class="nk-sale-data">
+                            <span class="amount">{{total_sale | intcomma }} {{currency}}</span>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div><!-- .card -->
+        </div><!-- .col -->
+        <div class="col-sm-6 col-lg-12 col-xxl-6">
+            <div class="card card-bordered">
+                <div class="card-inner">
+                    <div class="card-title-group align-start mb-2">
+                        <div class="card-title">
+                            <h6 class="title">Total Profits</h6>
+                        </div>
+                        <div class="card-tools">
+                            <em class="card-hint icon ni ni-help-fill" data-bs-toggle="tooltip" data-bs-placement="left" title="Daily Avg. subscription"></em>
+                        </div>
+                    </div>
+                    <div class="align-end flex-sm-wrap g-4 flex-md-nowrap">
+                        <div class="nk-sale-data">
+                            <span class="amount">{{sales_profit | intcomma }} {{currency}}</span>
+                            
+                        </div>
+                       
+                    </div>
+                </div>
+            </div><!-- .card -->
+        </div><!-- .col -->
+    </div><!-- .row -->
+</div><!-- .col -->
+<br>
+<div class="nk-block">
+    <div class="row g-gs">
+        <div class="col-md-6 col-xl-6">
+            <div class="card card-bordered h-100">
+                <div class="card-inner">
+                    <div class="card-title-group mb-4">
+                        <div class="card-title card-title-sm">
+                            <h6 class="title">Sales Payment Report</h6>
+                        </div>
+                        
+                    </div>
+                    <div class="payment-report">
+                        <div class="payment-doughnut-ck">
+                            <canvas class="analytics-doughnut" id="PaymentDoughnutData23"></canvas>
+                        </div>
+                        <div class="traffic-channel-group">
+                            {% for m in merchant_revenue %}
+                            <div class="traffic-channel-data">
+                                <div class="title"><span class="dot dot-lg sq" data-bg="#9cabff"></span><span> {{ m.payment_method | title }}</span></div>
+                                <div class="amount">{{ m.total_revenue | intcomma }} <small>{{ request.user.default_currency_id  }}</small></div>
+                            </div>
+                            {% endfor %}
+                            
+                        </div><!-- .traffic-channel-group -->
+                    </div><!-- .payment report -->
+                    <!--  -->
+                </div>
+            </div><!-- .card -->
+        </div><!-- .col -->
+       
+        <div class="col-md-6 col-xxl-6">
+            <div class="card card-bordered card-full">
+                <div class="card-inner-group">
+                    <div class="card-inner">
+                        <div class="card-title-group">
+                            <div class="card-title">
+                                <h6 class="title">Workers </h6>
+                            </div>
+                            <div class="card-tools">
+                                <a href="#" class="link">View All</a>
+                            </div>
+                        </div>
+                    </div>
+                    {% for w in worker %}
+                        {%if w.workers.all %}
+                            {%for i in w.workers.all %}
+                            <div class="card-inner card-inner-md">
+                                <div class="user-card">
+                                    <div class="user-avatar bg-primary-dim">
+                                        <span>WK</span>
+                                    </div>
+                                    <div class="user-info">
+                                        <span class="lead-text">{{i.name | title}}</span>
+                                        <span class="sub-text">{{ i.email }}</span>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                            {% endfor %}
+
+                        {% else %}
+                        <div class="card-inner card-inner-md">
+                            <div class="user-card">
+                            <p>Merchant has no worker </p>
+                            </div>
+                        </div>
+                        {% endif %}
+                    {% endfor %}
+                   
+                </div>
+            </div><!-- .card -->
+        </div><!-- .col -->
+    </div>
+</div>
+<br>
+<div class="nk-block-head">
+    <div class="nk-block-head-content">
+        <h5 class="nk-block-title title">Merchant Best Selling Products</h5>
+        <p>this indicates the best selling product for the following merchant </p>
+    </div>
+</div>
+<div class="nk-block">
+    <div class="row g-gs">
+<div class="col-md-6 col-xxl-6">
+    <div class="card card-bordered card-full">
+        <div class="card-inner-group">
+            <div class="card-inner">
+                <div class="card-title-group">
+                    <div class="card-title">
+                        <h6 class="title">Best Merchant Selling Products </h6>
+                    </div>
+                    <div class="card-tools">
+                    </div>
+                </div>
+            </div>
+            {% for o in best_selling_product %}
+            <div class="card-inner card-inner-md">
+                <div class="user-card">
+                    <div class="user-avatar bg-primary-dim">
+                        <span></span>
+                    </div>
+                    <div class="user-info">
+                        <span class="lead-text">{{o.product__product_name}}</span>
+                        <span class="sub-text">Total Sold {{o.total | intcomma }}</span>
+                    </div>
+                    <div class="user-action">
+                        <div class="drodown">
+                           
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {%endfor%}
+
+           
+        </div>
+    </div><!-- .card -->
+</div><!-- .col -->
+      
+<div class="col-md-6 col-xxl-6">
+    <div class="card card-bordered card-full">
+        <div class="card-inner-group">
+            <div class="card-inner">
+                <div class="card-title-group">
+                    <div class="card-title">
+                        <h6 class="title">Best Selling Product Categories</h6>
+                    </div>
+                    <div class="card-tools">
+                        <a href="html/user-list-regular.html" class="link">View All</a>
+                    </div>
+                </div>
+            </div>
+
+            {% for o in best_selling_category %}
+            <div class="card-inner card-inner-md">
+                <div class="user-card">
+                    <div class="user-avatar bg-primary-dim">
+                        <span></span>
+                    </div>
+                    <div class="user-info">
+                        <span class="lead-text">{{o.product__category__category}}</span>
+                        <span class="sub-text"> Total Revenue {{o.total_revenue | intcomma}} {{currency}}</span>
+                    </div>
+                    <div class="user-action">
+                        <div class="drodown">
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+  {%endfor%}
+           
+        </div>
+    </div><!-- .card -->
+</div><!-- .col -->
+
+    </div>
+</div>
+
+<br>
+<div class="nk-block-head nk-block-head-sm">
+    <div class="nk-block-between">
+        <div class="nk-block-head-content">
+            <h5 class="nk-block-title title">Daily Sales Report</h5>
+
+            <div class="nk-block-des text-soft">
+                <p>This shows the daily sales for the merchant</p>
+            </div>
+        </div><!-- .nk-block-head-content -->
+        <div class="nk-block-head-content">
+            <div class="toggle-wrap nk-block-tools-toggle">
+                <a href="#" class="btn btn-icon btn-trigger toggle-expand me-n1" data-target="pageMenu"><em class="icon ni ni-menu-alt-r"></em></a>
+               
+            </div><!-- .toggle-wrap -->
+        </div><!-- .nk-block-head-content -->
+    </div><!-- .nk-block-between -->
+</div><!-- .nk-block-head -->
+<div class="nk-block">
+    <div class="row g-gs">
+        <div class="col-12">
+            <div class="card card-bordered h-100">
+                <div class="card-inner">
+                   
+                    <div class="card card-bordered card-preview">
+                        <div class="card-inner">
+                            <div class="nk-ck">
+                                <canvas class="line-chart" id="solidLineChart3"></canvas>
+                            </div>
+                        </div>
+                    </div><!-- .card-preview -->
+                </div>
+            </div><!-- .card -->
+        </div><!-- .col -->
+    </div>
+</div><!-- .nk-block -->
+       
+</div><!-- .card-inner -->
+                                       
+{% endblock %}

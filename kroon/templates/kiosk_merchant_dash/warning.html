@@ -1,0 +1,130 @@
+{% load static crispy_forms_tags %}
+<!DOCTYPE html>
+<html lang="zxx" class="js">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="author" content="Softnio">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="A powerful and conceptual apps base dashboard template that especially build for developers and programmers.">
+    <!-- Fav Icon  -->
+    <link rel="shortcut icon" href="{% static 'macbotadmin_v1/images/favicon.png' %}">
+    <!-- Page Title  -->
+    <title> Kroon Kiosk Merchant Dashboard </title>
+    <!-- StyleSheets  -->
+    <link rel="stylesheet" href="{% static 'macbotadmin_v1/assets/css/dashlite.css' %}">
+    <link id="skin-default" rel="stylesheet" href="{% static 'macbotadmin_v1/assets/css/theme.css' %}">
+</head>
+
+<body class="nk-body bg-lighter npc-default  ">
+    <div class="nk-app-root">
+        <!-- main @s -->
+        <div class="nk-main ">
+            <div class="nk-wrap ">
+
+                <!-- main header @s -->
+                <div class="nk-header nk-header-fluid nk-header-fixed is-light">
+                    <div class="container-fluid">
+                        <div class="nk-header-wrap">
+                            <div class="nk-menu-trigger d-xl-none ms-n1">
+                                <a href="#" class="nk-nav-toggle nk-quick-nav-icon" data-target="sidebarMenu"><em class="icon ni ni-menu"></em></a>
+                            </div>
+                            <div class="nk-header-brand d-xl-none">
+                                <a href="html/crypto/index.html" class="logo-link">
+                                    <img class="logo-light logo-img" src="https://test-server-space.nyc3.digitaloceanspaces.com/kroon-kiosk-test-static/kiosk_auth_page_images/Kroon%20Kiosk%20logo.png" srcset="https://test-server-space.nyc3.digitaloceanspaces.com/kroon-kiosk-test-static/kiosk_auth_page_images/Kroon%20Kiosk%20logo.png" alt="logo">
+                                    <img class="logo-dark logo-img" src="https://test-server-space.nyc3.digitaloceanspaces.com/kroon-kiosk-test-static/kiosk_auth_page_images/Kroon%20Kiosk%20logo.png" srcset="https://test-server-space.nyc3.digitaloceanspaces.com/kroon-kiosk-test-static/kiosk_auth_page_images/Kroon%20Kiosk%20logo.png" alt="logo-dark">
+                                    <img class="logo-small logo-img logo-img-small" src="https://test-server-space.nyc3.digitaloceanspaces.com/kroon-kiosk-test-static/kiosk_auth_page_images/Kroon%20Kiosk%20logo.png" srcset="https://test-server-space.nyc3.digitaloceanspaces.com/kroon-kiosk-test-static/kiosk_auth_page_images/Kroon%20Kiosk%20logo.png" alt="logo-small">
+                                    <span class="nio-version">Only For Merchant</span>
+                                </a>
+                            </div>
+                            <div class="nk-header-news d-none d-xl-block">
+                                <div class="nk-news-list">
+                                    <a class="nk-news-item" href="#">
+                                        <div class="nk-news-icon">
+                                            <em class="icon ni ni-card-view"></em>
+                                        </div>
+                                        <div class="nk-news-text">
+                                            <p>Do you know the latest update of 2022? <span> A overview of our is now available on YouTube</span></p>
+                                            <em class="icon ni ni-external"></em>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="nk-header-tools">
+                                <ul class="nk-quick-nav">
+                                    
+                                    <li class="dropdown user-dropdown">
+                                        <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown">
+                                            <div class="user-toggle">
+                                                <div class="user-avatar sm">
+                                                    <em class="icon ni ni-user-alt"></em>
+                                                </div>
+                                                <div class="user-info d-none d-md-block">
+                                                    <div class="user-status user-status-unverified"> {{ request.user.account_type | title }}</div>
+                                                    <div class="user-name dropdown-indicator">{{ request.user.name | title }}</div>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        <div class="dropdown-menu dropdown-menu-md dropdown-menu-end dropdown-menu-s1">
+                                            <div class="dropdown-inner user-card-wrap bg-lighter d-none d-md-block">
+                                                <div class="user-card">
+                                                    <div class="user-avatar">
+                                                        <span><em class="icon ni ni-light-fill"></em></span>
+                                                    </div>
+                                                    <div class="user-info">
+                                                        <span class="lead-text">{{ request.user.name | title }}</span>
+                                                        <span class="sub-text">{{ request.user }}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                          
+                                           
+                                            <div class="dropdown-inner">
+                                                <ul class="link-list">
+                                                    <li><a href="{% url 'account_logout' %}"><em class="icon ni ni-signout"></em><span>Sign out</span></a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </li>
+                                   
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- main header @e -->
+                <!-- content @s -->
+                <div class="nk-content ">
+                    <div class="container-xl wide-lg">
+                        <div class="nk-content-body">
+                            <div class="kyc-app wide-sm m-auto">
+                                <div class="nk-block-head nk-block-head-lg wide-xs mx-auto">
+                                    <div class="nk-block-head-content text-center">
+                                        <h2 class="nk-block-title fw-normal">Welcome , {{ request.user.name | title }} </h2>
+                                        <div class="nk-block-des">
+                                            <p>You are currently on a <b> PERSONAL ACCOUNT </b>, to continue with Kroon Kiosk merchant dashboard,  you need to switch your account to the <b>MERCHANT ACCOUNT TYPE</b>. <br> <b> We are excited that you made it to this point , do you own a business ? switch your account to experience more benefits using KROON KIOSK  </b> </p>
+                                        </div>
+                                    </div>
+                                </div><!-- nk-block-head -->
+                                <hr class="preview-hr">
+
+                                <div class="form-group">
+                                    <a href="{% url 'switch_Account' %}" class="btn btn-lg btn-info btn-block" type="submit">Switch To Merchant Account</a>
+                                </div>
+                            </div><!-- kyc-app -->
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+            <script src="{% static 'macbotadmin_v1/assets/js/bundle.js' %}"></script>
+            <script src="{% static 'macbotadmin_v1/assets/js/scripts.js' %}"></script>
+            <script src="{% static 'macbotadmin_v1/assets/js/charts/chart-ecommerce.js' %}"></script>
+
+        </body>
+
+        </html>
+              

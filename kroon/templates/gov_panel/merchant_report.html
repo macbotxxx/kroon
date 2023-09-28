@@ -1,0 +1,343 @@
+{% extends "gov_panel/base.html" %}
+{% load static humanize %}
+{% load i18n crispy_forms_tags %}
+ 
+{% block content %}
+               
+                <div class="nk-content ">
+                    <div class="container-fluid">
+                        <div class="nk-content-inner">
+                            <div class="nk-content-body">
+                                <div class="nk-block-head nk-block-head-sm">
+                                    <div class="nk-block-between">
+                                        <div class="nk-block-head-content">
+                                            <h3 class="nk-block-title page-title">Merchants Report Overview  {% if province_report %} - {{current_province | title}}  Province {% endif %}</h3>
+                                           
+                                        </div><!-- .nk-block-head-content -->
+                                        <div class="nk-block-head-content">
+                                            <div class="toggle-wrap nk-block-tools-toggle">
+                                                <a href="#" class="btn btn-icon btn-trigger toggle-expand me-n1" data-target="pageMenu"><em class="icon ni ni-more-v"></em></a>
+                                                <div class="toggle-expand-content" data-content="pageMenu">
+                                                    <ul class="nk-block-tools g-3">
+                                                        <li>
+                                                            <div class="dropdown">
+                                                                <a href="#" class="dropdown-toggle btn btn-white btn-dim btn-outline-light" data-bs-toggle="dropdown"><em class="d-none d-sm-inline icon ni ni-world"></em><span><span class="d-none d-md-inline">Province </span> Reports </span><em class="dd-indc icon ni ni-chevron-right"></em></a>
+                                                                <div class="dropdown-menu dropdown-menu-end">
+                                                                    <ul class="link-list-opt no-bdr">
+                                                                        {% for i in all_country_province %}
+                                                                        <li><a href="{% url 'gov_province_report' i.id %}"><span>{{ i.province | title }}</span></a></li>
+                                                                        {% endfor %}
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                      
+                                                        <li class="nk-block-tools-opt"><a href="{% static 'gov_panel/gov_report.pdf' %}" class="btn btn-primary"><em class="icon ni ni-reports"></em><span>Generate Reports</span></a></li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div><!-- .nk-block-head-content -->
+                                    </div><!-- .nk-block-between -->
+                                </div><!-- .nk-block-head -->
+                                <div class="col-lg-6 col-xxl-12">
+                                    <div class="row g-gs">
+                                        <div class="col-xxl-3 col-sm-6">
+                                            <div class="card card-bordered">
+                                                <div class="card-inner">
+                                                    <div class="card-title-group align-start mb-2">
+                                                        <div class="card-title">
+                                                            <h6 class="title">Total Merchants</h6>
+                                                        </div>
+                                                        <div class="card-tools">
+                                                            <em class="card-hint icon ni ni-help-fill" data-bs-toggle="tooltip" data-bs-placement="left" title="Total active merchant onboarded by the government"></em>
+                                                        </div>
+                                                    </div>
+                                                    <div class="align-end flex-sm-wrap g-4 flex-md-nowrap">
+                                                        <div class="nk-sale-data">
+                                                            <span class="amount">{{ all_active_user | intcomma }} </span>
+                                                            <span class="sub-title"><span class="change down text-danger"></span>Total count of all merchants </span>
+                                                        </div>
+                                                        <div class="nk-sales-ck">
+                                                            
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div><!-- .card -->
+                                        </div><!-- .col -->
+                                        <div class="col-xxl-3 col-sm-6">
+                                            <div class="card card-bordered">
+                                                <div class="card-inner">
+                                                    <div class="card-title-group align-start mb-2">
+                                                        <div class="card-title">
+                                                            <h6 class="title">Active Merchants  </h6>
+                                                        </div>
+                                                        <div class="card-tools">
+                                                            <em class="card-hint icon ni ni-help-fill" data-bs-toggle="tooltip" data-bs-placement="left" title="Active merchants  "></em>
+                                                        </div>
+                                                    </div>
+                                                    <div class="align-end flex-sm-wrap g-4 flex-md-nowrap">
+                                                        <div class="nk-sale-data">
+                                                            <span class="amount">{{all_active_user | intcomma }}</span>
+                                                            <span class="sub-title"><span class="change up text-success"></span>Total Active Merchant</span>
+                                                        </div>
+                                                        <div class="nk-sales-ck">
+                                                           
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div><!-- .card -->
+                                        </div><!-- .col -->
+                                        <div class="col-xxl-3 col-sm-6">
+                                            <div class="card card-bordered">
+                                                <div class="card-inner">
+                                                    <div class="card-title-group align-start mb-2">
+                                                        <div class="card-title">
+                                                            <h6 class="title">Total Sales </h6>
+                                                        </div>
+                                                        <div class="card-tools">
+                                                            <em class="card-hint icon ni ni-help-fill" data-bs-toggle="tooltip" data-bs-placement="left" title="Total merchants sales "></em>
+                                                        </div>
+                                                    </div>
+                                                    <div class="align-end flex-sm-wrap g-4 flex-md-nowrap">
+                                                        <div class="nk-sale-data">
+                                                            <span class="amount">USD {{ total_revenue_USD | intcomma }}</span>
+                                                            <span class="sub-title"><span class="change up text-success"></span>total merchant sales</span>
+                                                        </div>
+                                                        <div class="nk-sales-ck">
+                                                           
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div><!-- .card -->
+                                        </div><!-- .col -->
+                                        <div class="col-xxl-3 col-sm-6">
+                                            <div class="card card-bordered">
+                                                <div class="card-inner">
+                                                    <div class="card-title-group align-start mb-2">
+                                                        <div class="card-title">
+                                                            <h6 class="title">Jobs Created </h6>
+                                                        </div>
+                                                        <div class="card-tools">
+                                                            <em class="card-hint icon ni ni-help-fill" data-bs-toggle="tooltip" data-bs-placement="left" title="Total Jobs Created "></em>
+                                                        </div>
+                                                    </div>
+                                                    <div class="align-end flex-sm-wrap g-4 flex-md-nowrap">
+                                                        <div class="nk-sale-data">
+                                                            <span class="amount">{{ job_created_count | intcomma }}</span>
+                                                            <span class="sub-title"><span class="change up text-success"></span>Total jobs created by merchant</span>
+                                                        </div>
+                                                        <div class="nk-sales-ck">
+                                                           
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div><!-- .card -->
+                                        </div><!-- .col -->
+                                    </div><!-- .row -->
+                                </div><!-- .col -->
+                                <br>
+                                <div class="col-xxl-12">
+                                    <div class="card card-bordered h-100">
+                                        <div class="card-inner">
+                                            <div class="card-title-group align-start gx-3 mb-3">
+                                                <div class="card-title">
+                                                    <h6 class="title">Daily Merchants Revenue</h6>
+                                                    <p>In 10 days sales from kroon kiosk merchants. </p>
+                                                </div>
+                                               
+                                            </div>
+                                            <div class="nk-sale-data-group align-center justify-between gy-3 gx-5">
+                                                <div class="nk-sale-data">
+                                                    <span class="amount">{{ request.user.default_currency_id }} {{ new_total | intcomma  }}</span>
+                                                </div>
+                                                
+                                            </div>
+                                            <div class="nk-sales-ck large pt-4">
+                                                <canvas class="line-chart" id="solidLineChart2"></canvas>
+                                            </div>
+                                        </div>
+                                    </div><!-- .card -->
+                                </div><!-- .col -->
+                                <br>
+
+                                <div class="col-xxl-12">
+                                    <div class="row g-gs">
+                              
+                                       
+
+                                        <figure class="highcharts-figure">
+                                            <div id="containergender"></div>
+                                           
+                                        </figure>
+
+                                        <figure class="highcharts-figure">
+                                            <div id="containerprovince"></div>
+                                           
+                                        </figure>
+                                </div>
+                                </div>
+
+
+
+
+
+
+
+                                
+                                <div class="nk-block">
+                                    <div class="row g-gs">
+                                       
+                                       
+                                        <div class="col-xxl-8">
+                                            <div class="card card-bordered card-full">
+                                                <div class="card-inner">
+                                                    <div class="card-title-group">
+                                                        <div class="card-title">
+                                                            <h6 class="title"><span class="me-2">Top Performing Merchants</span> <a href="#" class="link d-none d-sm-inline">See History</a></h6>
+                                                        </div>
+                                                        
+                                                    </div>
+                                                </div>
+                                                <div class="card-inner p-0 border-top">
+                                                    <div class="nk-tb-list nk-tb-orders">
+                                                        <div class="nk-tb-item nk-tb-head">
+                                                            <div class="nk-tb-col tb-col-sm"><span>Merchant</span></div>
+                                                            <div class="nk-tb-col tb-col-md"><span>Business Name</span></div>
+                                                            <div class="nk-tb-col"><span>Revenue</span></div>
+                                                            <div class="nk-tb-col"><span>Total Sales</span></div>
+                                                            <div class="nk-tb-col"><span class="d-none d-sm-inline">Status</span></div>
+                                                            <div class="nk-tb-col"><span>&nbsp;</span></div>
+                                                        </div>
+                                                        {% for i in best_merchants %}
+                                                        
+                                                        <div class="nk-tb-item">
+                                                           
+                                                            <div class="nk-tb-col tb-col-sm">
+                                                                <div class="user-card">
+                                                                    
+                                                                    <div class="user-name">
+                                                                        <span class="tb-lead">{{ i.user__name | title }}</span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="nk-tb-col tb-col-md">
+                                                                <span class="tb-sub">{{ i.user__merchant_business_name | title }}</span>
+                                                            </div>
+                                                           
+                                                            <div class="nk-tb-col">
+                                                                <span class="tb-sub tb-amount">{{ i.total_revenue | intcomma }} <span>{{ request.user.default_currency_id }}</span></span>
+                                                            </div>
+                                                            <div class="nk-tb-col">
+                                                                <span class="tb-sub tb-amount">{{ i.total | intcomma }} Sales</span>
+                                                            </div>
+                                                            <div class="nk-tb-col">
+                                                                <span class="badge badge-dot badge-dot-xs bg-success">Completed</span>
+                                                            </div>
+                                                            <div class="nk-tb-col nk-tb-col-action">
+                                                                <div class="dropdown">
+                                                                    <a class="text-soft dropdown-toggle btn btn-icon btn-trigger" data-bs-toggle="dropdown"><em class="icon ni ni-more-h"></em></a>
+                                                                    <div class="dropdown-menu dropdown-menu-end dropdown-menu-xs">
+                                                                        <ul class="link-list-opt no-bdr">
+                                                                    <li><a href=""><span>View Details</span></a></li>
+                                                                           
+                                                                           
+                                                                        </ul>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                        {% endfor %}
+                                                    </div>
+                                                </div>
+                                                <div class="card-inner-sm border-top text-center d-sm-none">
+                                                    <a href="#" class="btn btn-link btn-block">See History</a>
+                                                </div>
+                                            </div><!-- .card -->
+                                        </div><!-- .col -->
+                                       
+                                       
+                                      
+                                        <div class="col-md-6 col-xxl-4">
+                                            <div class="card card-bordered h-100">
+                                                <div class="card-inner mb-n2">
+                                                    <div class="card-title-group">
+                                                        <div class="card-title card-title-sm">
+                                                            <h6 class="title">List Of Most Sold Items - Top 9</h6>
+                                                        </div>
+                                                        
+                                                    </div>
+                                                </div>
+                                                <div class="nk-tb-list is-compact">
+                                                    <div class="nk-tb-item nk-tb-head">
+                                                        <div class="nk-tb-col"><span>Products </span></div>
+                                                        <div class="nk-tb-col text-end"><span>Items Sold</span></div>
+                                                    </div><!-- .nk-tb-head -->
+                                                    {% for p in best_selling_product %}
+                                                    <div class="nk-tb-item">
+                                                        <div class="nk-tb-col">
+                                                            <span class="tb-sub"><span>{{ p.product__product_name | title }}</span></span>
+                                                        </div>
+                                                        <div class="nk-tb-col text-end">
+                                                            <span class="tb-sub tb-amount"><span>{{ p.total | intcomma }}</span></span>
+                                                        </div>
+                                                    </div><!-- .nk-tb-item -->
+                                                   {% endfor %}
+                                                </div><!-- .nk-tb-list -->
+                                            </div><!-- .card -->
+                                        </div><!-- .col -->
+                                        <!-- content @s -->
+                                  
+                                        <div class="nk-block-head">
+                                            <div class="nk-block-head-content">
+                                                <h4 class="nk-block-title">{% if state == "legion"  %} Legion {% else %} Province {% endif %} Merchants  Records</h4>
+                                                <div class="nk-block-des">
+                                                   
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <table class="table" style="border: 1px solid black;">
+                                            <thead>
+                                              <tr>
+                                                <th scope="col">{% if state == "legion"  %} Legion {% else %} Province {% endif %}</th>
+                                                <th scope="col">Total Merchants</th>
+                                                <th scope="col">Active Merchants</th>
+                                                <th scope="col">Total Sales</th>
+                                                <th scope="col">Cost Of Sales</th>
+                                                <th scope="col">Profitability</th>
+                                              </tr>
+                                            </thead>
+                                            <tbody>
+                                            {% for i in province %}
+                                              <tr>
+                                                <td>{{i.province | title}}</td>
+                                                <td>{{i.province_count | intcomma}}</td>
+                                                <td>{{i.province_count | intcomma}}</td>
+
+                                                <td>{{ request.user.default_currency_id }} {{i.sales | intcomma}}</td>
+                                                <td>{{ request.user.default_currency_id }} {{i.cost_of_sales_province | intcomma}}</td>
+                                                <td>
+                                                    {% widthratio i.sales i.cost_of_sales_province 100 %} %
+                                                </td>
+
+                                              </tr>
+                                            {% endfor %}
+
+                                            </tbody>
+                                          </table>
+                                    </div><!-- .row -->
+                                  
+                                    
+                                    
+                                </div><!-- .nk-block -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+
+                <!-- content @e -->
+
+
+{% endblock content %}
+             

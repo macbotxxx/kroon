@@ -1,0 +1,76 @@
+{% load static humanize %}
+<!DOCTYPE html>
+<html lang="zxx" class="js">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="author" content="Michael Asa">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="kiosk merchant dashboard">
+    <!-- Fav Icon  -->
+    <link rel="shortcut icon" href="{% static 'macbotadmin_v1/images/favicon.png' %}">
+    <!-- Page Title  -->
+    <title> Kroon Kiosk Merchant Dashboard </title>
+    <!-- StyleSheets  -->
+    <link rel="stylesheet" href="{% static 'macbotadmin_v1/assets/css/dashlite.css' %}">
+    <link id="skin-default" rel="stylesheet" href="{% static 'macbotadmin_v1/assets/css/theme.css' %}">
+    <style type="text/css">iframe.goog-te-banner-frame{ display: none !important;}</style>
+    <style type="text/css">body {position: static !important; top:0px !important;}</style>
+
+</head>
+
+<body class="nk-body bg-lighter npc-default has-sidebar {% if not user_profile.web_light_mode %} dark-mode {% endif %}">
+    <div class="nk-app-root">
+        <!-- main @s -->
+        
+        <div class="nk-main ">
+           
+            <!-- wrap @s -->
+            <div class="nk-wrap ">
+                <!-- main header @s -->
+                
+                {% block content %}
+               
+                {% endblock %}
+                
+            </div>
+            <!-- wrap @e -->
+        </div>
+        <!-- main @e -->
+    </div>
+    <!-- app-root @e -->
+  
+    <!-- JavaScript -->
+    <script src="{% static 'macbotadmin_v1/assets/js/bundle.js' %}"></script>
+    <script src="{% static 'macbotadmin_v1/assets/js/scripts.js' %}"></script>
+    <script src="{% static 'macbotadmin_v1/assets/js/charts/chart-ecommerce.js' %}"></script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/series-label.js"></script>
+    <script src="https://code.highcharts.com/highcharts-3d.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
+    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+
+
+<script type="text/javascript">
+    function googleTranslateElementInit() {
+        setCookie('googtrans', '/en/en', 1);
+        new google.translate.TranslateElement({ pageLanguage: 'EN', layout: google.translate.TranslateElement.InlineLayout.SIMPLE }, 'google_translate_element');
+    }
+    function setCookie(key, value, expiry) {
+        var expires = new Date();
+        expires.setTime(expires.getTime() + (expiry * 24 * 60 * 60 * 1000));
+        document.cookie = key + '=' + value + ';expires=' + expires.toUTCString();
+    }
+</script>
+
+<script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit" type="text/javascript"></script>
+
+  
+
+
+
+
+</body>
+
+</html>

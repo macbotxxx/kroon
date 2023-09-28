@@ -1,0 +1,45 @@
+# todo list 
+-validate checkout payment sales 
+-subtracting the refund production from the initial balance 
+-generating email pdf record
+-creating funtions and ability to show merchants products 
+
+
+# gov dashboard
+
+actions logs - for gov workers 
+More details on inventory report and sales report 
+Ability to view workers business plan when generated
+
+CURRENT DATA SETS THAT ARE POSSIBLE
+1. Demographic data:
+a. Number of businesses by region (Province/State, Town, City, Region)
+b. Breakdown of businesses by owner age group (16-21, 22-27, 28-35, 36+, 45+, 65+) [SMEDAN/SEDCO to provide us what they consider youth so we can group all the youth in one bracket should they want a report on the youth alone]
+c. Breakdown of businesses by owner gender
+d. Number of businesses by sector
+[Each demographic should be used to generate a complete report. So we should have a report on Province/State, National, Gender, Age, Sector, etc... and they should be able to create each report on the dashboard]
+
+
+2. Financial data:
+a. Average revenue per business (daily/weekly/monthly/quarterly/annually)
+b. Average expenses per business (daily/weekly/monthly/quarterly/annually)
+c. Average profit margin per business (daily/weekly/monthly/quarterly/annually) d. Total revenue, expenses, and profit for all businesses (daily/weekly/monthly/quarterly/annually)
+e. Type of sales (Cash, Card, Mobile Money, Online)
+
+
+3. Inventory and sales data:
+a. Top-selling products across all businesses
+b. Average cost of items sold
+c. Average inventory turnover ratio
+d. Total number of products sold (daily/weekly/monthly/quarterly/annually)
+
+
+4. Employment data:
+a. Average number of employees per business
+b. Total number of employees across all businesses
+c. Employee retention rates (should be available in the sector reports and other reports as well where there are merchant store date)
+
+
+5. Impact of support initiatives:
+a. Number of businesses that have benefited from support initiatives
+b. Improvement in business performance metrics after support initiatives c. Increase in job creation or access to finance after support initiatives

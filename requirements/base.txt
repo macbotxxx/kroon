@@ -1,0 +1,41 @@
+python-slugify==8.0.1  # https://github.com/un33k/python-slugify
+Pillow==10.0.1  # https://github.com/python-pillow/Pillow
+argon2-cffi==23.1.0  # https://github.com/hynek/argon2_cffi
+redis==5.0.1  # https://github.com/redis/redis-py
+hiredis==2.2.3  # https://github.com/redis/hiredis-py
+celery==5.3.4  # pyup: < 6.0  # https://github.com/celery/celery
+django-celery-beat==2.5.0  # https://github.com/celery/django-celery-beat
+flower==2.0.1  # https://github.com/mher/flower
+
+# Django
+# ------------------------------------------------------------------------------
+django==4.2.5  # pyup: < 5.0  # https://www.djangoproject.com/
+django-environ==0.11.2  # https://github.com/joke2k/django-environ
+django-model-utils==4.3.1  # https://github.com/jazzband/django-model-utils
+django-allauth==0.57.0  # https://github.com/pennersr/django-allauth
+django-crispy-forms==2.0  # https://github.com/django-crispy-forms/django-crispy-forms
+crispy-bootstrap5==0.7  # https://github.com/django-crispy-forms/crispy-bootstrap5
+django-redis==5.3.0  # https://github.com/jazzband/django-redis
+# Django REST Framework
+djangorestframework==3.14.0  # https://github.com/encode/django-rest-framework
+django-cors-headers==4.2.0  # https://github.com/adamchainz/django-cors-headers
+# DRF-spectacular for api documentation
+django-crontab #https://pypi.org/project/django-crontab/
+google-auth #https://github.com/googleapis/google-api-python-client/tree/main
+drf-writable-nested #https://pypi.org/project/drf-writable-nested/
+django-import-export #https://django-import-export.readthedocs.io/en/latest/installation.html
+django-extensions
+django-filter ##https://django-filter.readthedocs.io/en/stable/guide/install.html
+coreapi
+drf-standardized-errors #https://github.com/ghazi-git/drf-standardized-errors
+
+django-jazzmin #==2.6.0  #https://github.com/farridav/django-jazzmin
+django-ckeditor #==6.5.0 #https://django-ckeditor.readthedocs.io/en/latest/#section-1
+django-tinymce #==3.6.1 #https://django-tinymce.readthedocs.io/en/latest/installation.html#id2
+
+django-mptt #https://django-mptt.readthedocs.io/en/latest/overview.html
+djangorestframework-simplejwt #https://django-rest-framework-simplejwt.readthedocs.io/en/latest/getting_started.html#installation
+django-countries #https://pypi.org/project/django-countries/
+dj-rest-auth #https://dj-rest-auth.readthedocs.io/en/latest/installation.html
+drf-yasg #https://drf-yasg.readthedocs.io/en/stable/readme.html
+Faker #https://faker.readthedocs.io/en/master/

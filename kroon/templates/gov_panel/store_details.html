@@ -1,0 +1,460 @@
+{% extends "gov_panel/base.html" %}
+{% load static humanize %}
+{% load i18n crispy_forms_tags %}
+ 
+{% block content %}
+                <!-- content @s -->
+                <div class="nk-content ">
+                    <div class="container-fluid">
+                        <div class="nk-content-inner">
+                            <div class="nk-content-body">
+                                <div class="nk-block-head nk-block-head-sm">
+                                    <div class="nk-block-between">
+                                        <div class="nk-block-head-content">
+                                            <h3 class="nk-block-title page-title">{{ store_details.business_name | title  }} Informations</h3>
+                                        </div><!-- .nk-block-head-content -->
+                                    </div><!-- .nk-block-between -->
+                                </div><!-- .nk-block-head -->
+                                <div class="nk-block nk-block-lg">
+                                    <div class="card card-bordered card-stretch">
+                                        <ul class="nav nav-tabs nav-tabs-mb-icon nav-tabs-card">
+                                            <li class="nav-item">
+                                                <a class="nav-link active" data-bs-toggle="tab" href="#site"><em class="icon ni ni-cart"></em><span>Merchants Products</span></a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" data-bs-toggle="tab" href="#admin"><em class="icon ni ni-money"></em><span>Sales And Financial Report</span></a>
+                                            </li>
+                                            <!-- <li class="nav-item">
+                                                <a class="nav-link" data-bs-toggle="tab" href="#theme"><em class="icon ni ni-color-palette-fill"></em><span>Theme setting </span></a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" data-bs-toggle="tab" href="#email"><em class="icon ni ni-mail-fill"></em><span>Email settings </span> </a>
+                                            </li> -->
+                                        </ul>
+                                        <div class="tab-content">
+                                            <div class="tab-pane active" id="site">
+                                                 <div class="nk-block">
+                                    <div class="card card-bordered card-stretch">
+                                        <div class="card-inner-group">
+                                            <div class="card-inner p-0">
+                                                <table class="nk-tb-list nk-tb-ulist">
+                                                    <thead>
+                                                        <tr class="nk-tb-item nk-tb-head">
+                                                           
+                                                            <th class="nk-tb-col"><span class="sub-text">Product Name</span></th>
+                                                           
+                                                            <th class="nk-tb-col tb-col-sm"><span class="sub-text">Product Image</span></th>
+                                                            <th class="nk-tb-col tb-col-lg"><span class="sub-text">Cost Price</span></th>
+                                                            
+                                                            <th class="nk-tb-col tb-col-xxl"><span class="sub-text">Sale Price</span></th>
+                                                            <th class="nk-tb-col tb-col-sm"><span class="sub-text">Stock</span></th>
+                                                            <th class="nk-tb-col tb-col-lg"><span class="sub-text">Date Created</span></th>
+                                                            <th class="nk-tb-col tb-col-md"><span class="sub-text">Categories</span></th>
+                                                            <th class="nk-tb-col tb-col-md"><span class="sub-text">Stoke Status</span></th>
+                                                        </tr><!-- .nk-tb-item -->
+                                                    </thead>
+                                                    <tbody>
+
+                                                        {% for p in store_products %}
+                                                        <tr class="nk-tb-item">
+                                                           
+                                                            <td class="nk-tb-col">
+                                                                <a href="#" class="project-title">
+                                                                    <h6 class="text-ellipsis title w-max-200px">{{ p.product_name | title  }}</h6>
+                                                                </a>
+                                                            </td>
+                                                            <td class="nk-tb-col tb-col-xxl">
+                                                                {% if p.image %}
+                                                               <img src="{{ p.image.url}}" alt="" srcset="" style="height: 40px;">
+                                                               {% endif %}
+                                                            </td>
+                                                            <td class="nk-tb-col tb-col-sm">
+                                                                <span > {{ p.user.default_currency_id }} {{ p.cost_price | intcomma }}</span>
+                                                            </td>
+                                                            <td class="nk-tb-col tb-col-lg">
+                                                                <span>{{ p.user.default_currency_id }} {{ p.price | intcomma }}</span>
+                                                            </td>
+                                                            <td class="nk-tb-col tb-col-xxl">
+                                                                <span>{{ p.stock | intcomma }}</span>
+                                                            </td>
+                                                            <td class="nk-tb-col tb-col-sm">
+                                                                <span>{{ p.created_date }}</span>
+                                                            </td>
+                                                            <td class="nk-tb-col tb-col-md">
+                                                                <ul class="d-flex flex-wrap g-1">
+                                                                    {% if p.category %}
+                                                                    <li><span class="badge badge-dim bg-info">{{p.category | title }}</span></li>
+                                                                    {% endif %}
+                                                                </ul>
+                                                            </td>
+                                                            <td class="nk-tb-col tb-col-md">
+                                                                <ul class="d-flex flex-wrap g-1">
+                                                                    {% if p.stock < 10 %}
+                                                                    <li><span class="badge badge-dim bg-danger">Low In Stock</span></li>
+                                                                    {% else %}
+                                                                    <li><span class="badge badge-dim bg-info">In Stock</span></li>
+                                                                    {% endif %}
+                                                                </ul>
+                                                            </td>
+                                                           
+                                                        </tr><!-- .nk-tb-item -->
+                                                        {% endfor %}
+                                                    </tbody>
+                                                </table><!-- .nk-tb-list -->
+                                            </div><!-- .card-inner -->
+                                            <div class="card-inner">
+                                                <div class="nk-block-between-md g-3">
+                                                    <div class="card-inner">
+                                                        <ul class="pagination justify-content-center justify-content-md-start">
+                                                            {% if store_products.has_previous %}
+                                                            <li class="page-item"><a class="page-link" href="?page={{ store_products.previous_page_number }}">Prev</a></li>
+                                                            {% endif %}
+                                                            
+                                                            {%for num in store_products.paginator.page_range %}
+                                                            {%if store_products.number == num %}
+                                                            <li class="page-item active"><a class="page-link" href="?page={{num}}">{{num}}</a></li>
+                                                            {% elif num > store_products.number|add:'-3' and num < store_products.number|add:'3' %}
+                                                            <li class="page-item"><a class="page-link" href="?page={{num}}">{{num}}</a></li>
+                                                            {%endif%}
+                                                            {%endfor%}
+                        
+                                                           {% if store_products.has_next %}
+                                                            <li class="page-item"><a class="page-link" href="?page={{store_products.next_page_number }}">Next</a></li>
+                                                            {% endif %}
+                                                        </ul><!-- .pagination -->
+                                                    </div><!-- .card-inner -->
+                                                   
+                                                </div><!-- .nk-block-between -->
+                                            </div>
+                                        </div><!-- .card-inner-group -->
+                                    </div><!-- .card -->
+                                </div><!-- .nk-block -->
+                                            </div>
+                                            <!--tab pan -->
+                                            <div class="tab-pane" id="admin">
+                                               
+                                                <div class="nk-block-head nk-block-head-sm">
+                                                    <div class="nk-block-between">
+                                                        <div class="nk-block-head-content">
+                                                            <h3 class="nk-block-title page-title">Sales Report</h3>
+                                                            <div class="nk-block-des text-soft">
+                                                                <p>Sales Report details.</p>
+                                                            </div>
+                                                        </div><!-- .nk-block-head-content -->
+                                                        <div class="nk-block-head-content">
+                                                            <div class="toggle-wrap nk-block-tools-toggle">
+                                                                <a href="#" class="btn btn-icon btn-trigger toggle-expand me-n1" data-target="pageMenu"><em class="icon ni ni-menu-alt-r"></em></a>
+                                                                <div class="toggle-expand-content" data-content="pageMenu">
+                                                                    <ul class="nk-block-tools g-3">
+                                                                        <li>
+                                                                            <div class="drodown">
+                                                                                <a href="#" class="dropdown-toggle btn btn-white btn-dim btn-outline-light" data-bs-toggle="dropdown"><em class="d-none d-sm-inline icon ni ni-filter-alt"></em><span>Filtered By</span><em class="dd-indc icon ni ni-chevron-right"></em></a>
+                                                                                <div class="dropdown-menu dropdown-menu-end">
+                                                                                    <ul class="link-list-opt no-bdr">
+                                                                                        <li><a href="#"><span>10 days</span></a></li>
+                                                                                        <li><a href="#"><span>20 days</span></a></li>
+                                                                                        <li><a href="#"><span>30 days</span></a></li>
+                                                                                    </ul>
+                                                                                </div>
+                                                                            </div>
+                                                                        </li>
+                                                                    </ul>
+                                                                </div>
+                                                            </div><!-- .toggle-wrap -->
+                                                        </div><!-- .nk-block-head-content -->
+                                                    </div><!-- .nk-block-between -->
+                                                </div><!-- .nk-block-head -->
+                                                <div class="nk-block">
+                                                    <div class="row g-gs">
+                                                        <div class="col-md-6 col-xl-4">
+                                                            <div class="card card-bordered h-100">
+                                                                <div class="card-inner">
+                                                                    <div class="card-title-group mb-4">
+                                                                        <div class="card-title card-title-sm">
+                                                                            <h6 class="title">Sales Payment Report</h6>
+                                                                        </div>
+                                                                        
+                                                                    </div>
+                                                                    <div class="payment-report">
+                                                                        <div class="payment-doughnut-ck">
+                                                                            <canvas class="analytics-doughnut" id="PaymentDoughnutData23"></canvas>
+                                                                        </div>
+                                                                        <div class="traffic-channel-group">
+                                                                            {% for m in merchant_revenue %}
+                                                                            <div class="traffic-channel-data">
+                                                                                <div class="title"><span class="dot dot-lg sq" data-bg="#9cabff"></span><span> {{ m.payment_method | title }}</span></div>
+                                                                                <div class="amount">{{ m.total_revenue | intcomma }} <small>{{ request.user.default_currency_id  }}</small></div>
+                                                                            </div>
+                                                                            {% endfor %}
+                                                                            
+                                                                        </div><!-- .traffic-channel-group -->
+                                                                    </div><!-- .payment report -->
+                                                                    <!--  -->
+                                                                </div>
+                                                            </div><!-- .card -->
+                                                        </div><!-- .col -->
+                                                        <div class="col-md-6 col-xxl-4">
+                                                            <div class="card card-bordered h-100">
+                                                                <div class="card-inner mb-n2">
+                                                                    <div class="card-title-group">
+                                                                        <div class="card-title card-title-sm">
+                                                                            <h6 class="title">List Of Most Sold Items - Top 9</h6>
+                                                                        </div>
+                                                                        
+                                                                    </div>
+                                                                </div>
+                                                                <div class="nk-tb-list is-compact">
+                                                                    <div class="nk-tb-item nk-tb-head">
+                                                                        <div class="nk-tb-col"><span>Products </span></div>
+                                                                        <div class="nk-tb-col text-end"><span>Items Sold</span></div>
+                                                                    </div><!-- .nk-tb-head -->
+                                                                    {% for p in best_selling_product %}
+                                                                    <div class="nk-tb-item">
+                                                                        <div class="nk-tb-col">
+                                                                            <span class="tb-sub"><span>{{ p.product__product_name | title }}</span></span>
+                                                                        </div>
+                                                                        <div class="nk-tb-col text-end">
+                                                                            <span class="tb-sub tb-amount"><span>{{ p.total | intcomma }}</span></span>
+                                                                        </div>
+                                                                    </div><!-- .nk-tb-item -->
+                                                                   {% endfor %}
+                                                                </div><!-- .nk-tb-list -->
+                                                            </div><!-- .card -->
+                                                        </div><!-- .col -->
+                                                        <div class="col-md-6 col-xxl-4">
+                                                            <div class="card card-bordered card-full">
+                                                                <div class="card-inner-group">
+                                                                    <div class="card-inner">
+                                                                        <div class="card-title-group">
+                                                                            <div class="card-title">
+                                                                                <h6 class="title">Workers </h6>
+                                                                            </div>
+                                                                            <div class="card-tools">
+                                                                                <a href="#" class="link">View All</a>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    {% for w in worker %}
+                                                                        {%if w.workers.all %}
+                                                                            {%for i in w.workers.all %}
+                                                                            <div class="card-inner card-inner-md">
+                                                                                <div class="user-card">
+                                                                                    <div class="user-avatar bg-primary-dim">
+                                                                                        <span>WK</span>
+                                                                                    </div>
+                                                                                    <div class="user-info">
+                                                                                        <span class="lead-text">{{i.name | title}}</span>
+                                                                                        <span class="sub-text">{{ i.email }}</span>
+                                                                                    </div>
+                                                                                    
+                                                                                </div>
+                                                                            </div>
+                                                                            {% endfor %}
+                
+                                                                        {% else %}
+                                                                        <div class="card-inner card-inner-md">
+                                                                            <div class="user-card">
+                                                                            <p>Merchant has no worker </p>
+                                                                            </div>
+                                                                        </div>
+                                                                        {% endif %}
+                                                                    {% endfor %}
+                                                                   
+                                                                </div>
+                                                            </div><!-- .card -->
+                                                        </div><!-- .col -->
+                                                    </div>
+                                                </div>
+                                                <div class="nk-block-head nk-block-head-sm">
+                                                    <div class="nk-block-between">
+                                                        <div class="nk-block-head-content">
+                                                            <h3 class="nk-block-title page-title">Daily Sales Report</h3>
+                                                            <div class="nk-block-des text-soft">
+                                                                <p>This shows the daily sales for the merchant</p>
+                                                            </div>
+                                                        </div><!-- .nk-block-head-content -->
+                                                        <div class="nk-block-head-content">
+                                                            <div class="toggle-wrap nk-block-tools-toggle">
+                                                                <a href="#" class="btn btn-icon btn-trigger toggle-expand me-n1" data-target="pageMenu"><em class="icon ni ni-menu-alt-r"></em></a>
+                                                               
+                                                            </div><!-- .toggle-wrap -->
+                                                        </div><!-- .nk-block-head-content -->
+                                                    </div><!-- .nk-block-between -->
+                                                </div><!-- .nk-block-head -->
+                                                <div class="nk-block">
+                                                    <div class="row g-gs">
+                                                        <div class="col-12">
+                                                            <div class="card card-bordered h-100">
+                                                                <div class="card-inner">
+                                                                   
+                                                                    <div class="card card-bordered card-preview">
+                                                                        <div class="card-inner">
+                                                                            <div class="nk-ck">
+                                                                                <canvas class="line-chart" id="solidLineChart3"></canvas>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div><!-- .card-preview -->
+                                                                </div>
+                                                            </div><!-- .card -->
+                                                        </div><!-- .col -->
+                                                    </div>
+                                                </div><!-- .nk-block -->
+                                              
+                                            </div>
+                                            <!--tab pan -->
+                                            <div class="tab-pane" id="theme">
+                                                <div class="card-inner pt-0">
+                                                    <div class="nk-block-head">
+                                                        <div class="nk-block-head-content">
+                                                            <h4 class="title nk-block-title">Theme Installed</h4>
+                                                            <p>Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet.</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row g-gs">
+                                                        <div class="col-lg-4 col-xxl-3 col-sm-6">
+                                                            <div class="card shadow-none">
+                                                                <img src="./images/crm/theme/a.jpg" class="border border-light rounded" alt="">
+                                                                <div class="card-inner pt-3 p-0">
+                                                                    <p class="card-text">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Expedita, sapiente!</p>
+                                                                    <a href="#" class="btn btn-primary"> Active Theme</a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-4 col-xxl-3 col-sm-6">
+                                                            <div class="card shadow-none">
+                                                                <img src="./images/crm/theme/b.jpg" class="border border-light rounded" alt="">
+                                                                <div class="card-inner pt-3 p-0">
+                                                                    <p class="card-text">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Expedita, sapiente!</p>
+                                                                    <a href="#" class="btn btn-primary disabled"> Current theme</a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-4 col-xxl-3 col-sm-6">
+                                                            <div class="card shadow-none">
+                                                                <img src="./images/crm/theme/c.jpg" class="border border-light rounded" alt="">
+                                                                <div class="card-inner pt-3 p-0">
+                                                                    <p class="card-text">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Expedita, sapiente!</p>
+                                                                    <a href="#" class="btn btn-primary"> Active theme</a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div> <!-- .tab-pane -->
+                                            <div class="tab-pane" id="email">
+                                                <div class="card-inner pt-0">
+                                                    <div class="nk-block-head">
+                                                        <div class="nk-block-head-content">
+                                                            <h4 class="title nk-block-title">Email-Settings</h4>
+                                                            <p>Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet.</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row g-gs">
+                                                        <div class="col-md-12">
+                                                            <div class="form-group">
+                                                                <label class="form-label">E-mail to Lead</label>
+                                                                <ul class="custom-control-group g-3 align-center">
+                                                                    <li>
+                                                                        <div class="custom-control custom-control-sm custom-checkbox">
+                                                                            <input type="checkbox" class="custom-control-input" id="lead-dis">
+                                                                            <label class="custom-control-label" for="lead-dis">About Discount</label>
+                                                                        </div>
+                                                                    </li>
+                                                                    <li>
+                                                                        <div class="custom-control custom-control-sm custom-checkbox">
+                                                                            <input type="checkbox" class="custom-control-input" id="lead-pro">
+                                                                            <label class="custom-control-label" for="lead-pro">About Product</label>
+                                                                        </div>
+                                                                    </li>
+                                                                    <li>
+                                                                        <div class="custom-control custom-control-sm custom-checkbox">
+                                                                            <input type="checkbox" class="custom-control-input" id="lead-det">
+                                                                            <label class="custom-control-label" for="lead-det">Product Details</label>
+                                                                        </div>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                        </div><!-- .col -->
+                                                        <div class="col-md-12">
+                                                            <div class="form-group">
+                                                                <label class="form-label">E-mail to Customers</label>
+                                                                <ul class="custom-control-group g-3 align-center">
+                                                                    <li>
+                                                                        <div class="custom-control custom-control-sm custom-checkbox">
+                                                                            <input type="checkbox" class="custom-control-input" id="cus-dis">
+                                                                            <label class="custom-control-label" for="cus-dis">About Discount</label>
+                                                                        </div>
+                                                                    </li>
+                                                                    <li>
+                                                                        <div class="custom-control custom-control-sm custom-checkbox">
+                                                                            <input type="checkbox" class="custom-control-input" id="cus-pro">
+                                                                            <label class="custom-control-label" for="cus-pro">About Product</label>
+                                                                        </div>
+                                                                    </li>
+                                                                    <li>
+                                                                        <div class="custom-control custom-control-sm custom-checkbox">
+                                                                            <input type="checkbox" class="custom-control-input" id="cus-det">
+                                                                            <label class="custom-control-label" for="cus-det">Product Details</label>
+                                                                        </div>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                        </div><!-- .col -->
+                                                        <div class="col-md-12">
+                                                            <div class="form-group">
+                                                                <label class="form-label">E-mail to Employee</label>
+                                                                <ul class="custom-control-group g-3 align-center">
+                                                                    <li>
+                                                                        <div class="custom-control custom-control-sm custom-checkbox">
+                                                                            <input type="checkbox" class="custom-control-input" id="emp-holiday">
+                                                                            <label class="custom-control-label" for="emp-holiday">Holiday</label>
+                                                                        </div>
+                                                                    </li>
+                                                                    <li>
+                                                                        <div class="custom-control custom-control-sm custom-checkbox">
+                                                                            <input type="checkbox" class="custom-control-input" id="emp-policy">
+                                                                            <label class="custom-control-label" for="emp-policy">Updated Policy</label>
+                                                                        </div>
+                                                                    </li>
+                                                                    <li>
+                                                                        <div class="custom-control custom-control-sm custom-checkbox">
+                                                                            <input type="checkbox" class="custom-control-input" id="emp-salary">
+                                                                            <label class="custom-control-label" for="emp-salary">About Salary</label>
+                                                                        </div>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                        </div><!-- .col -->
+                                                        <div class="col-sm-6 col-lg-4">
+                                                            <div class="form-group">
+                                                                <div class="form-control-wrap">
+                                                                    <div class="form-icon form-icon-right">
+                                                                        <em class="icon ni ni-search"></em>
+                                                                    </div>
+                                                                    <input type="text" class="form-control" id="default-04" placeholder="E-mail from a name">
+                                                                </div>
+                                                            </div>
+                                                        </div><!-- .col -->
+                                                    </div> <!-- .row -->
+                                                    <div class="row g-3">
+                                                        <div class="col-lg-7">
+                                                            <div class="form-group mt-2">
+                                                                <button type="submit" class="btn btn-lg btn-primary">Update</button>
+                                                            </div>
+                                                        </div><!-- .col -->
+                                                    </div><!-- .row -->
+                                                </div>
+                                            </div><!-- .tab-pane -->
+                                        </div><!-- .tab-content -->
+                                    </div>
+                                    <!--card-->
+                                </div>
+                                <!--nk-block-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- content @e -->
+{% endblock content %}
+
+              

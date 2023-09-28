@@ -1,0 +1,446 @@
+{% load static i18n %}
+<!DOCTYPE html>
+<html lang="zxx" class="js">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="author" content="Softnio">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="A powerful and conceptual apps base dashboard template that especially build for developers and programmers.">
+    <!-- Fav Icon  -->
+    <link rel="shortcut icon" href="{% static 'macbotadmin/images/favicon.png' %}">
+    <!-- Page Title  -->
+    <title>Kroon_kiosk Marketers Dashboard </title>
+    <!-- StyleSheets  -->
+    <link rel="stylesheet" href="{% static 'macbotadmin/assets/css/dashlite.css' %}">
+    <link id="skin-default" rel="stylesheet" href="{% static 'macbotadmin/assets/css/theme.css' %}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
+
+</head>
+
+<style>
+    /* Absolute Center Spinner */
+.loading {
+position: fixed;
+z-index: 999;
+height: 2em;
+width: 2em;
+overflow: show;
+margin: auto;
+top: 0;
+left: 0;
+bottom: 0;
+right: 0;
+}
+
+/* Transparent Overlay */
+.loading:before {
+content: '';
+display: block;
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background: radial-gradient(rgba(20, 20, 20,.8), rgba(0, 0, 0, .8));
+
+background: -webkit-radial-gradient(rgba(20, 20, 20,.8), rgba(0, 0, 0,.8));
+}
+
+/* :not(:required) hides these rules from IE9 and below */
+.loading:not(:required) {
+/* hide "loading..." text */
+font: 0/0 a;
+color: transparent;
+text-shadow: none;
+background-color: transparent;
+border: 0;
+}
+
+.loading:not(:required):after {
+content: '';
+display: block;
+font-size: 10px;
+width: 1em;
+height: 1em;
+margin-top: -0.5em;
+-webkit-animation: spinner 150ms infinite linear;
+-moz-animation: spinner 150ms infinite linear;
+-ms-animation: spinner 150ms infinite linear;
+-o-animation: spinner 150ms infinite linear;
+animation: spinner 150ms infinite linear;
+border-radius: 0.5em;
+-webkit-box-shadow: rgba(255,255,255, 0.75) 1.5em 0 0 0, rgba(255,255,255, 0.75) 1.1em 1.1em 0 0, rgba(255,255,255, 0.75) 0 1.5em 0 0, rgba(255,255,255, 0.75) -1.1em 1.1em 0 0, rgba(255,255,255, 0.75) -1.5em 0 0 0, rgba(255,255,255, 0.75) -1.1em -1.1em 0 0, rgba(255,255,255, 0.75) 0 -1.5em 0 0, rgba(255,255,255, 0.75) 1.1em -1.1em 0 0;
+box-shadow: rgba(255,255,255, 0.75) 1.5em 0 0 0, rgba(255,255,255, 0.75) 1.1em 1.1em 0 0, rgba(255,255,255, 0.75) 0 1.5em 0 0, rgba(255,255,255, 0.75) -1.1em 1.1em 0 0, rgba(255,255,255, 0.75) -1.5em 0 0 0, rgba(255,255,255, 0.75) -1.1em -1.1em 0 0, rgba(255,255,255, 0.75) 0 -1.5em 0 0, rgba(255,255,255, 0.75) 1.1em -1.1em 0 0;
+}
+
+/* Animation */
+
+@-webkit-keyframes spinner {
+0% {
+-webkit-transform: rotate(0deg);
+-moz-transform: rotate(0deg);
+-ms-transform: rotate(0deg);
+-o-transform: rotate(0deg);
+transform: rotate(0deg);
+}
+100% {
+-webkit-transform: rotate(360deg);
+-moz-transform: rotate(360deg);
+-ms-transform: rotate(360deg);
+-o-transform: rotate(360deg);
+transform: rotate(360deg);
+}
+}
+@-moz-keyframes spinner {
+0% {
+-webkit-transform: rotate(0deg);
+-moz-transform: rotate(0deg);
+-ms-transform: rotate(0deg);
+-o-transform: rotate(0deg);
+transform: rotate(0deg);
+}
+100% {
+-webkit-transform: rotate(360deg);
+-moz-transform: rotate(360deg);
+-ms-transform: rotate(360deg);
+-o-transform: rotate(360deg);
+transform: rotate(360deg);
+}
+}
+@-o-keyframes spinner {
+0% {
+-webkit-transform: rotate(0deg);
+-moz-transform: rotate(0deg);
+-ms-transform: rotate(0deg);
+-o-transform: rotate(0deg);
+transform: rotate(0deg);
+}
+100% {
+-webkit-transform: rotate(360deg);
+-moz-transform: rotate(360deg);
+-ms-transform: rotate(360deg);
+-o-transform: rotate(360deg);
+transform: rotate(360deg);
+}
+}
+@keyframes spinner {
+0% {
+-webkit-transform: rotate(0deg);
+-moz-transform: rotate(0deg);
+-ms-transform: rotate(0deg);
+-o-transform: rotate(0deg);
+transform: rotate(0deg);
+}
+100% {
+-webkit-transform: rotate(360deg);
+-moz-transform: rotate(360deg);
+-ms-transform: rotate(360deg);
+-o-transform: rotate(360deg);
+transform: rotate(360deg);
+}
+}
+</style>
+
+<div class="loading" id="loader" >Loading&#8230;</div>
+
+<body class="nk-body npc-default has-apps-sidebar has-sidebar ">
+   
+    <div class="nk-app-root">
+        <div class="nk-apps-sidebar is-dark">
+            <div class="nk-apps-brand">
+                <a href="{% url 'marketers:marketer_index' %}" class="logo-link">
+                    <img class="logo-light logo-img" src="https://www.kroonapp.com/wp-content/uploads/2022/03/img_4902.png" srcset="https://www.kroonapp.com/wp-content/uploads/2022/03/img_4902.png" alt="logo">
+                    <img class="logo-dark logo-img" src="https://www.kroonapp.com/wp-content/uploads/2022/03/img_4902.png" srcset="https://www.kroonapp.com/wp-content/uploads/2022/03/img_4902.png" alt="logo-dark">
+                </a>
+            </div>
+            <div class="nk-sidebar-element">
+                <div class="nk-sidebar-body">
+                    <div class="nk-sidebar-content" data-simplebar>
+                        <div class="nk-sidebar-menu">
+                            <!-- Menu -->
+                            <ul class="nk-menu apps-menu">
+                                <li class="nk-menu-item">
+                                    <a href="{% url 'marketers:marketer_index' %}" class="nk-menu-link" title="Analytics Dashboard">
+                                        <span class="nk-menu-icon"><em class="icon ni ni-dashboard"></em></span>
+                                    </a>
+                                </li>
+                               
+                            </ul>
+                        </div>
+                       
+                    </div>
+                    <div class="nk-sidebar-profile nk-sidebar-profile-fixed dropdown">
+                        <a href="#" data-toggle="dropdown" data-offset="50,-60">
+                            <div class="user-avatar">
+                                <span>AB</span>
+                            </div>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-md ml-4">
+                            <div class="dropdown-inner user-card-wrap d-none d-md-block">
+                                <div class="user-card">
+                                    <div class="user-avatar">
+                                        <span>AB</span>
+                                    </div>
+                                    <div class="user-info">
+                                        <span class="lead-text">{{ request.user.name | title }} </span>
+                                        <span class="sub-text text-soft">{{ request.user.email }} </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="dropdown-inner">
+                                <ul class="link-list">
+                                   
+                                </ul>
+                            </div>
+                            <div class="dropdown-inner">
+                                <ul class="link-list">
+                                    <li><a href="{% url 'account_logout' %}"><em class="icon ni ni-signout"></em><span>Sign out</span></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- main @s -->
+        <div class="nk-main ">
+            <!-- wrap @s -->
+            <div class="nk-wrap ">
+                <!-- main header @s -->
+                <div class="nk-header nk-header-fixed is-light">
+                    <div class="container-fluid">
+                        <div class="nk-header-wrap">
+                            <div class="nk-menu-trigger d-xl-none ml-n1">
+                                <a href="#" class="nk-nav-toggle nk-quick-nav-icon" data-target="sidebarMenu"><em class="icon ni ni-menu"></em></a>
+                            </div>
+                            <div class="nk-header-app-name">
+                                <div class="nk-header-app-logo">
+                                    <img src="https://www.kroonapp.com/wp-content/uploads/2022/03/img_4902.png" alt="">
+                                </div>
+                                <div class="nk-header-app-info">
+                                    <span class="sub-text">Kroon - Kiosk</span>
+                                    <span class="lead-text">Dashboard</span>
+                                </div>
+                            </div>
+                            <div class="nk-header-menu is-light">
+                                <div class="nk-header-menu-inner">
+                                    <!-- Menu -->
+                                    <ul class="nk-menu nk-menu-main">
+                                        <li class="nk-menu-item">
+                                            <a href="{% url 'marketers:marketer_index' %}" class="nk-menu-link">
+                                                <span class="nk-menu-text">Overview</span>
+                                            </a>
+                                        </li>
+                                        <!-- <li class="nk-menu-item">
+                                            <a href="html/components.html" class="nk-menu-link">
+                                                <span class="nk-menu-text">Components</span>
+                                            </a>
+                                        </li> -->
+                                        <!--  -->
+                                    </ul>
+                                    <!-- Menu -->
+                                </div>
+                            </div>
+                            <div class="nk-header-tools">
+                                <ul class="nk-quick-nav">
+                                   
+                                  
+                                    <li class="dropdown list-apps-dropdown d-lg-none">
+                                        <a href="#" class="dropdown-toggle nk-quick-nav-icon" data-toggle="dropdown">
+                                            <div class="icon-status icon-status-na"><em class="icon ni ni-menu-circled"></em></div>
+                                        </a>
+                                        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+                                            <div class="dropdown-body">
+                                                <ul class="list-apps">
+                                                    <li>
+                                                        <a href="{% url 'marketers:marketer_index' %}">
+                                                            <span class="list-apps-media"><em class="icon ni ni-dashlite bg-primary text-white"></em></span>
+                                                            <span class="list-apps-title">Dashboard</span>
+                                                        </a>
+                                                    </li>
+                                                   
+                                                </ul>
+                                              
+                                            </div><!-- .nk-dropdown-body -->
+                                        </div>
+                                    </li>
+                                    <li class="dropdown user-dropdown">
+                                        <a href="#" class="dropdown-toggle mr-n1" data-toggle="dropdown">
+                                            <div class="user-toggle">
+                                                <div class="user-avatar sm">
+                                                    <em class="icon ni ni-user-alt"></em>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        <div class="dropdown-menu dropdown-menu-md dropdown-menu-right">
+                                            <div class="dropdown-inner user-card-wrap bg-lighter d-none d-md-block">
+                                                <div class="user-card">
+                                                    <div class="user-avatar">
+                                                        <span>AB</span>
+                                                    </div>
+                                                    <div class="user-info">
+                                                        <span class="lead-text">{{ request.user.name | title  }}</span>
+                                                        <span class="sub-text">{{ request.user.email }}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="dropdown-inner">
+                                                <ul class="link-list">
+                                                   
+                                                    <li><a class="dark-switch" href="#"><em class="icon ni ni-moon"></em><span>Dark Mode</span></a></li>
+                                                </ul>
+                                            </div>
+                                            <div class="dropdown-inner">
+                                                <ul class="link-list">
+                                                    <li><a href="{% url 'account_logout' %}"><em class="icon ni ni-signout"></em><span>Sign out</span></a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- main header @e -->
+                <div class="nk-sidebar" data-content="sidebarMenu">
+                    <div class="nk-sidebar-inner" data-simplebar>
+                        <ul class="nk-menu nk-menu-md">
+                            <li class="nk-menu-heading">
+                                <h6 class="overline-title text-primary-alt">Dashboards</h6>
+                            </li><!-- .nk-menu-heading -->
+                            <li class="nk-menu-item">
+                                <a href="{% url 'marketers:marketer_index' %}" class="nk-menu-link">
+                                    <span class="nk-menu-icon"><em class="icon ni ni-dashboard"></em></span>
+                                    <span class="nk-menu-text">Default Dashboard</span>
+                                </a>
+                            </li><!-- .nk-menu-item -->
+                            <li class="nk-menu-heading">
+                                <h6 class="overline-title text-primary-alt">Push Notifications</h6>
+                            </li><!-- .nk-menu-heading -->
+                            <li class="nk-menu-item">
+                                <a href="{% url 'marketers:general_push_notifications' %}" class="nk-menu-link">
+                                    <span class="nk-menu-icon"><em class="icon ni ni-comments"></em></span>
+                                    <span class="nk-menu-text">General Mobile Notifications</span>
+                                </a>
+                            </li><!-- .nk-menu-item -->
+                            <li class="nk-menu-item">
+                                <a href="{% url 'marketers:general_email_notification' %}" class="nk-menu-link">
+                                    <span class="nk-menu-icon"><em class="icon ni ni-emails"></em></span>
+                                    <span class="nk-menu-text">General Email Notifications</span>
+                                </a>
+                            </li><!-- .nk-menu-item -->
+                            <li class="nk-menu-item">
+                                <a href="{% url 'marketers:list_of_active_users' %}" class="nk-menu-link">
+                                    <span class="nk-menu-icon"><em class="icon ni ni-notice"></em></span>
+                                    <span class="nk-menu-text">Personal Notifications</span>
+                                </a>
+                            </li><!-- .nk-menu-item -->
+                            <li class="nk-menu-item">
+                                <a href="{% url 'marketers:push_notification_per_country' %}" class="nk-menu-link">
+                                    <span class="nk-menu-icon"><em class="icon ni ni-b-si"></em></span>
+                                    <span class="nk-menu-text">Mobile Notifi... Per Country</span>
+                                </a>
+                            </li><!-- .nk-menu-item -->
+                            <li class="nk-menu-item">
+                                <a href="{% url 'marketers:general_email_notification_per_country' %}" class="nk-menu-link">
+                                    <span class="nk-menu-icon"><em class="icon ni ni-b-si"></em></span>
+                                    <span class="nk-menu-text"> Email Notifi... Per Country</span>
+                                </a>
+                            </li><!-- .nk-menu-item -->
+                          
+                          
+                           
+                            <li class="nk-menu-heading">
+                                <h6 class="overline-title text-primary-alt">Publish Advertising Ads</h6>
+                            </li><!-- .nk-menu-heading -->
+                            <li class="nk-menu-item">
+                                <a href="{% url 'marketers:general_ads' %}" class="nk-menu-link">
+                                    <span class="nk-menu-icon"><em class="icon ni ni-calendar"></em></span>
+                                    <span class="nk-menu-text">Send  Ads</span>
+                                </a>
+                            </li><!-- .nk-menu-item -->
+                           
+                            <li class="nk-menu-item">
+                                <a href="{% url 'marketers:general_news_feed_views' %}" class="nk-menu-link">
+                                    <span class="nk-menu-icon"><em class="icon ni ni-article"></em></span>
+                                    <span class="nk-menu-text">Send NewsFeed</span>
+                                </a>
+                            </li><!-- .nk-menu-item -->
+
+                           
+                          
+                        </ul><!-- .nk-menu -->
+                    </div>
+                </div>
+
+                {% block content %}
+                
+                {% endblock %}
+
+             
+            </div>
+            <!-- wrap @e -->
+        </div>
+        <!-- main @e -->
+    </div>
+    <!-- app-root @e -->
+    <!-- JavaScript -->
+    <script src="{% static 'macbotadmin/assets/js/bundle.js' %}"></script>
+    <script src="{% static 'macbotadmin/assets/js/scripts.js' %}"></script>
+    <script src="{% static 'macbotadmin/assets/js/charts/gd-analytics.js' %}"></script>
+    <script src="{% static 'macbotadmin/assets/js/libs/jqvmap.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
+
+ 
+    <script src="{% static 'macbotadmin/assets/js/charts/gd-default.js' %}"></script>
+     
+    <script>
+        $(document).ready(function() {
+        $('#summernote').summernote({
+            callbacks: {
+                onKeyup: function(e) {
+                    setTimeout(function(){
+                        $("#output").html($('#summernote').val());
+                    },2);
+                }
+            }
+        });
+        });
+    </script>
+
+    <script>
+        $("#id_header").keyup(function() {
+            $("#preview").html(this.value);
+        });
+    </script>
+    <script>
+        document.onreadystatechange = function() {
+            if (document.readyState !== "complete") {
+                // document.querySelector(
+                //   "body").style.visibility = "hidden";
+                document.querySelector(
+                  "#loader").style.visibility = "visible";
+            } else {
+                document.querySelector(
+                  "#loader").style.display = "none";
+                // document.querySelector(
+                //   "body").style.visibility = "visible";
+            }
+        };
+    </script>
+    <script>
+        $(function(){
+            $('form').on('submit', function(e){
+                $('body').append('<div class="loading" id="loader" >Loading&#8230;</div>')
+            });
+        })
+    </script>
+    
+        
+</body>
+
+</html>

@@ -1,0 +1,165 @@
+{% extends 'kiosk_merchant_dash/base.html' %}
+{% load static crispy_forms_tags humanize %}
+
+{% block content %}
+
+                <!-- content @s -->
+                <div class="nk-content ">
+                    <div class="container-fluid">
+                        <div class="nk-content-inner">
+                            <div class="nk-content-body">
+                                <div class="nk-block-head nk-block-head-sm">
+                                    <div class="nk-block-between">
+                                        <div class="nk-block-head-content">
+                                            <h3 class="nk-block-title page-title">My Subscriptions</h3>
+                                        </div><!-- .nk-block-head-content -->
+                                       
+                                    </div><!-- .nk-block-between -->
+                                </div><!-- .nk-block-head -->
+                                {% if messages %}
+                                <div class="alert alert-pro alert-danger">
+                                    <div class="alert-text">
+                                        <h6>Notifications Alert</h6>
+                                        {% for message in messages %}
+                                        <p>{{ message }}</p>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                {% endif %}
+                                
+                                <div class="nk-block">
+                                   
+                                   
+                                </div><!-- .nk-block -->
+                                <div class="nk-block">
+                                    <div class="card card-bordered sp-plan">
+                                        {% if active_sub %}
+                                        <div class="row no-gutters">
+                                            <div class="col-md-8">
+                                                <div class="sp-plan-info card-inner">
+                                                    <div class="row gx-0 gy-3">
+                                                        <div class="col-xl-9 col-sm-8">
+                                                            <div class="sp-plan-name">
+                                                                <h6 class="title"><a href="#">{{ active_sub.plan.plan_name | title }} <span class="badge bg-success rounded-pill">Active</span></a></h6>
+                                                                <p>Subscription ID: <span class="text-base">{{ active_sub.subscription_id }}</span></p>
+                                                            </div>
+                                                        </div>
+
+                                                        {% if active_sub.recurring_payment %}
+
+                                                            <div class="col-xl-3 col-sm-4">
+                                                                <div class="sp-plan-opt">
+                                                                    <div class="custom-control custom-switch">
+                                                                        <li class="order-md-last">
+                                                                            <a href="{% url 'cancel_subscription' %}" class="btn btn-auto btn-dim btn-danger" ><em class="icon ni ni-cross"></em><span>Cancel Auto Renew</span></a>
+                                                                        </li>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        
+                                                         {% endif %}
+                                                         
+                                                    </div>
+                                                </div><!-- .sp-plan-info -->
+                                                <div class="sp-plan-desc card-inner">
+                                                    <ul class="row gx-1">
+                                                        <li class="col-6 col-lg-3">
+                                                            <p><span class="text-soft">Started On</span> {{ active_sub.start_date }}</p>
+                                                        </li>
+                                                        <li class="col-6 col-lg-3">
+                                                            <p><span class="text-soft">Due Date</span> {{ active_sub.end_date }}</p>
+                                                        </li>
+                                                        <li class="col-6 col-lg-3">
+                                                            <p><span class="text-soft">Recuring</span>{% if active_sub.recurring_payment %} Yes {% else %} No {% endif %} </p>
+                                                        </li>
+                                                        <li class="col-6 col-lg-3">
+                                                            <p><span class="text-soft">Price</span>{% if active_sub.yearly_plan %} {{ active_sub.plan.yearly_plan_fee | intcomma }}  {% else %} {{ active_sub.plan.plan_fee | intcomma }} {% endif %} <span class="currency">{{ active_sub.plan.plan_default_currency }}</span></p>
+                                                        </li>
+                                                        
+                                                    </ul>
+                                                </div><!-- .sp-plan-desc -->
+                                            </div><!-- .col -->
+                                            <div class="col-md-4">
+                                                <div class="sp-plan-action card-inner">
+                                                    <div class="sp-plan-btn">
+                                                        <a href="{% url 'all_plans' %}" class="btn btn-primary" ><span>Change Plan</span></a>
+                                                    </div><br>
+                                                    {% if active_sub.recurring_payment %}
+
+                                                    <div class="sp-plan-note ">
+                                                        <h6>Next Billing on <span>{{ active_sub.end_date | date:'M d Y'}}</span></h6>
+                                                        <p>Next Billing Amount <span>{% if active_sub.yearly_plan %} {{ active_sub.plan.yearly_plan_fee | intcomma }}  {% else %} {{ active_sub.plan.plan_fee | intcomma }} {% endif %} <span class="currency">{{ active_sub.plan.plan_default_currency }}</span></p>
+                                                    </div>
+
+                                                    {% endif %}
+
+                                                </div>
+                                            </div><!-- .col -->
+                                        </div><!-- .row -->
+                                        {% endif %}
+                                    </div><!-- .sp-plan -->
+                                    <div class="nk-tb-list is-separate mb-3">
+                                        <div class="nk-tb-item nk-tb-head">
+                                            
+                                            <div class="nk-tb-col"><span class="sub-text">Plan </span></div>
+                                            <div class="nk-tb-col tb-col-mb"><span class="sub-text">Amount</span></div>
+                                            <div class="nk-tb-col tb-col-md"><span class="sub-text">Duration</span></div>
+                                            <div class="nk-tb-col tb-col-lg"><span class="sub-text">Start Date</span></div>
+                                            <div class="nk-tb-col tb-col-lg"><span class="sub-text">End Date</span></div>
+                                            <div class="nk-tb-col tb-col-md"><span class="sub-text">Status</span></div>
+                                            
+                                        </div><!-- .nk-tb-item -->
+                                        
+                                          
+                                        {% for s in subscriptions %}
+                                         
+                                        <div class="nk-tb-item">
+                                            
+                                            <div class="nk-tb-col">
+                                                <a href="#">
+                                                    <div class="user-card">
+                                                {% if s.active %}
+                                                        <div class="spinner-grow" style="width:8px; height: 7px;" role="status">
+                                                          </div> 
+                                                {% endif %}
+                                                        <div class="user-info">
+                                                            <span class="tb-lead"> {{ s.plan.plan_name | title }} </span>
+                                                            <span>{{ request.user }}</span>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                            <div class="nk-tb-col tb-col-mb">
+                                                <span class="tb-amount">{% if s.yearly_plan %} {{ s.plan.yearly_plan_fee | intcomma }}  {% else %} {{ s.plan.plan_fee | intcomma }} {% endif %}   <span class="currency">{{ s.plan.plan_default_currency }}</span></span>
+                                            </div>
+                                            <div class="nk-tb-col tb-col-md">
+                                                <span> {% if s.yearly_plan %} {{ s.plan.yearly_plan_duration }}  {% else %} {{ s.plan.plan_duration }} {% endif %} Days </span>
+                                            </div>
+                                            <div class="nk-tb-col tb-col-lg">
+                                                <span>{{ s.start_date }}</span>
+                                            </div>
+                                            <div class="nk-tb-col tb-col-lg">
+                                                <span>{{ s.end_date }}</span>
+                                            </div>
+                                            <div class="nk-tb-col tb-col-md">
+                                                {% if s.active %}
+                                                <span class="tb-status text-success">Active</span>
+                                                {% else %}
+                                                <span class="tb-status text-danger">Expired</span>
+                                                {% endif %}
+                                            </div>
+                                         
+                                        </div><!-- .nk-tb-item -->
+                                        
+                                        {% endfor %}
+                                    </div><!-- .nk-tb-list -->
+
+                                </div><!-- .nk-block -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- content @e -->
+               
+{% endblock %}
+  

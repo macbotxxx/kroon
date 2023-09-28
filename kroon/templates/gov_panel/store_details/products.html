@@ -1,0 +1,109 @@
+{% extends 'gov_panel/store_details/base.html' %}
+{% load static crispy_forms_tags humanize %}
+
+{% block details %}
+ <!-- content @s -->
+<div class="card-inner card-inner-lg">
+
+                            <div class="nk-block-head">
+                                <div class="nk-block-head-content">
+                                    <h5 class="nk-block-title title">Merchant Available Products </h5>
+                                    <p>the list of all available products that belongs to the following merchant</p>
+                                </div>
+                            </div>
+                              <div class="col-xxl-12">
+                                <div class="card card-bordered card-full">
+                                    <div class="card-inner">
+                                        <div class="card-title-group">
+                                            <div class="card-title">
+                                                <h6 class="title"><span class="me-2">Merchant Uploaded Products and Services </span> </h6>
+                                            </div>
+                                            <div class="card-tools">
+                                               
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-inner p-0 border-top">
+                                        <div class="nk-tb-list nk-tb-orders">
+                                            <div class="nk-tb-item nk-tb-head">
+                                                <div class="nk-tb-col"><span>Product SKU.</span></div>
+                                                <div class="nk-tb-col tb-col-sm"><span>Product Name</span></div>
+                                                <div class="nk-tb-col tb-col-md"><span>Date uploaded</span></div>
+                                                <div class="nk-tb-col tb-col-lg"><span>Category</span></div>
+                                                <div class="nk-tb-col"><span>Selling Price</span></div>
+                                                <div class="nk-tb-col"><span class="d-none d-sm-inline">Cost Price</span></div>
+                                                <div class="nk-tb-col"><span>&nbsp;</span></div>
+                                            </div>
+
+                              {% for i in m_products %}
+
+                                            <div class="nk-tb-item">
+                                                <div class="nk-tb-col">
+                                                    <span class="tb-lead"><a href="#">#{{i.product_sku}}</a></span>
+                                                </div>
+                                                <div class="nk-tb-col tb-col-sm">
+                                                    <div class="user-card">
+                                                       
+                                                        <div class="user-name">
+                                                            <span class="tb-lead">{{i.product_name | title}}</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="nk-tb-col tb-col-md">
+                                                    <span class="tb-sub">{{i.created_date}}</span>
+                                                </div>
+                                                <div class="nk-tb-col tb-col-lg">
+                                                    <span class="tb-sub text-primary">{{i.category}}</span>
+                                                </div>
+                                                <div class="nk-tb-col">
+                                                    <span class="tb-sub tb-amount">{{i.price}} <span>{{i.merchant_local_currency}}</span></span>
+                                                </div>
+                                                <div class="nk-tb-col">
+                                                    <span class="tb-sub tb-amount">{{i.cost_price}} <span>{{i.merchant_local_currency}}</span></span>
+                                                </div>
+                                                <div class="nk-tb-col">
+                                                    {% if i.is_available %}
+                                                    <span class="badge badge-dot badge-dot-xs bg-success">Still In Stock</span>
+                                                    {% endif %}
+                                                </div>
+                                                <div class="nk-tb-col nk-tb-col-action">
+                                                    <div class="dropdown">
+                                                        
+                                                    </div>
+                                                </div>
+                                            </div>
+                              {% endfor  %}
+                                           
+                                        </div>
+                                    </div>
+                                    <div class="card-inner">
+                                        <div class="nk-block-between-md g-3">
+                                            <div class="card-inner">
+                                                <ul class="pagination justify-content-center justify-content-md-start">
+                                                    {% if m_products.has_previous %}
+                                                    <li class="page-item"><a class="page-link" href="?page={{ m_products.previous_page_number }}">Prev</a></li>
+                                                    {% endif %}
+                                                    
+                                                    {%for num in m_products.paginator.page_range %}
+                                                    {%if m_products.number == num %}
+                                                    <li class="page-item active"><a class="page-link" href="?page={{num}}">{{num}}</a></li>
+                                                    {% elif num > m_products.number|add:'-3' and num < m_products.number|add:'3' %}
+                                                    <li class="page-item"><a class="page-link" href="?page={{num}}">{{num}}</a></li>
+                                                    {%endif%}
+                                                    {%endfor%}
+                
+                                                   {% if m_products.has_next %}
+                                                    <li class="page-item"><a class="page-link" href="?page={{m_products.next_page_number }}">Next</a></li>
+                                                    {% endif %}
+                                                </ul><!-- .pagination -->
+                                            </div><!-- .card-inner -->
+                                           
+                                        </div><!-- .nk-block-between -->
+                                    </div>
+                                </div><!-- .card -->
+                            </div><!-- .col -->
+</div><!-- .card-inner -->
+                                              
+{% endblock %}
+
+

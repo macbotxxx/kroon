@@ -1,0 +1,72 @@
+{% extends 'app_subscription/base.html' %}
+{% load static crispy_forms_tags humanize %}
+
+{% block content %}
+  <!-- content @s -->
+  <div class="nk-content ">
+    <div class="container-fluid">
+        <div class="nk-content-inner">
+            <div class="nk-content-body">
+                <div class="content-page wide-sm m-auto">
+                    <div class="nk-block-head nk-block-head-lg wide-xs mx-auto">
+                        <div class="nk-block-head-content text-center">
+                            <div class="nk-block-head-sub"><span>Payment</span></div>
+                            <h2 class="nk-block-title fw-normal">Pay With Government Promotional Code</h2>
+                            
+                        </div>
+                    </div><!-- .nk-block-head -->
+                    <div class="nk-block nk-block-lg">
+                      
+                        <div class="card card-bordered">
+                            <div class="card-inner">
+                                <div class="nk-block-head">
+                                    <div class="nk-block-head-content">
+                                        <h4 class="title nk-block-title" style="color:red"><b> Instructions</b></h4>
+                                        <div class="nk-block-des">
+                                            <p style="font-style: italic;"> Kindly Provide the promotional code issued by your <b>Government</b> , if in any case you are facing any issue with your promotional code , dont worry we are here to help you , kindly contact us for guidance , still having issues ? drop a message for us to provide the best we can in assisting you <a href="mailto:customer@kiosk.com">customer@kiosk.com</a>. </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% if messages %}
+                                <div class="alert alert-pro alert-danger">
+                                    <div class="alert-text">
+                                        <h6>Verification Error</h6>
+                                        {% for message in messages %}
+                                        <p>{{ message }}</p>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                {% endif %}
+                                <form action="" method="POST" class="gy-3">
+                                    {% csrf_token %}
+                                    <div class="row g-3 align-center">
+                                       
+                                        <div class="col-lg-15">
+                                            <div class="form-group">
+                                                <div class="form-control-wrap">
+                                                  {{ form | crispy }}
+                                                </div>
+                                               
+                                            </div>
+                                        </div>
+                                    </div>
+                                   
+                                    <div class="row g-3">
+                                        <div class="col-lg-10 offset-lg-3">
+                                            <div class="form-group mt-4">
+                                                <button type="submit" class="btn btn-lg btn-primary">Proceed With this Subscription</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div><!-- card -->
+                    </div><!-- .nk-block -->
+                    
+                </div><!-- .content-page -->
+            </div>
+        </div>
+    </div>
+</div>
+<!-- content @e -->
+{% endblock %}

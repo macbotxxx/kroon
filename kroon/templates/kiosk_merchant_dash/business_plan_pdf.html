@@ -1,0 +1,329 @@
+{% load static humanize %}
+<!DOCTYPE html>
+<html lang="zxx" class="js">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="author" content="velvet">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <!-- Fav Icon  -->
+    <link rel="shortcut icon" href="{% static 'macbotadmin_v1/images/favicon.png' %}">
+    <!-- Page Title  -->
+    <title> Kroon Kiosk Merchant Dashboard </title>
+    <!-- StyleSheets  -->
+    <link rel="stylesheet" href="{% static 'macbotadmin_v1/assets/css/dashlite.css' %}">
+    <link id="skin-default" rel="stylesheet" href="{% static 'macbotadmin_v1/assets/css/theme.css' %}">
+</head>
+
+<body class="nk-body bg-lighter npc-default has-sidebar " onload="printPromot()">
+    <div class="nk-app-root">
+        <!-- main @s -->
+        <div class="nk-main " >
+           
+            <!-- wrap @s -->
+            <div class="nk-wrap ">
+                <!-- main header @s -->
+                
+                <!-- main header @e -->
+                <!-- content @s -->
+                <div class="nk-content ">
+                    <div class="container-fluid">
+                        <div class="nk-content-inner">
+                            <div class="nk-content-body">
+                                <div class="content-page wide-md m-auto">
+                                    <div class="nk-block-head nk-block-head-lg wide-sm mx-auto">
+                                        <div class="nk-block-head-content text-center">
+                                           
+                                            <div class="nk-block-des">
+                                               
+                                            </div>
+                                        </div>
+                                    </div><!-- .nk-block-head -->
+                                    <div class="nk-block">
+                                      <div class="card">
+                                          <div class="card-inner card-inner-xl">
+                                              <div class="entry">
+
+                                                 
+                                                  
+                                                  <table class="table table-borderless">
+                                                   
+                                                    <tbody>
+                                                      <tr>
+                                                        <td style=" width: 170px;">
+                                                          
+                                                          <img src="{% if business_logo %} {{ business_logo.url }} {% endif %}" alt="business logo" srcset=""  >
+                                                        </td>
+                                                        <td style=" width:70px">
+
+                                                        </td>
+                                                        <td>
+                                                          <ul>
+                                                            <li><b>{{ business_name | title  }}</b></li>
+                                                            <li><p>Business Synopsis Report</p></li>
+                                                            <li><p>{{ business_address }}</p></li>
+                                                            <li><p>{{ business_contact }}</p></li>
+                                                            <li><p>{{ business_owner_email }}</p></li>
+                                                            <li><p>{{ business_registration_number }}</p></li>
+                                                          </ul>
+                                                        </td>
+                                                       
+                                                      </tr>
+                                                     
+                                                    </tbody>
+                                                  </table>
+                                                  <table class="table table-bordered">
+                                                     
+                                                      <tbody>
+                                                        <tr>
+                                                          <th scope="row">Business Name :</th>
+                                                          <td>{{ business_name | title }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                          <th scope="row">Business Registration Number :</th>
+                                                          <td>{{ business_registration_number }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                          <th scope="row">Business Address :</th>
+                                                          <td>{{ business_address | title }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                          <th scope="row">Business Contact Number :</th>
+                                                          <td>{{ business_owner_contact }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                          <th scope="row">Owner Name :</th>
+                                                          <td>{{ business_owner_name | title }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                          <th scope="row">Owner Contact Number :</th>
+                                                          <td>{{ business_owner_contact }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                          <th scope="row">Owner Email Address :</th>
+                                                          <td>{{ business_owner_email }}</td>
+                                                        </tr>
+                                                        
+                                                        
+                                                      </tbody>
+                                                    </table> <br>
+                                                    <p> <b> {{ business_name | title  }} </b> is a <b> {{ business_type | title }} </b> with the main focus
+                                                      of the business being in the {{ business_type | title }} industry. The business was established in <b> {{ year_of_operation }} </b>, and is currently employing <b> {{ number_of_employees }}</b> employees. <br>
+                                                      This Business Synopsis Report is for the period of <b>{{ period_of_report }}</b> months with a further
+                                                          projection for a two year period.
+                                                  </p>
+                                                  <table class="table table-bordered">
+                                                     
+                                                      <tbody>
+                                                        <tr>
+                                                          <th scope="row">Total Sales for Period :</th>
+                                                          <td>{{ total_sales_period | intcomma }} {{ request.user.default_currency_id }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                          <th scope="row">Total Cost of Sales for Period :</th>
+                                                          <td>{{ total_cost_of_sales_period | intcomma }} {{ request.user.default_currency_id }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                          <th scope="row">Total Gross Profits for Period :</th>
+                                                          <td><b>{{ total_gross_profits_for_period | intcomma }} {{ request.user.default_currency_id }}</b></td>
+                                                        </tr>
+                                                      </tbody>
+                                                    </table> <br>
+                                                    <H4>Expenses</H4>
+                                                    <table class="table table-bordered">
+                                                     
+                                                      <tbody>
+                                                        <tr>
+                                                          <th scope="row">Salaries :</th>
+                                                          <td>{{ salaries | intcomma }} {{ request.user.default_currency_id }} </td>
+                                                        </tr>
+                                                        <tr>
+                                                          <th scope="row">Electricity :</th>
+                                                          <td>{{ electricity | intcomma }} {{ request.user.default_currency_id }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                          <th scope="row">Data :</th>
+                                                          <td>{{ data | intcomma }} {{ request.user.default_currency_id }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                          <th scope="row">Fuel :</th>
+                                                          <td>{{ fuel | intcomma }} {{ request.user.default_currency_id }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                          <th scope="row">Total Expenses for Period :</th>
+                                                          <td><b>{{ total_of_all_above_expenses | intcomma }} {{ request.user.default_currency_id }}</b></td>
+                                                        </tr>
+                                                        <tr>
+                                                          <th scope="row">Net Profit/Loss :</th>
+                                                          <td><b>{{ net_profit_loss | intcomma }} {{ request.user.default_currency_id }}</b></td>
+                                                        </tr>
+                                                      </tbody>
+                                                    </table>
+                                                    <br>
+                                                    <H4>Transaction Breakdown</H4>
+                                                    <table class="table table-bordered">
+                                                      <thead class="thead-dark">
+                                                          <tr>
+                                                            <th scope="col">Transaction Type</th>
+                                                            <th scope="col">Value</th>
+                                                            <th scope="col">%</th>
+                                                           
+                                                          </tr>
+                                                        </thead>
+                                                      <tbody>
+                                                        <tr>
+                                                          <th scope="row">Cash :</th>
+                                                          <td>{{ cash_sales | intcomma }} {{ request.user.default_currency_id }} </td>
+                                                          <td>{{ cash_sale_pecentage }} %</td>
+                                                        </tr>
+                                                        <tr>
+                                                          <th scope="row">Card :</th>
+                                                          <td>{{ card_sales | intcomma }} {{ request.user.default_currency_id }} </td>
+                                                          <td>{{ card_sale_pecentage }} %</td>
+                                                        </tr>
+                                                        <tr>
+                                                          <th scope="row">Kroon :</th>
+                                                          <td>{{ kroon_sales | intcomma }} {{ request.user.default_currency_id }} </td>
+                                                          <td>{{ kroon_sale_pecentage }} %</td>
+                                                        </tr>
+                                                        <tr>
+
+                                                          <th scope="row">Mobile Money :</th>
+                                                          <td>{{ mobile_payment_sales | intcomma }} {{ request.user.default_currency_id }} </td>
+                                                          <td>{{ mobile_money_sale_pecentage }} %</td>
+                                                        </tr>
+                                                       
+                                                       
+                                                      </tbody>
+                                                    </table><br>
+                                                    <h4>Inventory Breakdown</h4>
+                                                    <p>
+                                                      <b> {{ business_name | title  }} </b> is a <b> {{ business_type | title }} </b> selling products and
+                                                          services of the following categories
+                                                      
+                                                          <ul>
+                                                            {% if business_category.all %}
+                                                              {% for c in  business_category.all %}
+                                                               <b> <li>{{c}}</li> </b>
+                                                              {% endfor %}
+                                                            {% endif %}
+                                                          </ul>
+                                                    </p>
+                                                   <table class="table table-bordered">
+                                                      <thead class="thead-dark">
+                                                          <tr>
+                                                            <th scope="col"></th>
+                                                            <th scope="col">Item Description</th>
+                                                            <th scope="col">Item Value</th>
+                                                            <th scope="col">Total Sales</th>
+                                                           
+                                                          </tr>
+                                                        </thead>
+                                                      <tbody>
+                                                        <tr>
+                                                          <th scope="row">Best Sold Item for
+                                                            Period :</th>
+                                                          <td>{{ best_sold_item | title }}</td>
+                                                          <td>{{ best_sold_item_price | intcomma }} {{ request.user.default_currency_id }}</td>
+                                                          <td>{{ total_sold | intcomma }} {{ request.user.default_currency_id }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                          <th scope="row">Worst Sold Item
+                                                            for Period :</th>
+                                                          <td>{{ worst_sold_item | title }}</td>
+                                                          <td>{{ worst_sold_item_price | intcomma }} {{ request.user.default_currency_id }}</td>
+                                                          <td>{{ worst_total_sold | intcomma }} {{ request.user.default_currency_id }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                          <th scope="row">Top Grossing
+                                                            Item for Period :</th>
+                                                            <td>{{ best_sold_item | title }}</td>
+                                                            <td>{{ best_sold_item_price | intcomma }} {{ request.user.default_currency_id }}</td>
+                                                          <td>{{ total_sold | intcomma }} {{ request.user.default_currency_id }}</td>
+
+                                                        </tr>
+                                                       
+                                                       
+                                                      </tbody>
+                                                    </table><br>
+                                                    <h5>Projections for Business</h5>
+                                                    <p>
+                                                      Based on businesses with a similar trend as <b> {{ business_name | title }} </b> we project a 15% growth rate in terms of sales over the following two years assuming that
+                                                          expenses and remain reasonably consistent
+                                                    </p>
+                                                    <table class="table table-bordered">
+                                                      <thead class="thead-dark">
+                                                          <tr>
+                                                            <th scope="col"></th>
+                                                            <th scope="col">Current</th>
+                                                            <th scope="col">Projection For A Year</th>
+                                                            <th scope="col">Projection For Two Years</th>
+                                                           
+                                                          </tr>
+                                                        </thead>
+                                                      <tbody>
+                                                        <tr>
+                                                          <th scope="row">Sales :</th>
+                                                          <td>{{ total_ordered_items_price | intcomma }} {{ request.user.default_currency_id }}</td>
+                                                          <td>{{ sale_one_year_percentage | intcomma }} {{ request.user.default_currency_id }}</td>
+                                                          <td>{{ sale_two_year_percentage | intcomma }} {{ request.user.default_currency_id }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                          <th scope="row">Cost of Sales :</th>
+                                                          <td>{{ total_cost_of_sales_period | intcomma }} {{ request.user.default_currency_id }} </td>
+                                                          <td>{{ cost_of_sale_per_year | intcomma }} {{ request.user.default_currency_id }}</td>
+                                                          <td>{{ cost_of_sale_2_years | intcomma }} {{ request.user.default_currency_id }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                          <th scope="row">Gross Profit/Loss :</th>
+                                                          <td><b>{{ gross_profit_n_loss | intcomma }} {{ request.user.default_currency_id }}</b></td>
+                                                          <td><b>{{ gross_for_a_year | intcomma }} {{ request.user.default_currency_id }}</b></td>
+                                                          <td><b>{{ gross_for_two_year | intcomma }} {{ request.user.default_currency_id }}</b></td>
+                                                        </tr>
+                                                        <tr>
+                                                          <th scope="row">Total Expenses :</th>
+                                                          <td>{{ total_of_all_above_expenses | intcomma }} {{ request.user.default_currency_id }}</td>
+                                                          <td>{{ expensive_for_a_year_per_year | intcomma }} {{ request.user.default_currency_id }}</td>
+                                                          <td>{{ expensive_for_two_year | intcomma }} {{ request.user.default_currency_id }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                          <th scope="row">Net Profits/Loss :</th>
+                                                          <td><b>{{ net_profit | intcomma }} {{ request.user.default_currency_id }}</b></td>
+                                                          <td><b>{{ net_profit_a_year | intcomma }} {{ request.user.default_currency_id }}</b></td>
+                                                          <td><b>{{ net_profit_two_year | intcomma }} {{ request.user.default_currency_id }}</b></td>
+                                                        </tr>
+                                                       
+                                                       
+                                                      </tbody>
+                                                    </table><br>
+                                              </div>
+                                          </div><!-- .card-inner -->
+                                      </div><!-- .card -->
+                                  </div><!-- .nk-block -->
+                                </div><!-- .content-page -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+             
+            </div>
+            <!-- wrap @e -->
+        </div>
+        <!-- main @e -->
+    </div>
+    <!-- app-root @e -->
+  
+    <!-- JavaScript -->
+    <script src="{% static 'macbotadmin_v1/assets/js/bundle.js' %}"></script>
+    <script src="{% static 'macbotadmin_v1/assets/js/scripts.js' %}"></script>
+    <script src="{% static 'macbotadmin_v1/assets/js/charts/chart-ecommerce.js' %}"></script>
+    <script>
+      function printPromot() {
+          window.print();
+      }
+  </script>
+
+</body>
+
+</html>  

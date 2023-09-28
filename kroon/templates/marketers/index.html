@@ -1,0 +1,274 @@
+{% extends "marketers/base.html" %}
+{% load static humanize %}
+{% load i18n %}
+
+
+{% block content %}
+               <!-- content @s -->
+               <div class="nk-content ">
+                <div class="container-fluid">
+                    <div class="nk-content-inner">
+                        <div class="nk-content-body">
+                            <div class="nk-block-head nk-block-head-sm">
+                                <div class="nk-block-between">
+                                    <div class="nk-block-head-content">
+                                        <h3 class="nk-block-title page-title">Users Overview Dashboard</h3>
+                                        <div class="nk-block-des text-soft">
+                                            <p>Welcome to Kroon _ Kiosk Overview Dashboard</p>
+                                        </div>
+                                    </div><!-- .nk-block-head-content -->
+                                    <div class="nk-block-head-content">
+                                        <div class="toggle-wrap nk-block-tools-toggle">
+                                            <a href="#" class="btn btn-icon btn-trigger toggle-expand mr-n1" data-target="pageMenu"><em class="icon ni ni-more-v"></em></a>
+                                            <div class="toggle-expand-content" data-content="pageMenu">
+                                                <ul class="nk-block-tools g-3">
+                                                    <li><a href="{% url 'marketers:general_push_notifications' %}" class="btn btn-white btn-dim btn-outline-primary"><em class="icon ni ni-chat-fill"></em><span>Push General Notifications</span></a></li>
+                                                    <li><a href="#" class="btn btn-white btn-dim btn-outline-primary"><em class="icon ni ni-mail-fill"></em><span>Send Email Notifications</span></a></li>
+                                                  
+                                                </ul>
+                                            </div><!-- .toggle-expand-content -->
+                                        </div><!-- .toggle-wrap -->
+                                    </div><!-- .nk-block-head-content -->
+                                </div><!-- .nk-block-between -->
+                            </div><!-- .nk-block-head -->
+                            <div class="nk-block">
+                                <div class="row g-gs">
+                                    <div class="col-md-4">
+                                        <div class="card card-bordered card-full">
+                                            <div class="card-inner">
+                                                <div class="card-title-group align-start mb-0">
+                                                    <div class="card-title">
+                                                        <h6 class="subtitle">Total Users</h6>
+                                                    </div>
+                                                    <div class="card-tools">
+                                                        <em class="card-hint icon ni ni-help-fill" data-toggle="tooltip" data-placement="left" title="Total users that has successfully completed their kroon registration , note this calculates both for merchant and kroon users as well ."></em>
+                                                    </div>
+                                                </div>
+                                                <div class="card-amount">
+                                                    <span class="amount"> {{total_user_count | intcomma }} <em class="icon ni ni-users-fill"></em>
+                                                    </span>
+                                                    <!-- <span class="change up text-danger"><em class="icon ni ni-arrow-long-up"></em>1.93%</span> -->
+                                                </div>
+                                                <div class="invest-data">
+                                                    <div class="invest-data-amount g-2">
+                                                        <div class="invest-data-history">
+                                                            <div class="title">This Month</div>
+                                                            <div class="amount">{% for i in user_this_month %} {{ i.created_count }} {% endfor %}</div>
+                                                        </div>
+                                                        <div class="invest-data-history">
+                                                            <div class="title">This Week</div>
+                                                            <div class="amount">1,259</div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="invest-data-ck">
+                                                        <canvas class="iv-data-chart" id="totalDeposit"></canvas>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div><!-- .card -->
+                                    </div><!-- .col -->
+                                    <div class="col-md-4">
+                                        <div class="card card-bordered card-full">
+                                            <div class="card-inner">
+                                                <div class="card-title-group align-start mb-0">
+                                                    <div class="card-title">
+                                                        <h6 class="subtitle">Total Active User's</h6>
+                                                    </div>
+                                                    <div class="card-tools">
+                                                        <em class="card-hint icon ni ni-help-fill" data-toggle="tooltip" data-placement="left" title="Total active user's data holds the record for active users on the platform which includes personal and merchant accounts."></em>
+                                                    </div>
+                                                </div>
+                                                <div class="card-amount">
+                                                    <span class="amount"> {{ total_active_users | intcomma }} <em class="icon ni ni-user-add"></em>
+                                                    </span>
+                                                    <!-- <span class="change down text-danger"><em class="icon ni ni-arrow-long-down"></em>1.93%</span> -->
+                                                </div>
+                                                <div class="invest-data">
+                                                    <div class="invest-data-amount g-2">
+                                                        <div class="invest-data-history">
+                                                            <div class="title">This Month</div>
+                                                            <div class="amount">{% for i in user_this_month %} {{ i.created_count }} {% endfor %}</div>
+                                                        </div>
+                                                        <div class="invest-data-history">
+                                                            <div class="title">This Week</div>
+                                                            <div class="amount">1,259</div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="invest-data-ck">
+                                                        <canvas class="iv-data-chart" id="totalWithdraw"></canvas>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div><!-- .card -->
+                                    </div><!-- .col -->
+                                    <div class="col-md-4">
+                                        <div class="card card-bordered  card-full">
+                                            <div class="card-inner">
+                                                <div class="card-title-group align-start mb-0">
+                                                    <div class="card-title">
+                                                        <h6 class="subtitle">Total Of Non Active User's </h6>
+                                                    </div>
+                                                    <div class="card-tools">
+                                                        <em class="card-hint icon ni ni-help-fill" data-toggle="tooltip" data-placement="left" title="Total number of non active users which includes personal and merchants account"></em>
+                                                    </div>
+                                                </div>
+                                                <div class="card-amount">
+                                                    <span class="amount"> {{ total_nonactive_count | intcomma  }} <em class="icon ni ni-user-remove"></em>
+                                                    </span>
+                                                </div>
+                                                <div class="invest-data">
+                                                    <div class="invest-data-amount g-2">
+                                                        <div class="invest-data-history">
+                                                            <div class="title">This Month</div>
+                                                            <div class="amount">2,940</div>
+                                                        </div>
+                                                        <div class="invest-data-history">
+                                                            <div class="title">This Week</div>
+                                                            <div class="amount">1,259</div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="invest-data-ck">
+                                                        <canvas class="iv-data-chart" id="totalBalance"></canvas>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div><!-- .card -->
+                                    </div><!-- .col -->
+                                 
+                        
+                                </div>
+                            </div>
+                            <div class="nk-block-head nk-block-head-sm">
+                                <div class="nk-block-between">
+                                    <div class="nk-block-head-content">
+                                        <h3 class="nk-block-title page-title">Total Users Per Country</h3>
+                                        
+                                    </div><!-- .nk-block-head-content -->
+                                   
+                                </div><!-- .nk-block-between -->
+                            </div><!-- .nk-block-head -->
+                            <div class="nk-block">
+                                <div class="row g-gs">
+                                   
+                        
+                                       
+                                    {% for i in user_count_per_country %}
+                                    <div class="col-md-4">
+                                        <div class="card card-bordered  card-full">
+                                            <div class="card-inner">
+                                                <div class="card-title-group align-start mb-0">
+                                                    <div class="card-title">
+                                                        <h6 class="subtitle">{{ i.country_of_residence__name | title }}</h6>
+                                                    </div>
+                                                    <div class="card-tools">
+                                                        <em class="card-hint icon ni ni-help-fill" data-toggle="tooltip" data-placement="left" title="Total number of non active users which includes personal and merchants account"></em>
+                                                    </div>
+                                                </div>
+                                                <div class="card-amount">
+                                                    <span class="amount"> {{ i.number }} <em class="icon ni ni-user-add"></em>
+                                                    </span>
+                                                </div>
+                                                <div class="invest-data">
+                                                    <div class="invest-data-amount g-2">
+                                                        <div class="invest-data-history">
+                                                            <div class="title">This Month</div>
+                                                            <div class="amount">2,940</div>
+                                                        </div>
+                                                        <div class="invest-data-history">
+                                                            <div class="title">This Week</div>
+                                                            <div class="amount">1,259</div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="invest-data-ck">
+                                                        <img
+                                                        src="https://flagcdn.com/{{i.country_of_residence__iso2 | lower}}.svg"
+                                                        width="100"
+                                                        alt="South Africa">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div><!-- .card -->
+                                    </div><!-- .col -->
+                                    {% endfor %}
+                                   
+                                </div>
+                            </div>
+                 </div>
+                </div>
+            </div>
+
+            <div class="nk-content ">
+                <div class="container-fluid">
+                    <div class="nk-content-inner">
+                        <div class="nk-content-body">
+                           
+                            <div class="nk-block">
+                                <div class="card card-bordered card-stretch">
+                                    <div class="card-inner-group">
+                                        <div class="card-inner">
+                                            <div class="card-title-group">
+                                                <div class="card-title">
+                                                    <h5 class="title">Total Registered Users In a Month.</h5>
+                                                </div>
+                                               
+                                              
+                                            </div><!-- .card-title-group -->
+                                        </div><!-- .card-inner -->
+                                        <div class="card-inner p-0">
+                                            <table class="table table-orders">
+                                                <thead class="tb-odr-head">
+                                                    <tr class="tb-odr-item">
+                                                        <th class="tb-odr-info">
+                                                            <span class="tb-odr-date d-none d-md-inline-block">Date</span>
+                                                        </th>
+                                                        <th class="tb-odr-amount">
+                                                            <span class="tb-odr-total">Total Count</span>
+                                                        </th>
+                                                        <th class="tb-odr-action">&nbsp;</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody class="tb-odr-body">
+
+                                                    {%for i in user_month %}
+                                                    <tr class="tb-odr-item">
+                                                        <td class="tb-odr-info">
+                                                        
+                                                            <span class="tb-odr-date">{{ i.created  }}</span>
+                                                        </td>
+                                                        <td class="tb-odr-amount">
+                                                            <span class="tb-odr-total">
+                                                                <span class="amount">{{ i.created_count }}</span>
+                                                            </span>
+
+                                                        </td>
+                                                       
+                                                    </tr><!-- .tb-odr-item -->
+                                                    {% endfor %}
+                                                </tbody>
+                                            </table>
+                                        </div><!-- .card-inner -->
+                                        <div class="card-inner">
+                                            <ul class="pagination justify-content-center justify-content-md-start">
+                                                <li class="page-item"><a class="page-link" href="#">Prev</a></li>
+                                                <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                                <li class="page-item"><span class="page-link"><em class="icon ni ni-more-h"></em></span></li>
+                                                <li class="page-item"><a class="page-link" href="#">6</a></li>
+                                                <li class="page-item"><a class="page-link" href="#">7</a></li>
+                                                <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                                            </ul><!-- .pagination -->
+                                        </div><!-- .card-inner -->
+                                    </div><!-- .card-inner-group -->
+                                </div><!-- .card -->
+                            </div><!-- .nk-block -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- content @e -->
+            <!-- content @e -->
+{% endblock %}
+
+
+
+         
