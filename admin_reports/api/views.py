@@ -6,6 +6,7 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from kroon.users.pagination import StandardResultsSetPagination
 from helpers.common.security import KOKPermission
 from admin_reports.permissions import IsBlekieAndEtransac
+from django.db.models import Q
 from drf_yasg.utils import swagger_auto_schema
 from kroon.users.models import User
 from transactions.models import Transactions, KroonTokenTransfer , KroonTokenRequest, UserRequestToken
@@ -38,7 +39,7 @@ class AllUserListView(
         ]
     lookup_field = "wallet_id"
     serializer_class = UserListSerializers
-    queryset = User.objects.all()
+    queryset = User.objects.select_related('country_of_residence','country_province','on_boarding_user', 'government_organization_name','bank_details').filter(Q(country_of_residence__iso2 = "NG" ) | Q(country_of_residence__iso2 = "GH") ) #getting the full list of Nigerians and ghana users
     pagination_class = StandardResultsSetPagination
 
     def get_object(self, queryset=None):
@@ -67,7 +68,6 @@ class AllUserListView(
             serializer = UserDetailsSerializer(instance)
 
             return Response(serializer.data)
-
 
 
 
