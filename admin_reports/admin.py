@@ -4,5 +4,5 @@ from .models import AdminPushNotifications
 # Register your models here.
 @admin.register(AdminPushNotifications)
 class AdminPushNotificationsadmin(admin.ModelAdmin):
-    list_display = ('title', 'device_id', 'status', 'created_at')
-    list_display_links = ('title', 'device_id', 'status', 'created_at')
+    list_display = ('title', 'status', 'created_date')
+    list_display_links = ('title', 'status', 'created_date')

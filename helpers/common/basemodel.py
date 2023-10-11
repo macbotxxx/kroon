@@ -3,6 +3,9 @@ import uuid
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
+NULL_AND_BLANK = {'null': True, 'blank': True}
+
+
 class BaseModel (models.Model):
 
     id = models.UUIDField(
@@ -14,28 +17,29 @@ class BaseModel (models.Model):
     )
 
     created_date = models.DateTimeField(
-        verbose_name=_("Created Date"),
         default=timezone.now,
-        max_length=20, 
-        help_text=_("Timestamp when the record was created.")
+        editable=False,
+        verbose_name=_('Created'),
+        help_text=_(
+            """Timestamp when the record was created. The date and time 
+            are displayed in the Timezone from where request is made. 
+            e.g. 2019-14-29T00:15:09Z for April 29, 2019 0:15:09 UTC"""
         )
+    )
 
     modified_date = models.DateTimeField(
-        verbose_name=_("Modified Date"),
-        default=timezone.now,
-        max_length=20, 
-        help_text=_("Modified date when the record was created.")
-        )
-
+        auto_now=True,
+        editable=False,
+        verbose_name=_('Updated'),
+        **NULL_AND_BLANK,
+        help_text=_(
+            """Timestamp when the record was modified. The date and 
+            time are displayed in the Timezone from where request 
+            is made. e.g. 2019-14-29T00:15:09Z for April 29, 2019 0:15:09 UTC
+            """)
+    )
     #Metadata
     class Meta :
         abstract = True
         verbose_name = _("Base Model")
         verbose_name_plural = _("Base Model")
-
-    #Methods
-    # def get_absolute_url(self):
-    #     return reverse('url', args=[args])
-
-    def __str__(self):
-        return self.created_date

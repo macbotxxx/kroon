@@ -10,14 +10,27 @@ from admin_reports.permissions import IsBlekieAndEtransac
 from django.db.models import Q
 from drf_yasg.utils import swagger_auto_schema
 from kroon.users.models import User
-from transactions.models import Transactions, KroonTokenTransfer , KroonTokenRequest, UserRequestToken
+from transactions.models import (
+    Transactions, 
+    KroonTokenTransfer, 
+    KroonTokenRequest, 
+    UserRequestToken
+    )
 from kroon.users.api.serializers import UserDetailsSerializer
 from rest_framework.mixins import (
     ListModelMixin,
     RetrieveModelMixin,
+    DestroyModelMixin,
+    CreateModelMixin
 )
 from rest_framework.viewsets import GenericViewSet
-from .serializers import UserListSerializers, TransactionsListSerializers , TransactionDetailsSerializers
+from .serializers import (
+    UserListSerializers, 
+    TransactionsListSerializers , 
+    TransactionDetailsSerializers,
+    AdminPushNotificationsSerializer
+    )
+from admin_reports.models import AdminPushNotifications
 
 
 
@@ -124,7 +137,87 @@ class TransactionListView(
             return Response(serializer.data)
         
 
+class PushNotificationViewSet(
+    RetrieveModelMixin,
+    ListModelMixin,
+    GenericViewSet,
+    DestroyModelMixin,
+    CreateModelMixin
+    ):
+ 
+    permission_classes = [
+        IsAuthenticated,
+        KOKPermission,
+        IsBlekieAndEtransac,
+        ]
+    lookup_field = "id"
+    serializer_class = AdminPushNotificationsSerializer
+    queryset = AdminPushNotifications.objects.all()
+    pagination_class = StandardResultsSetPagination
+
+    def get_object(self, queryset=None):
+        return AdminPushNotifications.objects.filter(id=self.kwargs["id"]).first()
+    
+    @swagger_auto_schema(
+        tags=['Admin Reports'],  # Add your desired tag(s) here
+        operation_summary="Post Push Notifications",
+        operation_description="Create and push Push Notifications.",
+    )
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+    @swagger_auto_schema(
+        tags=['Admin Reports'],  # Add your desired tag(s) here
+        operation_summary="All Push Notifications",
+        operation_description="Endpoints retrieves the list of Push Notifications.",
+    )
+    def list(self, request, *args, **kwargs):
+        return super(PushNotificationViewSet, self).list(request, *args, **kwargs)
+    
+    @swagger_auto_schema(
+        tags=['Admin Reports'],  # Add your desired tag(s) here
+        operation_summary="Get Push Notifications",
+        operation_description=" Retrieve the information of a push notification by passed Id.",
+    )
+    def retrieve(self, request, *args, **kwargs):
+        try:
+            instance = self.get_object()
+        except Exception as e:
+            return Response({"message": str(e)})
+        else:
+            # any additional logic
+            serializer = self.get_serializer(instance)
+            return Response(serializer.data)
+    
+    @swagger_auto_schema(
+        tags=['Admin Reports'],  # Add your desired tag(s) here
+        operation_summary="Delete Push Notifications",
+        operation_description="This deletes a push notification using the push notification ID",
+    )
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        self.perform_destroy(instance)
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    
+
+    
+
+    
+
+
+    
+
+
+        
+
 # this is recorded to be a sandbox to the original data and records
+# sandbox starts here ----------------------------------------------------------------
+# sandbox starts here ----------------------------------------------------------------
+# sandbox starts here ----------------------------------------------------------------
 # sandbox starts here ----------------------------------------------------------------
 
 class TotalTransactions(GenericViewSet):
@@ -443,6 +536,8 @@ class GlobalOverview(GenericViewSet):
         return Response(data , status=status.HTTP_200_OK)
     
 
+# this is recorded to be a sandbox to the original data and records
+# sandbox end here ----------------------------------------------------------------
 
     
     

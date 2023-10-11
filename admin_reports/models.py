@@ -4,6 +4,10 @@ from django.utils.translation import gettext_lazy as _
 from helpers.common.basemodel import BaseModel
 from locations.models import Country
 from kroon.users.models import User
+from .choices import ModelChoices
+
+NULL_AND_BLANK = {'null': True, 'blank': False}
+
 
 class AdminPushNotifications (BaseModel):
 
@@ -14,37 +18,30 @@ class AdminPushNotifications (BaseModel):
     )
     
     title = models.CharField(
-        verbose_name=_("News Feed Title"),
+        verbose_name=_("Title"),
         max_length=255,
-        null=True, 
-        help_text=_("The title of the new feed that will be displayed to the user")
-    )
-
-    device_id = models.CharField(
-        verbose_name=_("Device ID"),
-        max_length=150,
-        null=True, 
-        help_text=_("this stores the device ID of the merchants device which is linked to their account")
+        **NULL_AND_BLANK,
+        help_text=_("The notification title that will be displayed to the user mobile device.")
     )
 
     body_message = models.TextField(
         verbose_name = _("Body Message"),
-        null=True,
+        **NULL_AND_BLANK,
         help_text=_("this holds the content of the push notification")
     )
 
     news_feed_country = models.ManyToManyField(
         Country,
-        verbose_name = _("News Feed Country"),
-        help_text =_("The country that is only valid to view this news feed ")
+        verbose_name = _("Country"),
+        help_text =_("The country that is only valid to view this ")
     )
 
     platform = models.CharField(
-        choices=PLATFORM,
-        default= "all_the_above",
+        choices=ModelChoices.APP_TYPES,
+        default= ModelChoices.APP_TYPE_ALL,
         max_length=30,
-        null=True, blank=True,
-        help_text=_("The platform that is only valid to view this news feed specified for the paltform only , which can also be identified as the 'all the above' which shows all the contents for kroon and kroon kiosk to the users")
+        **NULL_AND_BLANK,
+        help_text=_("This holds the platform that is only valid to recieve the push notification, which can also be identified as the 'all the above' which shows the contents for devices and platforms that is registered under kroon network.")
     )
 
     device_type = models.CharField(
