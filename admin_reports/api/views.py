@@ -3,7 +3,7 @@ from rest_framework import status
 from django.http.response import Http404
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from kroon.users.pagination import StandardResultsSetPagination
 from helpers.common.security import KOKPermission
 from admin_reports.permissions import IsBlekieAndEtransac
@@ -161,12 +161,7 @@ class TotalTransactions(GenericViewSet):
     
 
 class TotalWalletValue(GenericViewSet):
-    """
-    Get total of all wallet value 
-
-    this endpoint shows the list of all wallets value compare to last year
-
-    """
+   
     permission_classes = [
         IsAuthenticated,
         KOKPermission,
@@ -193,12 +188,7 @@ class TotalWalletValue(GenericViewSet):
 
 
 class TotalPayouts(GenericViewSet):
-    """
-    Get total of all payouts 
-
-    this endpoint shows the list of all payouts compare to last year
-
-    """
+   
     permission_classes = [
         IsAuthenticated,
         KOKPermission,
@@ -224,12 +214,7 @@ class TotalPayouts(GenericViewSet):
     
 
 class TotalEwallets(GenericViewSet):
-    """
-    Get total of all E wallet  
-
-    this endpoint shows the list of all E wallets compare to last year
-
-    """
+   
     permission_classes = [
         IsAuthenticated,
         KOKPermission,
@@ -253,18 +238,14 @@ class TotalEwallets(GenericViewSet):
 
 
 class TotalMerchants(GenericViewSet):
-    """
-    Get total registered merchants  
-
-    this endpoint shows the list of all registered merchants compare to last year
-
-    """
+   
     permission_classes = [
         IsAuthenticated,
         KOKPermission,
         IsBlekieAndEtransac,
         ]
     queryset = Transactions.objects.all()
+    lookup_value_regex = "[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}"
 
     @swagger_auto_schema(
         tags=['Admin Reports'],  # Add your desired tag(s) here
@@ -282,23 +263,19 @@ class TotalMerchants(GenericViewSet):
 
 
 class CrossBorderTransfer(GenericViewSet):
-    """
-    Get total cross border transfer 
-
-    this endpoint shows the list of all cross border transfer compare to last year
-
-    """
+   
     permission_classes = [
-        IsAuthenticated,
-        KOKPermission,
-        IsBlekieAndEtransac,
+        AllowAny,
+        # KOKPermission,
+        # IsBlekieAndEtransac,
         ]
     queryset = Transactions.objects.all()
+    lookup_value_regex = "[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}"
 
     @swagger_auto_schema(
         tags=['Admin Reports'],  # Add your desired tag(s) here
         operation_summary="Cross Border Transfer",
-        operation_description=" *SANDBOX* // this shows the amount of all cross border transfer to compare last year record",
+        operation_description=" *SANDBOX* // this shows the amount of all cross border transfer to compare last year record ",
     )
     def list(self, request, *args, **kwargs):
         data = {
@@ -311,12 +288,7 @@ class CrossBorderTransfer(GenericViewSet):
     
 
 class DailyAverage(GenericViewSet):
-    """
-    Get the daily average
-
-    this endpoint shows the list of all daily average compare to last year
-
-    """
+   
     permission_classes = [
         IsAuthenticated,
         KOKPermission,
@@ -330,7 +302,7 @@ class DailyAverage(GenericViewSet):
         operation_description=" *SANDBOX* // this shows the amount of all daily average to compare yesterday record",
     )
     def list(self, request, *args, **kwargs):
-        data = {
+        response = {
             'local_currency': 'NGN',
             'transaction_volume': 23678,
             'transaction_volume_per': '+17,82',
@@ -340,16 +312,11 @@ class DailyAverage(GenericViewSet):
             'yesterday_transaction_value':20341,
         }
 
-        return Response(data , status=status.HTTP_200_OK)
+        return Response(data=response , status=status.HTTP_200_OK)
     
 
 class TotalActiveMerchants(GenericViewSet):
-    """
-    Get the number of merchants
-
-    this endpoint shows the total count of all merchants both the new and loss merchants on the platform
-
-    """
+   
     permission_classes = [
         IsAuthenticated,
         KOKPermission,
@@ -373,12 +340,7 @@ class TotalActiveMerchants(GenericViewSet):
 
 
 class TopPerformingRegions(GenericViewSet):
-    """
-    Get the list of top performing regions
-
-    this endpoint shows the total of top performing regions
-
-    """
+  
     permission_classes = [
         IsAuthenticated,
         KOKPermission,
@@ -412,12 +374,7 @@ class TopPerformingRegions(GenericViewSet):
 
 
 class GlobalOverview(GenericViewSet):
-    """
-    Get the list of top performing regions
-
-    this endpoint shows the total of top performing regions
-
-    """
+   
     permission_classes = [
         IsAuthenticated,
         KOKPermission,
