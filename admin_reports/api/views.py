@@ -31,6 +31,7 @@ from .serializers import (
     AdminPushNotificationsSerializer
     )
 from admin_reports.models import AdminPushNotifications
+from admin_reports.task import device_push_notification
 
 
 
@@ -144,6 +145,12 @@ class PushNotificationViewSet(
     DestroyModelMixin,
     CreateModelMixin
     ):
+    """
+    Send Push Notification 
+
+    This endpoints allows you to send push notifications to kroon and kiosk users , using the notification ID to get and delete the notification that is stored
+
+    """
  
     permission_classes = [
         IsAuthenticated,
@@ -166,6 +173,8 @@ class PushNotificationViewSet(
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
+        # sendout push notification
+        # device_push_notification(serializer = serializer)
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
@@ -202,6 +211,8 @@ class PushNotificationViewSet(
         instance = self.get_object()
         self.perform_destroy(instance)
         return Response(status=status.HTTP_204_NO_CONTENT)
+    
+    
     
 
     

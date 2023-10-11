@@ -4,6 +4,7 @@ from transactions.models import Transactions, KroonTokenTransfer , KroonTokenReq
 from admin_reports.models import AdminPushNotifications
 from django.utils.translation import gettext_lazy as _
 from admin_reports.choices import ModelChoices
+from locations.api.serializers import CountryDetails
 
 class UserListSerializers(serializers.ModelSerializer):
 
@@ -28,6 +29,8 @@ class TransactionsListSerializers(serializers.ModelSerializer):
             'modified_date',
             ]
         
+
+
 class TransactionDetailsSerializers(serializers.ModelSerializer):
     benefactor = UserListSerializers( read_only=True )
     recipient = UserListSerializers( read_only=True )
@@ -47,6 +50,7 @@ class TransactionDetailsSerializers(serializers.ModelSerializer):
         read_only_fields = ['benefactor', 'recipient', 'transactional_id', 'flw_ref', 'amount', 'amount_in_localcurrency', 'currency', 'local_currency', 'amount_settled', 'debited_kroon_amount', 'credited_kroon_amount', 'kroon_balance', 'payment_type', 'narration', 'device_fingerprint', 'transactional_date', 'ip_address', 'card', 'card_first_6digits', 'card_last_4digits', 'card_issuer', 'card_country', 'card_type', 'card_expiry', 'billing_id', 'billing_name', 'billing_mobile_number', 'billing_email', 'billing_date', 'service_providers', 'action', 'status',]
 
 
+
 class AdminPushNotificationsSerializer(serializers.ModelSerializer):
     title = serializers.CharField(
         max_length=150,
@@ -63,6 +67,7 @@ class AdminPushNotificationsSerializer(serializers.ModelSerializer):
         default= ModelChoices.APP_TYPE_ALL,
         help_text=_("This holds the platform that is only valid to recieve the push notification, which can also be identified as the 'all the above' which shows the contents for devices and platforms that is registered under kroon network.")
     )
+
     class Meta:
         model = AdminPushNotifications
         fields = "__all__"
