@@ -43,6 +43,11 @@ def mobile_push_notification ( *args , **kwargs ):
             serverToken = KIOSK_FCM_SERVER_KEY_TAB
         else:
             serverToken = FCM_SERVER_KEY_KIOSK
+    else:
+        serverToken = FCM_SERVER_KEY_KIOSK
+        # TODO: this section needs to be fixed
+        #the general push notification which is meant to send 
+        # a push notification to all clients
         
     deviceToken = device_id
     headers = {

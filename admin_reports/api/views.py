@@ -165,6 +165,7 @@ class PushNotificationViewSet(
     def get_object(self, queryset=None):
         return AdminPushNotifications.objects.get(id=self.kwargs["id"])
     
+    # Post Push Notifications
     @swagger_auto_schema(
         tags=['Admin Reports'],  # Add your desired tag(s) here
         operation_summary="Post Push Notifications",
@@ -175,10 +176,15 @@ class PushNotificationViewSet(
         serializer.is_valid(raise_exception=True)
         # sendout push notification
         device_push_notification(serializer = serializer)
-        self.perform_create(serializer)
+        self.perform_create( serializer )
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
-
+    
+    def perform_create(self, serializer):
+        serializer.save(publisher = self.request.user) # save the publisher
+    
+    
+    # All Push Notifications
     @swagger_auto_schema(
         tags=['Admin Reports'],  # Add your desired tag(s) here
         operation_summary="All Push Notifications",
@@ -187,6 +193,7 @@ class PushNotificationViewSet(
     def list(self, request, *args, **kwargs):
         return super(PushNotificationViewSet, self).list(request, *args, **kwargs)
     
+    # Get Push Notifications
     @swagger_auto_schema(
         tags=['Admin Reports'],  # Add your desired tag(s) here
         operation_summary="Get Push Notifications",
@@ -202,6 +209,7 @@ class PushNotificationViewSet(
             serializer = self.get_serializer(instance)
             return Response(serializer.data)
     
+    # Delete Push Notifications
     @swagger_auto_schema(
         tags=['Admin Reports'],  # Add your desired tag(s) here
         operation_summary="Delete Push Notifications",
