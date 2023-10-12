@@ -28,7 +28,8 @@ from .serializers import (
     UserListSerializers, 
     TransactionsListSerializers , 
     TransactionDetailsSerializers,
-    AdminPushNotificationsSerializer
+    AdminPushNotificationsSerializer,
+    NotificationInfo
     )
 from admin_reports.models import AdminPushNotifications
 from admin_reports.task import device_push_notification
@@ -206,7 +207,7 @@ class PushNotificationViewSet(
             return Response({"message": str(e)})
         else:
             # any additional logic
-            serializer = self.get_serializer(instance)
+            serializer = NotificationInfo(instance)
             return Response(serializer.data)
     
     # Delete Push Notifications

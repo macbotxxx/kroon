@@ -5,6 +5,7 @@ from admin_reports.models import AdminPushNotifications
 from django.utils.translation import gettext_lazy as _
 from admin_reports.choices import ModelChoices
 from locations.api.serializers import CountryDetails
+from kroon.users.api.serializers import UserOnlyInfo
 
 class UserListSerializers(serializers.ModelSerializer):
 
@@ -84,3 +85,11 @@ class AdminPushNotificationsSerializer(serializers.ModelSerializer):
 
     # def create(self, validated_data):
     #     return super().create(validated_data)
+
+
+class NotificationInfo(serializers.ModelSerializer):
+    publisher = UserOnlyInfo( read_only = True)
+    news_feed_country = CountryDetails( read_only = True , many = True )
+    class Meta:
+        model = AdminPushNotifications
+        fields = "__all__"
