@@ -263,7 +263,7 @@ class ELearningViewSet(
     def get_object(self, queryset=None):
         return Kiosk_E_Learning.objects.get(id=self.kwargs["id"])
     
-    # Post Push Notifications
+    # Post Uploaded Tutorial videos
     @swagger_auto_schema(
         tags=['Admin Reports'],  # Add your desired tag(s) here
         operation_summary="Upload Elearning Clip",
@@ -280,7 +280,7 @@ class ELearningViewSet(
     #     serializer.save(publisher = self.request.user) # save the publisher
     
     
-    # All Push Notifications
+    # All Uploaded Tutorial videos
     @swagger_auto_schema(
         tags=['Admin Reports'],  # Add your desired tag(s) here
         operation_summary="List of Elearning clips",
@@ -289,7 +289,7 @@ class ELearningViewSet(
     def list(self, request, *args, **kwargs):
         return super(ELearningViewSet, self).list(request, *args, **kwargs)
     
-    # Get Push Notifications
+    # Get Uploaded Tutorial video
     @swagger_auto_schema(
         tags=['Admin Reports'],  # Add your desired tag(s) here
         operation_summary="Get elearning clip",
@@ -305,7 +305,94 @@ class ELearningViewSet(
             serializer = ElearningInfo(instance)
             return Response(serializer.data)
     
-    # Delete Push Notifications
+    # Delete Uploaded Tutorial videos
+    @swagger_auto_schema(
+        tags=['Admin Reports'],  # Add your desired tag(s) here
+        operation_summary="Delete Elearning Video",
+        operation_description="This deletes a elearning Video using the elearning VideoID",
+    )
+    def destroy(self, request, *args, **kwargs):
+        try:
+            instance = self.get_object()
+        except Exception as e:
+            return Response({"message": str(e)})
+        else:
+            self.perform_destroy(instance)
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    
+
+
+
+class SurveyViewSet(
+    RetrieveModelMixin,
+    ListModelMixin,
+    GenericViewSet,
+    DestroyModelMixin,
+    CreateModelMixin
+    ):
+    """
+    Survey  
+
+    This endpoints allows you to surveys to kroon and kiosk users , using each survey ID to get and delete the any published survey that is stored to get the ideas on how the users feel using the following applications under the kroon network .
+
+    """
+ 
+    permission_classes = [
+        IsAuthenticated,
+        KOKPermission,
+        IsBlekieAndEtransac,
+        ]
+    lookup_field = "id"
+    serializer_class = ELearningSerializers
+    queryset = App_Survey.objects.all()
+    pagination_class = StandardResultsSetPagination
+
+    def get_object(self, queryset=None):
+        return App_Survey.objects.get(id=self.kwargs["id"])
+    
+    # Post Uploaded Tutorial videos
+    @swagger_auto_schema(
+        tags=['Admin Reports'],  # Add your desired tag(s) here
+        operation_summary="Upload Elearning Clip",
+        operation_description="Create and uploads the elearning clip.",
+    )
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True) 
+        self.perform_create( serializer )
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+    
+    # def perform_create(self, serializer):
+    #     serializer.save(publisher = self.request.user) # save the publisher
+    
+    
+    # All Uploaded Tutorial videos
+    @swagger_auto_schema(
+        tags=['Admin Reports'],  # Add your desired tag(s) here
+        operation_summary="List of Elearning clips",
+        operation_description="Endpoints retrieves the list of kroon and kiosk tutorial clips which is known as elearning.",
+    )
+    def list(self, request, *args, **kwargs):
+        return super(ELearningViewSet, self).list(request, *args, **kwargs)
+    
+    # Get Uploaded Tutorial video
+    @swagger_auto_schema(
+        tags=['Admin Reports'],  # Add your desired tag(s) here
+        operation_summary="Get elearning clip",
+        operation_description=" Retrieve the information of a video by passed Id.",
+    )
+    def retrieve(self, request, *args, **kwargs):
+        try:
+            instance = self.get_object()
+        except Exception as e:
+            return Response({"message": str(e)})
+        else:
+            # any additional logic
+            serializer = ElearningInfo(instance)
+            return Response(serializer.data)
+    
+    # Delete Uploaded Tutorial videos
     @swagger_auto_schema(
         tags=['Admin Reports'],  # Add your desired tag(s) here
         operation_summary="Delete Elearning Video",

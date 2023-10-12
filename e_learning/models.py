@@ -101,9 +101,9 @@ class SurveyQA(BaseModel):
     survey_qa = models.ForeignKey(
         App_Survey, on_delete=models.CASCADE,
         null=True,
-        related_name='survey_field',
-        verbose_name = _('Survey QA'),
-        help_text = _('this hold the survey question and answers')
+        related_name='survey_user',
+        verbose_name = _('User Account'),
+        help_text = _('this hold the user account that answered the survey questions')
     )
 
     survey_questions_id = models.ForeignKey(
