@@ -99,7 +99,7 @@ class SurveyQA(BaseModel):
     # registering custom manager interface
 
     survey_qa = models.ForeignKey(
-        App_Survey, on_delete=models.CASCADE,
+        App_Survey, on_delete=models.SET_NULL,
         null=True,
         related_name='survey_user',
         verbose_name = _('User Account'),
@@ -117,7 +117,7 @@ class SurveyQA(BaseModel):
     survey_answer = models.CharField(
         verbose_name = _('Survey Answer'),
         null =True,
-        max_length = 300,blank=True,
+        max_length = 300, blank=True,
         help_text=_("the hold the answer of the survey")
     )
 

@@ -15,7 +15,7 @@ from kroon.users.models import User
 from admin_reports.models import AdminPushNotifications
 from admin_reports.task import device_push_notification
 from admin_reports.permissions import IsBlekieAndEtransac
-from e_learning.models import Kiosk_E_Learning , App_Survey
+from e_learning.models import Kiosk_E_Learning , App_Survey, SurveyQA , AppSurveyQuestion
 
 
 from transactions.models import (
@@ -29,7 +29,8 @@ from rest_framework.mixins import (
     ListModelMixin,
     RetrieveModelMixin,
     DestroyModelMixin,
-    CreateModelMixin
+    CreateModelMixin,
+    UpdateModelMixin
 )
 from rest_framework.viewsets import GenericViewSet
 from .serializers import (
@@ -39,7 +40,10 @@ from .serializers import (
     AdminPushNotificationsSerializer,
     NotificationInfo,
     ELearningSerializers,
-    ElearningInfo
+    ElearningInfo,
+    SurveyQuestionSerializer,
+    SurveyUsers,
+    SurveyQuestioninfo
     )
 
 
@@ -65,6 +69,8 @@ class AllUserListView(
     serializer_class = UserListSerializers
     queryset = User.objects.select_related('country_of_residence','country_province','on_boarding_user', 'government_organization_name','bank_details').filter(Q(country_of_residence__iso2 = "NG" ) | Q(country_of_residence__iso2 = "GH") ) #getting the full list of Nigerians and ghana users
     pagination_class = StandardResultsSetPagination
+    ordering_fields = ['created_date', 'modified_date']
+    lookup_value_regex = "[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}"
 
     def get_object(self, queryset=None):
         return User.objects.filter(wallet_id=self.kwargs["wallet_id"]).first()
@@ -86,7 +92,7 @@ class AllUserListView(
         try:
             instance = self.get_object()
         except Exception as e:
-            return Response({"message": str(e)})
+            return Response({"message": str(e)}, status=status.HTTP_404_NOT_FOUND)
         else:
             # any additional logic
             serializer = UserDetailsSerializer(instance)
@@ -117,6 +123,8 @@ class TransactionListView(
     serializer_class = TransactionsListSerializers
     queryset = Transactions.objects.all()
     pagination_class = StandardResultsSetPagination
+    ordering_fields = ['created_date', 'modified_date']
+    lookup_value_regex = "[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}"
 
     def get_object(self, queryset=None):
         return Transactions.objects.filter(transactional_id=self.kwargs["transactional_id"]).first()
@@ -139,7 +147,7 @@ class TransactionListView(
         try:
             instance = self.get_object()
         except Exception as e:
-            return Response({"message": str(e)})
+            return Response({"message": str(e)}, status=status.HTTP_404_NOT_FOUND)
         else:
             # any additional logic
             serializer = TransactionDetailsSerializers(instance)
@@ -170,6 +178,8 @@ class PushNotificationViewSet(
     serializer_class = AdminPushNotificationsSerializer
     queryset = AdminPushNotifications.objects.all()
     pagination_class = StandardResultsSetPagination
+    ordering_fields = ['created_date', 'modified_date']
+    lookup_value_regex = "[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}"
 
     def get_object(self, queryset=None):
         return AdminPushNotifications.objects.get(id=self.kwargs["id"])
@@ -212,7 +222,7 @@ class PushNotificationViewSet(
         try:
             instance = self.get_object()
         except Exception as e:
-            return Response({"message": str(e)})
+            return Response({"message": str(e)}, status=status.HTTP_404_NOT_FOUND)
         else:
             # any additional logic
             serializer = NotificationInfo(instance)
@@ -228,7 +238,7 @@ class PushNotificationViewSet(
         try:
             instance = self.get_object()
         except Exception as e:
-            return Response({"message": str(e)})
+            return Response({"message": str(e)}, status=status.HTTP_404_NOT_FOUND)
         else:
             self.perform_destroy(instance)
         return Response(status=status.HTTP_204_NO_CONTENT)
@@ -259,6 +269,8 @@ class ELearningViewSet(
     serializer_class = ELearningSerializers
     queryset = Kiosk_E_Learning.objects.all()
     pagination_class = StandardResultsSetPagination
+    ordering_fields = ['created_date', 'modified_date']
+    lookup_value_regex = "[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}"
 
     def get_object(self, queryset=None):
         return Kiosk_E_Learning.objects.get(id=self.kwargs["id"])
@@ -299,7 +311,7 @@ class ELearningViewSet(
         try:
             instance = self.get_object()
         except Exception as e:
-            return Response({"message": str(e)})
+            return Response({"message": str(e)}, status=status.HTTP_404_NOT_FOUND)
         else:
             # any additional logic
             serializer = ElearningInfo(instance)
@@ -315,7 +327,7 @@ class ELearningViewSet(
         try:
             instance = self.get_object()
         except Exception as e:
-            return Response({"message": str(e)})
+            return Response({"message": str(e)}, status=status.HTTP_404_NOT_FOUND)
         else:
             self.perform_destroy(instance)
         return Response(status=status.HTTP_204_NO_CONTENT)
@@ -328,7 +340,8 @@ class SurveyViewSet(
     ListModelMixin,
     GenericViewSet,
     DestroyModelMixin,
-    CreateModelMixin
+    CreateModelMixin,
+    UpdateModelMixin
     ):
     """
     Survey  
@@ -343,18 +356,20 @@ class SurveyViewSet(
         IsBlekieAndEtransac,
         ]
     lookup_field = "id"
-    serializer_class = ELearningSerializers
-    queryset = App_Survey.objects.all()
+    serializer_class = SurveyQuestionSerializer
+    queryset = AppSurveyQuestion.objects.all()
     pagination_class = StandardResultsSetPagination
+    ordering_fields = ['created_date', 'modified_date']
+    lookup_value_regex = "[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}"
 
     def get_object(self, queryset=None):
-        return App_Survey.objects.get(id=self.kwargs["id"])
+        return AppSurveyQuestion.objects.get(id=self.kwargs["id"])
     
     # Post Uploaded Tutorial videos
     @swagger_auto_schema(
         tags=['Admin Reports'],  # Add your desired tag(s) here
-        operation_summary="Upload Elearning Clip",
-        operation_description="Create and uploads the elearning clip.",
+        operation_summary="Post Survey Question",
+        operation_description="Create the survey questions for the users",
     )
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -370,40 +385,141 @@ class SurveyViewSet(
     # All Uploaded Tutorial videos
     @swagger_auto_schema(
         tags=['Admin Reports'],  # Add your desired tag(s) here
-        operation_summary="List of Elearning clips",
-        operation_description="Endpoints retrieves the list of kroon and kiosk tutorial clips which is known as elearning.",
+        operation_summary="List Survey Questions",
+        operation_description="Endpoints retrieves the list of user that answred the following inapp ssurvey that is been published by the kroon network admin .",
     )
     def list(self, request, *args, **kwargs):
-        return super(ELearningViewSet, self).list(request, *args, **kwargs)
+        return super(SurveyViewSet, self).list(request, *args, **kwargs)
+    
+    #Update survey questions
+    @swagger_auto_schema(
+        tags=['Admin Reports'],  # Add your desired tag(s) here
+        operation_summary="Update a Survey Questions",
+        operation_description="Update a survey question using the survey ID.",
+    )
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop("partial", False)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+
+    # Patch update on a survey qestion
+    @swagger_auto_schema(
+        tags=['Admin Reports'],  # Add your desired tag(s) here
+        operation_summary="Patch a Survey Questions",
+        operation_description="Patch a  survey question using the survey ID.",
+    )
+    def partial_update(self, request, *args, **kwargs):
+        partial = kwargs.pop("partial", False)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
     
     # Get Uploaded Tutorial video
     @swagger_auto_schema(
         tags=['Admin Reports'],  # Add your desired tag(s) here
-        operation_summary="Get elearning clip",
-        operation_description=" Retrieve the information of a video by passed Id.",
+        operation_summary="Get Survey Question",
+        operation_description=" Retrieve the information of a survey by passing the survey Id.",
     )
     def retrieve(self, request, *args, **kwargs):
         try:
             instance = self.get_object()
         except Exception as e:
-            return Response({"message": str(e)})
+            return Response({"message": str(e)}, status=status.HTTP_404_NOT_FOUND)
         else:
             # any additional logic
-            serializer = ElearningInfo(instance)
+            serializer = self.get_serializer(instance)
             return Response(serializer.data)
     
     # Delete Uploaded Tutorial videos
     @swagger_auto_schema(
         tags=['Admin Reports'],  # Add your desired tag(s) here
-        operation_summary="Delete Elearning Video",
-        operation_description="This deletes a elearning Video using the elearning VideoID",
+        operation_summary="Delete Survey Question",
+        operation_description="This deletes a survey question using the survey question ID",
     )
     def destroy(self, request, *args, **kwargs):
         try:
             instance = self.get_object()
         except Exception as e:
-            return Response({"message": str(e)})
+            return Response({"message": str(e)}, status=status.HTTP_404_NOT_FOUND)
         else:
+            self.perform_destroy(instance)
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    
+
+
+    
+
+class AnsweredSurveyViewSet(
+    RetrieveModelMixin,
+    ListModelMixin,
+    GenericViewSet,
+    DestroyModelMixin
+    ):
+    """
+    Answered Survey  
+
+    This endpoints allows the admin to get the list and delete the survey actions taken by the  kroon and kiosk users , using each survey ID to get and delete the any published survey that is stored to get the ideas on how the users feel using the following applications under the kroon network .
+
+    """
+ 
+    permission_classes = [
+        IsAuthenticated,
+        KOKPermission,
+        IsBlekieAndEtransac,
+        ]
+    lookup_field = "id"
+    serializer_class = SurveyUsers
+    queryset = App_Survey.objects.all()
+    pagination_class = StandardResultsSetPagination
+    ordering_fields = ['created_date', 'modified_date']
+    lookup_value_regex = "[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}"
+
+    def get_object(self, queryset=None):
+        return SurveyQA.objects.get(survey_qa=self.kwargs["id"])
+     
+    
+    # All Uploaded Tutorial videos
+    @swagger_auto_schema(
+        tags=['Admin Reports'],  # Add your desired tag(s) here
+        operation_summary="List Survey Users",
+        operation_description="Endpoints retrieves the list of user that answred the following inapp ssurvey that is been published by the kroon network admin .",
+    )
+    def list(self, request, *args, **kwargs):
+        return super(AnsweredSurveyViewSet, self).list(request, *args, **kwargs)
+
+    
+    # Get Uploaded Tutorial video
+    @swagger_auto_schema(
+        tags=['Admin Reports'],  # Add your desired tag(s) here
+        operation_summary="Get Survey QA",
+        operation_description=" Retrieve the information of a survey by passing the survey Id.",
+    )
+    def retrieve(self, request, *args, **kwargs):
+        try:
+            instance = self.get_object()
+        except Exception as e:
+            return Response({"message": str(e)}, status=status.HTTP_404_NOT_FOUND)
+        else:
+            # any additional logic
+            serializer = SurveyQuestioninfo(instance)
+            return Response(serializer.data)
+    
+    # Delete Uploaded Tutorial videos
+    @swagger_auto_schema(
+        tags=['Admin Reports'],  # Add your desired tag(s) here
+        operation_summary="Delete Survey QA",
+        operation_description="This deletes a survey using the survey ID",
+    )
+    def destroy(self, request, *args, **kwargs):
+        try:
+            instance = self.get_object()
+        except Exception as e:
+            return Response({"message": str(e)}, status=status.HTTP_404_NOT_FOUND)
+        else:
+            self.get_queryset().get( id = instance.survey_qa.id).delete()
             self.perform_destroy(instance)
         return Response(status=status.HTTP_204_NO_CONTENT)
     

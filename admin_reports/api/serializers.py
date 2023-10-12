@@ -6,7 +6,7 @@ from django.utils.translation import gettext_lazy as _
 from admin_reports.choices import ModelChoices
 from locations.api.serializers import CountryDetails
 from kroon.users.api.serializers import UserOnlyInfo
-from e_learning.models import Kiosk_E_Learning, AppSurveyQuestion , SurveyQA
+from e_learning.models import Kiosk_E_Learning, AppSurveyQuestion , SurveyQA , App_Survey
 
 class UserListSerializers(serializers.ModelSerializer):
 
@@ -118,8 +118,14 @@ class SurveyQuestionSerializer(serializers.ModelSerializer):
 
 
 class SurveyQuestioninfo(serializers.ModelSerializer):
+    survey_questions_id = SurveyQuestionSerializer( read_only=True)
     class Meta:
         model = SurveyQA
-        fields = "__all__"
-        exclude = ['user']
+        exclude = ['survey_qa']
         read_only_fields = ['id','created_date',]
+
+class SurveyUsers(serializers.ModelSerializer):
+    class Meta:
+        model = App_Survey
+        fields = ["id",]
+        read_only_fields = ['created_date',]
