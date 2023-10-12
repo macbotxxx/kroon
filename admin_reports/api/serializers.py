@@ -6,6 +6,7 @@ from django.utils.translation import gettext_lazy as _
 from admin_reports.choices import ModelChoices
 from locations.api.serializers import CountryDetails
 from kroon.users.api.serializers import UserOnlyInfo
+from e_learning.models import Kiosk_E_Learning
 
 class UserListSerializers(serializers.ModelSerializer):
 
@@ -93,3 +94,17 @@ class NotificationInfo(serializers.ModelSerializer):
     class Meta:
         model = AdminPushNotifications
         fields = "__all__"
+
+
+class ELearningSerializers(serializers.ModelSerializer):
+    class Meta:
+        model = Kiosk_E_Learning
+        fields = "__all__"
+        read_only_fields = ['id','created_date',]
+
+class ElearningInfo(serializers.ModelSerializer):
+    e_leanring_country = CountryDetails( read_only = True , many = True )
+    class Meta:
+        model = Kiosk_E_Learning
+        fields = "__all__"
+        read_only_fields = ['id','created_date',]

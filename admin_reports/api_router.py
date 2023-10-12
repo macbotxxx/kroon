@@ -14,7 +14,8 @@ from admin_reports.api.views import (
     TotalActiveMerchants,
     TopPerformingRegions,
     GlobalOverview,
-    PushNotificationViewSet
+    PushNotificationViewSet,
+    ELearningViewSet
     )
 
 router = DefaultRouter() if settings.DEBUG else SimpleRouter()
@@ -33,6 +34,7 @@ router.register("active-merchants", TotalActiveMerchants)
 router.register("top-performing-regions", TopPerformingRegions)
 router.register("global_overview", GlobalOverview)
 router.register("push-notification", PushNotificationViewSet)
+router.register("e-learning", ELearningViewSet)
 
 app_name = "admin_reports"
 urlpatterns = router.urls

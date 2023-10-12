@@ -1,15 +1,23 @@
 import contextlib
-from rest_framework import status
+
 from django.http.response import Http404
-from rest_framework.response import Response
-from rest_framework.views import APIView
-from rest_framework.permissions import IsAuthenticated, AllowAny
-from kroon.users.pagination import StandardResultsSetPagination
-from helpers.common.security import KOKPermission
-from admin_reports.permissions import IsBlekieAndEtransac
 from django.db.models import Q
 from drf_yasg.utils import swagger_auto_schema
+
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from rest_framework import status
+from rest_framework.permissions import IsAuthenticated, AllowAny
+
+from kroon.users.pagination import StandardResultsSetPagination
+from helpers.common.security import KOKPermission
 from kroon.users.models import User
+from admin_reports.models import AdminPushNotifications
+from admin_reports.task import device_push_notification
+from admin_reports.permissions import IsBlekieAndEtransac
+from e_learning.models import Kiosk_E_Learning , App_Survey
+
+
 from transactions.models import (
     Transactions, 
     KroonTokenTransfer, 
@@ -29,10 +37,10 @@ from .serializers import (
     TransactionsListSerializers , 
     TransactionDetailsSerializers,
     AdminPushNotificationsSerializer,
-    NotificationInfo
+    NotificationInfo,
+    ELearningSerializers,
+    ElearningInfo
     )
-from admin_reports.models import AdminPushNotifications
-from admin_reports.task import device_push_notification
 
 
 
@@ -228,7 +236,91 @@ class PushNotificationViewSet(
     
     
 
+class ELearningViewSet(
+    RetrieveModelMixin,
+    ListModelMixin,
+    GenericViewSet,
+    DestroyModelMixin,
+    CreateModelMixin
+    ):
+    """
+    E-Learning  
+
+    This endpoints allows you to publish tutorials videos to kroon and kiosk users , using each video ID to get and delete the any published clip that is stored to guild the users on how to use the application.
+
+    """
+ 
+    permission_classes = [
+        IsAuthenticated,
+        KOKPermission,
+        IsBlekieAndEtransac,
+        ]
+    lookup_field = "id"
+    serializer_class = ELearningSerializers
+    queryset = Kiosk_E_Learning.objects.all()
+    pagination_class = StandardResultsSetPagination
+
+    def get_object(self, queryset=None):
+        return Kiosk_E_Learning.objects.get(id=self.kwargs["id"])
     
+    # Post Push Notifications
+    @swagger_auto_schema(
+        tags=['Admin Reports'],  # Add your desired tag(s) here
+        operation_summary="Upload Elearning Clip",
+        operation_description="Create and uploads the elearning clip.",
+    )
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True) 
+        self.perform_create( serializer )
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+    
+    # def perform_create(self, serializer):
+    #     serializer.save(publisher = self.request.user) # save the publisher
+    
+    
+    # All Push Notifications
+    @swagger_auto_schema(
+        tags=['Admin Reports'],  # Add your desired tag(s) here
+        operation_summary="List of Elearning clips",
+        operation_description="Endpoints retrieves the list of kroon and kiosk tutorial clips which is known as elearning.",
+    )
+    def list(self, request, *args, **kwargs):
+        return super(ELearningViewSet, self).list(request, *args, **kwargs)
+    
+    # Get Push Notifications
+    @swagger_auto_schema(
+        tags=['Admin Reports'],  # Add your desired tag(s) here
+        operation_summary="Get elearning clip",
+        operation_description=" Retrieve the information of a video by passed Id.",
+    )
+    def retrieve(self, request, *args, **kwargs):
+        try:
+            instance = self.get_object()
+        except Exception as e:
+            return Response({"message": str(e)})
+        else:
+            # any additional logic
+            serializer = ElearningInfo(instance)
+            return Response(serializer.data)
+    
+    # Delete Push Notifications
+    @swagger_auto_schema(
+        tags=['Admin Reports'],  # Add your desired tag(s) here
+        operation_summary="Delete Elearning Video",
+        operation_description="This deletes a elearning Video using the elearning VideoID",
+    )
+    def destroy(self, request, *args, **kwargs):
+        try:
+            instance = self.get_object()
+        except Exception as e:
+            return Response({"message": str(e)})
+        else:
+            self.perform_destroy(instance)
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    
+
 
     
 
