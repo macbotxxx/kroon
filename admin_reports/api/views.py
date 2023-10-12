@@ -163,7 +163,7 @@ class PushNotificationViewSet(
     pagination_class = StandardResultsSetPagination
 
     def get_object(self, queryset=None):
-        return AdminPushNotifications.objects.filter(id=self.kwargs["id"]).first()
+        return AdminPushNotifications.objects.get(id=self.kwargs["id"])
     
     @swagger_auto_schema(
         tags=['Admin Reports'],  # Add your desired tag(s) here
@@ -174,7 +174,7 @@ class PushNotificationViewSet(
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         # sendout push notification
-        # device_push_notification(serializer = serializer)
+        device_push_notification(serializer = serializer)
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
@@ -208,8 +208,12 @@ class PushNotificationViewSet(
         operation_description="This deletes a push notification using the push notification ID",
     )
     def destroy(self, request, *args, **kwargs):
-        instance = self.get_object()
-        self.perform_destroy(instance)
+        try:
+            instance = self.get_object()
+        except Exception as e:
+            return Response({"message": str(e)})
+        else:
+            self.perform_destroy(instance)
         return Response(status=status.HTTP_204_NO_CONTENT)
     
     

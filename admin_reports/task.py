@@ -10,7 +10,7 @@ def device_push_notification( *args , **kwargs ):
     platform = serializer.validated_data['platform']
     news_feed_country = serializer.validated_data['news_feed_country']
     for i in news_feed_country:
-        pass
+        print(i)
     return "Admin push notification is sent out"
 
 
