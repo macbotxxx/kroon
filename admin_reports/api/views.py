@@ -16,6 +16,7 @@ from admin_reports.models import AdminPushNotifications
 from admin_reports.task import device_push_notification
 from admin_reports.permissions import IsBlekieAndEtransac
 from e_learning.models import Kiosk_E_Learning , App_Survey, SurveyQA , AppSurveyQuestion
+from ads.models import Ads
 
 
 from transactions.models import (
@@ -43,7 +44,9 @@ from .serializers import (
     ElearningInfo,
     SurveyQuestionSerializer,
     SurveyUsers,
-    SurveyQuestioninfo
+    SurveyQuestioninfo,
+    AdsSerializer,
+    AdsInfo
     )
 
 
@@ -525,7 +528,122 @@ class AnsweredSurveyViewSet(
     
 
 
+
+
+class InAppAdsViewSet(
+    RetrieveModelMixin,
+    ListModelMixin,
+    GenericViewSet,
+    DestroyModelMixin,
+    CreateModelMixin,
+    UpdateModelMixin
+    ):
+    """
+    Ad  
+
+    This endpoints allows you to post in app ads to kroon and kiosk users , using each ad ID to get and delete the any published ad that is stored using the following applications under the kroon network .
+
+    """
+ 
+    permission_classes = [
+        IsAuthenticated,
+        KOKPermission,
+        IsBlekieAndEtransac,
+        ]
+    lookup_field = "id"
+    serializer_class = AdsSerializer
+    queryset = Ads.objects.all()
+    pagination_class = StandardResultsSetPagination
+    ordering_fields = ['created_date', 'modified_date']
+    lookup_value_regex = "[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}"
+
+    def get_object(self, queryset=None):
+        return Ads.objects.get(id=self.kwargs["id"])
     
+    # Post Uploaded Tutorial videos
+    @swagger_auto_schema(
+        tags=['Admin Reports'],  # Add your desired tag(s) here
+        operation_summary="Post Ad",
+        operation_description="Create the ads for the users",
+    )
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True) 
+        self.perform_create( serializer )
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+    
+    def perform_create(self, serializer):
+        serializer.save(status = True) # change the status to true
+    
+    
+    # All Uploaded Tutorial videos
+    @swagger_auto_schema(
+        tags=['Admin Reports'],  # Add your desired tag(s) here
+        operation_summary="List Ads",
+        operation_description="Endpoints retrieves the list of inapp ads  that is been published by the kroon network admin .",
+    )
+    def list(self, request, *args, **kwargs):
+        return super(InAppAdsViewSet, self).list(request, *args, **kwargs)
+    
+    #Update ads
+    @swagger_auto_schema(
+        tags=['Admin Reports'],  # Add your desired tag(s) here
+        operation_summary="Update a Ad",
+        operation_description="Update a ad using the survey ID.",
+    )
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop("partial", False)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+
+    # Patch update on a survey qestion
+    @swagger_auto_schema(
+        tags=['Admin Reports'],  # Add your desired tag(s) here
+        operation_summary="Patch an Ads",
+        operation_description="Patch an inapp ad using the survey ID.",
+    )
+    def partial_update(self, request, *args, **kwargs):
+        partial = kwargs.pop("partial", False)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+    
+    # Get Uploaded Tutorial video
+    @swagger_auto_schema(
+        tags=['Admin Reports'],  # Add your desired tag(s) here
+        operation_summary="Get Ad",
+        operation_description=" Retrieve the an inapp  ad by passing the ad Id.",
+    )
+    def retrieve(self, request, *args, **kwargs):
+        try:
+            instance = self.get_object()
+        except Exception as e:
+            return Response({"message": str(e)}, status=status.HTTP_404_NOT_FOUND)
+        else:
+            # any additional logic
+            serializer = AdsInfo(instance)
+            return Response(serializer.data)
+    
+    # Delete Uploaded Tutorial videos
+    @swagger_auto_schema(
+        tags=['Admin Reports'],  # Add your desired tag(s) here
+        operation_summary="Delete Ad",
+        operation_description="This deletes an inapp  ad using the ad ID",
+    )
+    def destroy(self, request, *args, **kwargs):
+        try:
+            instance = self.get_object()
+        except Exception as e:
+            return Response({"message": str(e)}, status=status.HTTP_404_NOT_FOUND)
+        else:
+            self.perform_destroy(instance)
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    
+
 
 
     

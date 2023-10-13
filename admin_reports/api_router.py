@@ -17,7 +17,8 @@ from admin_reports.api.views import (
     PushNotificationViewSet,
     ELearningViewSet,
     SurveyViewSet,
-    AnsweredSurveyViewSet
+    AnsweredSurveyViewSet,
+    InAppAdsViewSet
     )
 
 router = DefaultRouter() if settings.DEBUG else SimpleRouter()
@@ -39,6 +40,7 @@ router.register("push-notification", PushNotificationViewSet)
 router.register("e-learning", ELearningViewSet)
 router.register("survey", SurveyViewSet)
 router.register("answered-survey", AnsweredSurveyViewSet)
+router.register("inapp-ad", InAppAdsViewSet)
 
 app_name = "admin_reports"
 urlpatterns = router.urls

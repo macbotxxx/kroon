@@ -7,6 +7,7 @@ from admin_reports.choices import ModelChoices
 from locations.api.serializers import CountryDetails
 from kroon.users.api.serializers import UserOnlyInfo
 from e_learning.models import Kiosk_E_Learning, AppSurveyQuestion , SurveyQA , App_Survey
+from ads.models import Ads
 
 class UserListSerializers(serializers.ModelSerializer):
 
@@ -129,3 +130,20 @@ class SurveyUsers(serializers.ModelSerializer):
         model = App_Survey
         fields = ["id",]
         read_only_fields = ['created_date',]
+
+
+class AdsSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Ads
+        fields = "__all__"
+        read_only_fields =  ['id','created_date','modified_date','active',]
+
+
+class AdsInfo(serializers.ModelSerializer):
+    ad_country = CountryDetails( read_only = True , many = True )
+    class Meta:
+        model = Ads
+        exclude = ['id','created_date','modified_date','active',]
+        read_only_fields =  ['id','created_date','modified_date','active',]
+
