@@ -12,7 +12,7 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from kroon.users.pagination import StandardResultsSetPagination
 from helpers.common.security import KOKPermission
 from kroon.users.models import User
-from admin_reports.models import AdminPushNotifications
+from admin_reports.models import AdminNewsFeed
 from admin_reports.task import device_push_notification
 from admin_reports.permissions import IsBlekieAndEtransac
 from e_learning.models import Kiosk_E_Learning , App_Survey, SurveyQA , AppSurveyQuestion
@@ -38,7 +38,7 @@ from .serializers import (
     UserListSerializers, 
     TransactionsListSerializers , 
     TransactionDetailsSerializers,
-    AdminPushNotificationsSerializer,
+    AdminNewsFeedSerializer,
     NotificationInfo,
     ELearningSerializers,
     ElearningInfo,
@@ -158,7 +158,7 @@ class TransactionListView(
             return Response(serializer.data)
         
 
-class PushNotificationViewSet(
+class NewsFeedViewSet(
     RetrieveModelMixin,
     ListModelMixin,
     GenericViewSet,
@@ -178,14 +178,14 @@ class PushNotificationViewSet(
         IsBlekieAndEtransac,
         ]
     lookup_field = "id"
-    serializer_class = AdminPushNotificationsSerializer
-    queryset = AdminPushNotifications.objects.all()
+    serializer_class = AdminNewsFeedSerializer
+    queryset = AdminNewsFeed.objects.all()
     pagination_class = StandardResultsSetPagination
     ordering_fields = ['created_date', 'modified_date']
     lookup_value_regex = "[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}"
 
     def get_object(self, queryset=None):
-        return AdminPushNotifications.objects.get(id=self.kwargs["id"])
+        return AdminNewsFeed.objects.get(id=self.kwargs["id"])
     
     # Post Push Notifications
     @swagger_auto_schema(
@@ -213,7 +213,7 @@ class PushNotificationViewSet(
         operation_description="Endpoints retrieves the list of Push Notifications.",
     )
     def list(self, request, *args, **kwargs):
-        return super(PushNotificationViewSet, self).list(request, *args, **kwargs)
+        return super(NewsFeedViewSet, self).list(request, *args, **kwargs)
     
     # Get Push Notifications
     @swagger_auto_schema(

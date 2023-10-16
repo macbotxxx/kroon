@@ -9,7 +9,7 @@ from .choices import ModelChoices
 NULL_AND_BLANK = {'null': True, 'blank': False}
 
 
-class AdminPushNotifications (BaseModel):
+class AdminNewsFeed (BaseModel):
 
     PLATFORM = (
         ('all_the_above', _('all_the_above')),
@@ -28,6 +28,13 @@ class AdminPushNotifications (BaseModel):
         verbose_name = _("Body Message"),
         **NULL_AND_BLANK,
         help_text=_("this holds the content of the push notification")
+    )
+
+    image = models.ImageField(
+        verbose_name = _("News Feed Image"),
+        null=True, blank=True,
+        upload_to="news_feed/",
+        help_text=_("news feed image that will be displayed to the user")
     )
 
     news_feed_country = models.ManyToManyField(

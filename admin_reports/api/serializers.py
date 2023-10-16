@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from kroon.users.models import User
 from transactions.models import Transactions, KroonTokenTransfer , KroonTokenRequest, UserRequestToken
-from admin_reports.models import AdminPushNotifications
+from admin_reports.models import AdminNewsFeed
 from django.utils.translation import gettext_lazy as _
 from admin_reports.choices import ModelChoices
 from locations.api.serializers import CountryDetails
@@ -54,7 +54,7 @@ class TransactionDetailsSerializers(serializers.ModelSerializer):
 
 
 
-class AdminPushNotificationsSerializer(serializers.ModelSerializer):
+class AdminNewsFeedSerializer(serializers.ModelSerializer):
     title = serializers.CharField(
         max_length=150,
         help_text=_("The notification title that will be displayed to the user mobile device.")
@@ -72,7 +72,7 @@ class AdminPushNotificationsSerializer(serializers.ModelSerializer):
     )
 
     class Meta:
-        model = AdminPushNotifications
+        model = AdminNewsFeed
         fields = "__all__"
         read_only_fields = ['id','publisher','notification_type','status','created_date','device_type',]
 
@@ -93,7 +93,7 @@ class NotificationInfo(serializers.ModelSerializer):
     publisher = UserOnlyInfo( read_only = True)
     news_feed_country = CountryDetails( read_only = True , many = True )
     class Meta:
-        model = AdminPushNotifications
+        model = AdminNewsFeed
         fields = "__all__"
 
 

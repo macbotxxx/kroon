@@ -14,7 +14,7 @@ from admin_reports.api.views import (
     TotalActiveMerchants,
     TopPerformingRegions,
     GlobalOverview,
-    PushNotificationViewSet,
+    NewsFeedViewSet,
     ELearningViewSet,
     SurveyViewSet,
     AnsweredSurveyViewSet,
@@ -36,7 +36,7 @@ router.register("daily-average", DailyAverage)
 router.register("active-merchants", TotalActiveMerchants)
 router.register("top-performing-regions", TopPerformingRegions)
 router.register("global_overview", GlobalOverview)
-router.register("push-notification", PushNotificationViewSet)
+router.register("newss-feed", NewsFeedViewSet)
 router.register("e-learning", ELearningViewSet)
 router.register("survey", SurveyViewSet)
 router.register("answered-survey", AnsweredSurveyViewSet)
