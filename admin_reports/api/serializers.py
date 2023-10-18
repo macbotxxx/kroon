@@ -1,10 +1,12 @@
-from rest_framework import serializers
+from rest_framework import serializers, exceptions
+from django_filters import rest_framework as filters
 from kroon.users.models import User
 from transactions.models import Transactions, KroonTokenTransfer , KroonTokenRequest, UserRequestToken
 from admin_reports.models import AdminNewsFeed
 from django.utils.translation import gettext_lazy as _
 from admin_reports.choices import ModelChoices
 from locations.api.serializers import CountryDetails
+from locations.models import Country
 from kroon.users.api.serializers import UserOnlyInfo
 from e_learning.models import Kiosk_E_Learning, AppSurveyQuestion , SurveyQA , App_Survey
 from ads.models import Ads
@@ -146,4 +148,23 @@ class AdsInfo(serializers.ModelSerializer):
         model = Ads
         exclude = ['id','created_date','modified_date','active',]
         read_only_fields =  ['id','created_date','modified_date','active',]
+
+
+class AdminRecordFilter(filters.FilterSet):
+    country = filters.CharFilter(
+        help_text=_(""" the country fields take only the country ios2 example : NG,GH """)
+    )
+
+    gender = filters.ChoiceFilter(
+        choices=ModelChoices.GENDER_TYPE,
+        default= ModelChoices.GENDER_ONE,
+        help_text=_("This shows the select option for gender select on both kroon and kiosk application.")
+    )
+
+    def validate_country(self , value):
+        if item_exist := Country.model.objects.filter(iso2__iexact=value).exists():
+            msg = _('the country ISO2 is invalid')
+            raise exceptions.ValidationError(msg)
+        return value
+    
 

@@ -39,3 +39,4 @@ django-countries #https://pypi.org/project/django-countries/
 dj-rest-auth #https://dj-rest-auth.readthedocs.io/en/latest/installation.html
 drf-yasg #https://drf-yasg.readthedocs.io/en/stable/readme.html
 Faker #https://faker.readthedocs.io/en/master/
+drf-friendly-errors==0.14    # https://github.com/FutureMind/drf-friendly-errors

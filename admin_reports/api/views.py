@@ -8,6 +8,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated, AllowAny
+from django_filters import rest_framework as filters
 
 from kroon.users.pagination import StandardResultsSetPagination
 from helpers.common.security import KOKPermission
@@ -17,6 +18,7 @@ from admin_reports.task import device_push_notification
 from admin_reports.permissions import IsBlekieAndEtransac
 from e_learning.models import Kiosk_E_Learning , App_Survey, SurveyQA , AppSurveyQuestion
 from ads.models import Ads
+
 
 
 from transactions.models import (
@@ -35,18 +37,14 @@ from rest_framework.mixins import (
 )
 from rest_framework.viewsets import GenericViewSet
 from .serializers import (
-    UserListSerializers, 
-    TransactionsListSerializers , 
-    TransactionDetailsSerializers,
-    AdminNewsFeedSerializer,
-    NotificationInfo,
-    ELearningSerializers,
-    ElearningInfo,
-    SurveyQuestionSerializer,
-    SurveyUsers,
-    SurveyQuestioninfo,
-    AdsSerializer,
-    AdsInfo
+    UserListSerializers,TransactionsListSerializers , 
+    TransactionDetailsSerializers,AdminNewsFeedSerializer,
+    NotificationInfo,ELearningSerializers,
+    ElearningInfo,SurveyQuestionSerializer,
+    SurveyUsers,SurveyQuestioninfo,
+    AdsSerializer,AdsInfo,
+    AdminRecordFilter
+
     )
 
 
@@ -406,6 +404,7 @@ class SurveyViewSet(
         serializer = self.get_serializer(instance, data=request.data, partial=partial)
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     # Patch update on a survey qestion
     @swagger_auto_schema(
@@ -419,6 +418,7 @@ class SurveyViewSet(
         serializer = self.get_serializer(instance, data=request.data, partial=partial)
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
     
     # Get Uploaded Tutorial video
     @swagger_auto_schema(
@@ -598,6 +598,8 @@ class InAppAdsViewSet(
         serializer = self.get_serializer(instance, data=request.data, partial=partial)
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
 
     # Patch update on a survey qestion
     @swagger_auto_schema(
@@ -611,6 +613,8 @@ class InAppAdsViewSet(
         serializer = self.get_serializer(instance, data=request.data, partial=partial)
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
     
     # Get Uploaded Tutorial video
     @swagger_auto_schema(
@@ -657,7 +661,9 @@ class InAppAdsViewSet(
 # sandbox starts here ----------------------------------------------------------------
 # sandbox starts here ----------------------------------------------------------------
 
-class TotalTransactions(GenericViewSet):
+class TotalTransactions(
+    GenericViewSet
+    ):
     """
     Get total of all transactions 
 
@@ -672,6 +678,23 @@ class TotalTransactions(GenericViewSet):
         IsBlekieAndEtransac,
         ]
     queryset = Transactions.objects.all()
+    filter_backends = (filters.DjangoFilterBackend,)
+    filterset_class = AdminRecordFilter
+    
+    def get_filterinputs(self):
+        filter_fields = []
+        filterset_data = self.filterset_class
+        # Instantiate the filterset
+        filterset = filterset_data(data=self.request.query_params, queryset=self.queryset)
+        # List out the filter inputs
+        filter_inputs = filterset.data
+        # You can now iterate through filter_inputs to list them out
+        for key , value in filter_inputs.items():
+            filter_fields.append({
+               f"{key}":f"{value}"
+                })
+        return filter_fields
+
 
     @swagger_auto_schema(
         tags=['Admin Reports'],  # Add your desired tag(s) here
@@ -679,6 +702,24 @@ class TotalTransactions(GenericViewSet):
         operation_description=" *SANDBOX* // this shows the amount of all transactions to compare last year record",
     )
     def list(self, request, *args, **kwargs):
+        data = self.get_filterinputs()
+            # Initialize a variable to store the 'country' value
+        country = None
+        gender = None
+        # Loop through the list of dictionaries
+        for item in data:
+            if 'country' in item:
+                country = item['country']
+                pass  # Stop searching if 'country' is found
+
+            if 'gender' in item:
+                gender = item['gender']
+                pass  # Stop searching if 'gender' is found
+
+        # Now 'country' contains the value if found, or it's None if not found
+
+          
+        
         data = {
             'local_currency': 'NGN',
             'total_amount': 398090,
