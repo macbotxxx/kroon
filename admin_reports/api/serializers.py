@@ -151,6 +151,11 @@ class AdsInfo(serializers.ModelSerializer):
 
 
 class AdminRecordFilter(filters.FilterSet):
+    
+    year = filters.DateFilter(
+        help_text=_(""" the input accepts the year that will be needed to filter from """)
+    )
+
     country = filters.CharFilter(
         help_text=_(""" the country fields take only the country ios2 example : NG,GH """)
     )
@@ -161,10 +166,10 @@ class AdminRecordFilter(filters.FilterSet):
         help_text=_("This shows the select option for gender select on both kroon and kiosk application.")
     )
 
-    def validate_country(self , value):
-        if item_exist := Country.model.objects.filter(iso2__iexact=value).exists():
-            msg = _('the country ISO2 is invalid')
-            raise exceptions.ValidationError(msg)
-        return value
+    # def validate_country(self , value):
+    #     if item_exist := Country.model.objects.filter(iso2__iexact=value).exists():
+    #         msg = _('the country ISO2 is invalid')
+    #         raise exceptions.ValidationError(msg)
+    #     return value
     
 

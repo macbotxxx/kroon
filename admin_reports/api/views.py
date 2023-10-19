@@ -9,7 +9,8 @@ from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from django_filters import rest_framework as filters
-
+from django.db.models import Sum
+from datetime import date
 from kroon.users.pagination import StandardResultsSetPagination
 from helpers.common.security import KOKPermission
 from kroon.users.models import User
@@ -18,6 +19,7 @@ from admin_reports.task import device_push_notification
 from admin_reports.permissions import IsBlekieAndEtransac
 from e_learning.models import Kiosk_E_Learning , App_Survey, SurveyQA , AppSurveyQuestion
 from ads.models import Ads
+from locations.models import Country
 
 
 
@@ -704,8 +706,10 @@ class TotalTransactions(
     def list(self, request, *args, **kwargs):
         data = self.get_filterinputs()
             # Initialize a variable to store the 'country' value
+        print(data)
         country = None
         gender = None
+        year = None
         # Loop through the list of dictionaries
         for item in data:
             if 'country' in item:
@@ -713,18 +717,59 @@ class TotalTransactions(
                 pass  # Stop searching if 'country' is found
 
             if 'gender' in item:
-                gender = item['gender']
+                gender = item['gender'].lower()
                 pass  # Stop searching if 'gender' is found
+            
+            if 'year' in item:
+                year = item['year']
+                pass
+                
 
         # Now 'country' contains the value if found, or it's None if not found
+        try:
+            country_id = Country.objects.get(iso2=country.upper())
+        except Country.DoesNotExist:
+            return Response({'message': 'Country ISO2 does not exist'}, status=status.HTTP_404_NOT_FOUND)
+        
+        # today = date.today()
+        this_year = int(year)
+        last_year = this_year - 1
+ 
 
-          
+        transaction_qs = Transactions.objects.select_related('user','benefactor','recipient').filter(Q(user__gender = gender.lower()) , user__country_of_residence = country_id  , status = "successful", created_date__year = this_year).values("status").annotate(total_amount=Sum('amount_in_localcurrency'))
+
+        last_year_transaction_qs = Transactions.objects.select_related('user','benefactor','recipient').filter(Q(user__gender = gender.lower()) , user__country_of_residence = country_id  , status = "successful", created_date__year = last_year ).values("status").annotate(total_amount=Sum('amount_in_localcurrency'))
+
+        total_amount = 0
+        last_year_amount = 0
+
+        # qs_percentage = transaction_qs.
+        for transact in transaction_qs:
+            if 'total_amount' in transact:
+                total_amount = transact['total_amount']
+            else:
+                total_amount = 0
+
+        for last_year_transact in last_year_transaction_qs:
+            if 'total_amount' in last_year_transact:
+                last_year_amount = last_year_transact['total_amount']
+            else:
+                last_year_amount = 0
+
+        print(transaction_qs)
+        print(last_year_transaction_qs)
+        
+
+        # You can now access the calculated percentage in each object
+        # for obj in queryset:
+        #     print(obj.your_field, obj.percentage)
+
         
         data = {
-            'local_currency': 'NGN',
-            'total_amount': 398090,
+            'local_currency': country_id.currency.upper(),
+            'total_amount': total_amount,
             'transaction_percentage':'+18.20',
-            'last_year_amount':1283729,
+            'last_year_amount':last_year_amount,
             'total_percentage':'73'
         }
 
