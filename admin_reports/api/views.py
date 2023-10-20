@@ -9,7 +9,7 @@ from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from django_filters import rest_framework as filters
-from django.db.models import Sum
+from django.db.models import Sum, Count
 from datetime import date
 from kroon.users.pagination import StandardResultsSetPagination
 from helpers.common.security import KOKPermission
@@ -1034,21 +1034,22 @@ class TotalEwallets(GenericViewSet):
         last_year = this_year - 1
  
 
-        total_payout = Transactions.objects.select_related('user','benefactor','recipient').filter(Q(user__gender = gender.lower()) , user__country_of_residence = country_id  , status = "successful", created_date__year = this_year  , action = "LOCAL BANK WITHDRAWAL" ).values("status").annotate(total_amount=Sum('debited_kroon_amount'))
+        total_ewallet = User.objects.select_related('country_province','country','on_boarding_user','government_organization_name','bank_details').filter(Q(gender = gender.lower()) , country_of_residence = country_id , created_date__year = this_year).values("is_active").annotate(total_amount=Count('is_active'))
 
-        last_year_total_payout = Transactions.objects.select_related('user','benefactor','recipient').filter(Q(user__gender = gender.lower()) , user__country_of_residence = country_id  , status = "successful", created_date__year = last_year , action = "LOCAL BANK WITHDRAWAL" ).values("status").annotate(total_amount=Sum('debited_kroon_amount'))
+        last_year_total_ewallet = User.objects.select_related('country_province','country','on_boarding_user','government_organization_name','bank_details').filter(Q(gender = gender.lower()) , country_of_residence = country_id , created_date__year = last_year ).values("is_active").annotate(total_amount=Count('is_active'))
+
 
         total_amount = 0
         last_year_amount = 0
 
-        # qs_percentage = wallet_value.
-        for transact in total_payout:
+        # qs_percentage = total_ewallet.
+        for transact in total_ewallet:
             if 'total_amount' in transact:
                 total_amount = transact['total_amount']
             else:
                 total_amount = 0
 
-        for last_year_transact in last_year_total_payout:
+        for last_year_transact in last_year_total_ewallet:
             if 'total_amount' in last_year_transact:
                 last_year_amount = last_year_transact['total_amount']
             else:
@@ -1059,14 +1060,14 @@ class TotalEwallets(GenericViewSet):
         else:
             percentage = 0
         
-        percentage_format = "{}%".format(percentage)
+        percentage_format = "{}%".format(percentage, '.2f')
 
         
         data = {
             'local_currency': country_id.currency.upper(),
-            'total_amount': total_amount,
+            'total_ewallet': total_amount, #total ewallet
             'transaction_percentage': percentage_format,
-            'last_year_amount':last_year_amount,
+            'last_year_ewallet':last_year_amount, #total ewallet last year
             'total_percentage':percentage_format
         }
 
@@ -1087,7 +1088,7 @@ class TotalMerchants(GenericViewSet):
     @swagger_auto_schema(
         tags=['Admin Reports'],  # Add your desired tag(s) here
         operation_summary="Total Merchants",
-        operation_description=" *SANDBOX* // this shows the amount of all registered merchants to compare last year record",
+        operation_description=" this shows the amount of all registered merchants to compare last year record",
     )
     def list(self, request, *args, **kwargs):
         data = {
@@ -1230,7 +1231,7 @@ class GlobalOverview(GenericViewSet):
                 'region': 'Lagos',
                 'local_currency': 'NGN',
                 'total_wallets': 2046,
-                'wallet_value': 893876,
+                'total_ewallet': 893876,
                 'payout_value': 45723,
                 'total_merchants': 2046,
                 'active_merchants': 2046,
