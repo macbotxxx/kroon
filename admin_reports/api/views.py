@@ -878,19 +878,95 @@ class TotalPayouts(GenericViewSet):
         IsBlekieAndEtransac,
         ]
     queryset = Transactions.objects.all()
+    filter_backends = (filters.DjangoFilterBackend,)
+    filterset_class = AdminRecordFilter
+
+    def get_filterinputs(self):
+        filter_fields = []
+        filterset_data = self.filterset_class
+        # Instantiate the filterset
+        filterset = filterset_data(data=self.request.query_params, queryset=self.queryset)
+        # List out the filter inputs
+        filter_inputs = filterset.data
+        # You can now iterate through filter_inputs to list them out
+        for key , value in filter_inputs.items():
+            filter_fields.append({
+               f"{key}":f"{value}"
+                })
+        return filter_fields
+
 
     @swagger_auto_schema(
         tags=['Admin Reports'],  # Add your desired tag(s) here
         operation_summary="Total Payouts",
-        operation_description=" *SANDBOX* // this shows the amount of all payouts to compare last year record",
+        operation_description=" this shows the amount of all payouts to compare last year record",
     )
     def list(self, request, *args, **kwargs):
+        data = self.get_filterinputs()
+
+        country = None
+        gender = None
+        year = None
+        # Loop through the list of dictionaries
+        for item in data:
+            if 'country' in item:
+                country = item['country']
+                pass  # Stop searching if 'country' is found
+
+            if 'gender' in item:
+                gender = item['gender'].lower()
+                pass  # Stop searching if 'gender' is found
+            
+            if 'year' in item:
+                year = item['year']
+                pass
+                
+
+        # Now 'country' contains the value if found, or it's None if not found
+        try:
+            country_id = Country.objects.get(iso2=country.upper())
+        except Country.DoesNotExist:
+            return Response({'message': 'Country ISO2 does not exist'}, status=status.HTTP_404_NOT_FOUND)
+        
+        # today = date.today()
+        this_year = int(year)
+        last_year = this_year - 1
+ 
+
+        total_payout = Transactions.objects.select_related('user','benefactor','recipient').filter(Q(user__gender = gender.lower()) , user__country_of_residence = country_id  , status = "successful", created_date__year = this_year  , action = "LOCAL BANK WITHDRAWAL" ).values("status").annotate(total_amount=Sum('debited_kroon_amount'))
+
+        last_year_total_payout = Transactions.objects.select_related('user','benefactor','recipient').filter(Q(user__gender = gender.lower()) , user__country_of_residence = country_id  , status = "successful", created_date__year = last_year , action = "LOCAL BANK WITHDRAWAL" ).values("status").annotate(total_amount=Sum('debited_kroon_amount'))
+
+        total_amount = 0
+        last_year_amount = 0
+
+        # qs_percentage = wallet_value.
+        for transact in total_payout:
+            if 'total_amount' in transact:
+                total_amount = transact['total_amount']
+            else:
+                total_amount = 0
+
+        for last_year_transact in last_year_total_payout:
+            if 'total_amount' in last_year_transact:
+                last_year_amount = last_year_transact['total_amount']
+            else:
+                last_year_amount = 0
+
+        if last_year_amount != 0:
+            percentage  = (total_amount - last_year_amount) / last_year_amount * 100
+        else:
+            percentage = 0
+        
+        percentage_format = "{}%".format(percentage)
+
+        
         data = {
-            'local_currency': 'NGN',
-            'total_amount': 9157690,
-            'transaction_percentage':'+9.20',
-            'last_year_amount':1983729,
-            'total_percentage':'87'
+            'local_currency': country_id.currency.upper(),
+            'total_amount': total_amount,
+            'transaction_percentage': percentage_format,
+            'last_year_amount':last_year_amount,
+            'total_percentage':percentage_format
         }
 
         return Response(data , status=status.HTTP_200_OK)
@@ -904,16 +980,94 @@ class TotalEwallets(GenericViewSet):
         IsBlekieAndEtransac,
         ]
     queryset = Transactions.objects.all()
+    filter_backends = (filters.DjangoFilterBackend,)
+    filterset_class = AdminRecordFilter
+
+    def get_filterinputs(self):
+        filter_fields = []
+        filterset_data = self.filterset_class
+        # Instantiate the filterset
+        filterset = filterset_data(data=self.request.query_params, queryset=self.queryset)
+        # List out the filter inputs
+        filter_inputs = filterset.data
+        # You can now iterate through filter_inputs to list them out
+        for key , value in filter_inputs.items():
+            filter_fields.append({
+               f"{key}":f"{value}"
+                })
+        return filter_fields
 
     @swagger_auto_schema(
         tags=['Admin Reports'],  # Add your desired tag(s) here
         operation_summary="Total E-Wallets",
-        operation_description=" *SANDBOX* // this shows the amount of all E wallets to compare last year record",
+        operation_description=" this shows the amount of all E wallets to compare last year record",
     )
     def list(self, request, *args, **kwargs):
+        data = self.get_filterinputs()
+
+        country = None
+        gender = None
+        year = None
+        # Loop through the list of dictionaries
+        for item in data:
+            if 'country' in item:
+                country = item['country']
+                pass  # Stop searching if 'country' is found
+
+            if 'gender' in item:
+                gender = item['gender'].lower()
+                pass  # Stop searching if 'gender' is found
+            
+            if 'year' in item:
+                year = item['year']
+                pass
+                
+
+        # Now 'country' contains the value if found, or it's None if not found
+        try:
+            country_id = Country.objects.get(iso2=country.upper())
+        except Country.DoesNotExist:
+            return Response({'message': 'Country ISO2 does not exist'}, status=status.HTTP_404_NOT_FOUND)
+        
+        # today = date.today()
+        this_year = int(year)
+        last_year = this_year - 1
+ 
+
+        total_payout = Transactions.objects.select_related('user','benefactor','recipient').filter(Q(user__gender = gender.lower()) , user__country_of_residence = country_id  , status = "successful", created_date__year = this_year  , action = "LOCAL BANK WITHDRAWAL" ).values("status").annotate(total_amount=Sum('debited_kroon_amount'))
+
+        last_year_total_payout = Transactions.objects.select_related('user','benefactor','recipient').filter(Q(user__gender = gender.lower()) , user__country_of_residence = country_id  , status = "successful", created_date__year = last_year , action = "LOCAL BANK WITHDRAWAL" ).values("status").annotate(total_amount=Sum('debited_kroon_amount'))
+
+        total_amount = 0
+        last_year_amount = 0
+
+        # qs_percentage = wallet_value.
+        for transact in total_payout:
+            if 'total_amount' in transact:
+                total_amount = transact['total_amount']
+            else:
+                total_amount = 0
+
+        for last_year_transact in last_year_total_payout:
+            if 'total_amount' in last_year_transact:
+                last_year_amount = last_year_transact['total_amount']
+            else:
+                last_year_amount = 0
+
+        if last_year_amount != 0:
+            percentage  = (total_amount - last_year_amount) / last_year_amount * 100
+        else:
+            percentage = 0
+        
+        percentage_format = "{}%".format(percentage)
+
+        
         data = {
-            'total_wallets': 8201,
-            'last_year_wallets':4903,
+            'local_currency': country_id.currency.upper(),
+            'total_amount': total_amount,
+            'transaction_percentage': percentage_format,
+            'last_year_amount':last_year_amount,
+            'total_percentage':percentage_format
         }
 
         return Response(data , status=status.HTTP_200_OK)
