@@ -652,17 +652,6 @@ class InAppAdsViewSet(
 
 
 
-    
-
-
-        
-
-# this is recorded to be a sandbox to the original data and records
-# sandbox starts here ----------------------------------------------------------------
-# sandbox starts here ----------------------------------------------------------------
-# sandbox starts here ----------------------------------------------------------------
-# sandbox starts here ----------------------------------------------------------------
-
 class TotalTransactions(
     GenericViewSet
     ):
@@ -671,7 +660,7 @@ class TotalTransactions(
 
     This endpoint allows you to get all transactions been made by the users in kroon and kiosk
 
-    A transaction details consists of the following TOPUP, KROON TRANSFER , WITHDRAWAL
+    A transaction details consists of the following TOPUP, Local Bank  WITHDRAWAL
 
     """
     permission_classes = [
@@ -701,12 +690,11 @@ class TotalTransactions(
     @swagger_auto_schema(
         tags=['Admin Reports'],  # Add your desired tag(s) here
         operation_summary="Total Transaction",
-        operation_description=" *SANDBOX* // this shows the amount of all transactions to compare last year record",
+        operation_description=" this shows the amount of all transactions to compare last year record",
     )
     def list(self, request, *args, **kwargs):
         data = self.get_filterinputs()
-            # Initialize a variable to store the 'country' value
-        print(data)
+
         country = None
         gender = None
         year = None
@@ -756,50 +744,129 @@ class TotalTransactions(
             else:
                 last_year_amount = 0
 
-        print(transaction_qs)
-        print(last_year_transaction_qs)
-        
+        if last_year_amount != 0:
+            percentage  = (total_amount - last_year_amount) / last_year_amount * 100
+        else:
+            percentage = 0
 
-        # You can now access the calculated percentage in each object
-        # for obj in queryset:
-        #     print(obj.your_field, obj.percentage)
+        percentage_format = "{}%".format(percentage)
 
-        
         data = {
             'local_currency': country_id.currency.upper(),
             'total_amount': total_amount,
-            'transaction_percentage':'+18.20',
+            'transaction_percentage': percentage_format,
             'last_year_amount':last_year_amount,
-            'total_percentage':'73'
+            'total_percentage':percentage_format
         }
 
         return Response(data , status=status.HTTP_200_OK)
     
 
 class TotalWalletValue(GenericViewSet):
-   
+    """
+    Get total wallet value 
+
+    This endpoint allows you to get all the merchants total value , merchants using kroon 
+
+    """
     permission_classes = [
         IsAuthenticated,
         KOKPermission,
         IsBlekieAndEtransac,
         ]
     queryset = Transactions.objects.all()
+    filter_backends = (filters.DjangoFilterBackend,)
+    filterset_class = AdminRecordFilter
+
+    def get_filterinputs(self):
+        filter_fields = []
+        filterset_data = self.filterset_class
+        # Instantiate the filterset
+        filterset = filterset_data(data=self.request.query_params, queryset=self.queryset)
+        # List out the filter inputs
+        filter_inputs = filterset.data
+        # You can now iterate through filter_inputs to list them out
+        for key , value in filter_inputs.items():
+            filter_fields.append({
+               f"{key}":f"{value}"
+                })
+        return filter_fields
 
     @swagger_auto_schema(
         tags=['Admin Reports'],  # Add your desired tag(s) here
         operation_summary="Total Wallet Value",
-        operation_description=" *SANDBOX* // this shows the amount of all wallet value to compare last year record",
+        operation_description="this shows the amount of all wallet value to compare last year record",
     )
     def list(self, request, *args, **kwargs):
+        data = self.get_filterinputs()
+
+        country = None
+        gender = None
+        year = None
+        # Loop through the list of dictionaries
+        for item in data:
+            if 'country' in item:
+                country = item['country']
+                pass  # Stop searching if 'country' is found
+
+            if 'gender' in item:
+                gender = item['gender'].lower()
+                pass  # Stop searching if 'gender' is found
+            
+            if 'year' in item:
+                year = item['year']
+                pass
+                
+
+        # Now 'country' contains the value if found, or it's None if not found
+        try:
+            country_id = Country.objects.get(iso2=country.upper())
+        except Country.DoesNotExist:
+            return Response({'message': 'Country ISO2 does not exist'}, status=status.HTTP_404_NOT_FOUND)
+        
+        # today = date.today()
+        this_year = int(year)
+        last_year = this_year - 1
+ 
+
+        wallet_value = User.objects.select_related('country_province','country','on_boarding_user','government_organization_name','bank_details').filter(Q(gender = gender.lower()) , country_of_residence = country_id , created_date__year = this_year).values("is_active").annotate(total_amount=Sum('kroon_token'))
+
+        last_year_wallet_value = User.objects.select_related('country_province','country','on_boarding_user','government_organization_name','bank_details').filter(Q(gender = gender.lower()) , country_of_residence = country_id , created_date__year = last_year ).values("is_active").annotate(total_amount=Sum('kroon_token'))
+
+        total_amount = 0
+        last_year_amount = 0
+
+        # qs_percentage = wallet_value.
+        for transact in wallet_value:
+            if 'total_amount' in transact:
+                total_amount = transact['total_amount']
+            else:
+                total_amount = 0
+
+        for last_year_transact in last_year_wallet_value:
+            if 'total_amount' in last_year_transact:
+                last_year_amount = last_year_transact['total_amount']
+            else:
+                last_year_amount = 0
+
+        if last_year_amount != 0:
+            percentage  = (total_amount - last_year_amount) / last_year_amount * 100
+        else:
+            percentage = 0
+        
+        percentage_format = "{}%".format(percentage)
+
+        
         data = {
-            'local_currency': 'NGN',
-            'total_amount': 4557690,
-            'transaction_percentage':'+11.20',
-            'last_year_amount':1983729,
-            'total_percentage':'90'
+            'local_currency': country_id.currency.upper(),
+            'total_amount': total_amount,
+            'transaction_percentage': percentage_format,
+            'last_year_amount':last_year_amount,
+            'total_percentage':percentage_format
         }
 
         return Response(data , status=status.HTTP_200_OK)
+
     
 
 
