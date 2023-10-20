@@ -1055,20 +1055,17 @@ class TotalEwallets(GenericViewSet):
             else:
                 last_year_amount = 0
 
-        if last_year_amount != 0:
-            percentage  = (total_amount - last_year_amount) / last_year_amount * 100
-        else:
-            percentage = 0
+        # if last_year_amount != 0:
+        #     percentage  = (total_amount - last_year_amount) / last_year_amount * 100
+        # else:
+        #     percentage = 0
         
-        percentage_format = "{}%".format(percentage, '.2f')
+        # percentage_format = "{}%".format(percentage, '.2f')
 
         
         data = {
-            'local_currency': country_id.currency.upper(),
-            'total_ewallet': total_amount, #total ewallet
-            'transaction_percentage': percentage_format,
-            'last_year_ewallet':last_year_amount, #total ewallet last year
-            'total_percentage':percentage_format
+            'total_wallet': total_amount, #total ewallet
+            'last_year_wallet':last_year_amount, #total ewallet last year
         }
 
         return Response(data , status=status.HTTP_200_OK)
@@ -1084,6 +1081,22 @@ class TotalMerchants(GenericViewSet):
         ]
     queryset = Transactions.objects.all()
     lookup_value_regex = "[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}"
+    filter_backends = (filters.DjangoFilterBackend,)
+    filterset_class = AdminRecordFilter
+
+    def get_filterinputs(self):
+        filter_fields = []
+        filterset_data = self.filterset_class
+        # Instantiate the filterset
+        filterset = filterset_data(data=self.request.query_params, queryset=self.queryset)
+        # List out the filter inputs
+        filter_inputs = filterset.data
+        # You can now iterate through filter_inputs to list them out
+        for key , value in filter_inputs.items():
+            filter_fields.append({
+               f"{key}":f"{value}"
+                })
+        return filter_fields
 
     @swagger_auto_schema(
         tags=['Admin Reports'],  # Add your desired tag(s) here
@@ -1091,9 +1104,59 @@ class TotalMerchants(GenericViewSet):
         operation_description=" this shows the amount of all registered merchants to compare last year record",
     )
     def list(self, request, *args, **kwargs):
+        data = self.get_filterinputs()
+
+        country = None
+        gender = None
+        year = None
+        # Loop through the list of dictionaries
+        for item in data:
+            if 'country' in item:
+                country = item['country']
+                pass  # Stop searching if 'country' is found
+
+            if 'gender' in item:
+                gender = item['gender'].lower()
+                pass  # Stop searching if 'gender' is found
+            
+            if 'year' in item:
+                year = item['year']
+                pass
+                
+        # Now 'country' contains the value if found, or it's None if not found
+        try:
+            country_id = Country.objects.get(iso2=country.upper())
+        except Country.DoesNotExist:
+            return Response({'message': 'Country ISO2 does not exist'}, status=status.HTTP_404_NOT_FOUND)
+        
+        # today = date.today()
+        this_year = int(year)
+        last_year = this_year - 1
+ 
+        total_merchant = User.objects.select_related('country_province','country','on_boarding_user','government_organization_name','bank_details').filter(Q(gender = gender) , country_of_residence = country_id , created_date__year = this_year , account_type = "merchant").values("is_active").annotate(total_amount=Count('is_active'))
+
+        last_year_total_merchant = User.objects.select_related('country_province','country','on_boarding_user','government_organization_name','bank_details').filter(Q(gender = gender) , country_of_residence = country_id , created_date__year = last_year , account_type = "merchant" ).values("is_active").annotate(total_amount=Count('is_active'))
+
+
+        total_amount = 0
+        last_year_amount = 0
+
+        # qs_percentage = total_ewallet.
+        for transact in total_merchant:
+            if 'total_amount' in transact:
+                total_amount = transact['total_amount']
+            else:
+                total_amount = 0
+
+        for last_year_transact in last_year_total_merchant:
+            if 'total_amount' in last_year_transact:
+                last_year_amount = last_year_transact['total_amount']
+            else:
+                last_year_amount = 0
+
         data = {
-            'total_merchants': 8901,
-            'last_year_merchants':2793,
+            'total_merchants': total_amount,
+            'last_year_merchants':last_year_amount,
         }
 
         return Response(data , status=status.HTTP_200_OK)
@@ -1116,6 +1179,7 @@ class CrossBorderTransfer(GenericViewSet):
         operation_description=" *SANDBOX* // this shows the amount of all cross border transfer to compare last year record ",
     )
     def list(self, request, *args, **kwargs):
+
         data = {
             'local_currency': 'NGN',
             'total_cross_border_transfers': 453928,
