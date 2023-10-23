@@ -10,7 +10,7 @@ from rest_framework import status
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from django_filters import rest_framework as filters
 from django.db.models import Sum, Count
-from datetime import date
+from datetime import date, timedelta
 from kroon.users.pagination import StandardResultsSetPagination
 from helpers.common.security import KOKPermission
 from kroon.users.models import User
@@ -1197,21 +1197,114 @@ class DailyAverage(GenericViewSet):
         IsBlekieAndEtransac,
         ]
     queryset = Transactions.objects.all()
+    filter_backends = (filters.DjangoFilterBackend,)
+    filterset_class = AdminRecordFilter
+
+    def get_filterinputs(self):
+        filter_fields = []
+        filterset_data = self.filterset_class
+        # Instantiate the filterset
+        filterset = filterset_data(data=self.request.query_params, queryset=self.queryset)
+        # List out the filter inputs
+        filter_inputs = filterset.data
+        # You can now iterate through filter_inputs to list them out
+        for key , value in filter_inputs.items():
+            filter_fields.append({
+               f"{key}":f"{value}"
+                })
+        return filter_fields
+    
 
     @swagger_auto_schema(
         tags=['Admin Reports'],  # Add your desired tag(s) here
         operation_summary="Daily Average",
-        operation_description=" *SANDBOX* // this shows the amount of all daily average to compare yesterday record",
+        operation_description="this shows the amount of all daily average to compare yesterday record",
     )
     def list(self, request, *args, **kwargs):
+        data = self.get_filterinputs()
+
+        country = None
+        gender = None
+        year = None
+        # Loop through the list of dictionaries
+        for item in data:
+            if 'country' in item:
+                country = item['country']
+                pass  # Stop searching if 'country' is found
+
+            if 'gender' in item:
+                gender = item['gender'].lower()
+                pass  # Stop searching if 'gender' is found
+            
+            if 'year' in item:
+                year = item['year']
+                pass
+   
+
+        # Now 'country' contains the value if found, or it's None if not found
+        try:
+            country_id = Country.objects.get(iso2=country.upper())
+        except Country.DoesNotExist:
+            return Response({'message': 'Country ISO2 does not exist'}, status=status.HTTP_404_NOT_FOUND)
+        
+        today = date.today()
+        yesterday = today - timedelta(days=1)
+
+        today_qs = Transactions.objects.select_related('user','benefactor','recipient').filter(Q(user__gender = gender.lower()) , user__country_of_residence = country_id  , status = "successful", created_date__date = today  )
+
+        today_volume = today_qs.count()
+        total_payout = today_qs.values("status").annotate(total_amount=Sum('amount_in_localcurrency'))
+
+        yesterday_qs = Transactions.objects.select_related('user','benefactor','recipient').filter(Q(user__gender = gender.lower()) , user__country_of_residence = country_id  , status = "successful", created_date__date = yesterday )
+
+        yesterday_volume = yesterday_qs.count()
+        yesterday_transacts = yesterday_qs.values("status").annotate(total_amount=Sum('amount_in_localcurrency'))
+
+
+        total_amount = 0
+        yesterday_amount = 0
+
+        # qs_percentage = wallet_value.
+        for transact in total_payout:
+            if 'total_amount' in transact:
+                total_amount = transact['total_amount']
+            else:
+                total_amount = 0
+
+        for yesterday_transact in yesterday_transacts:
+            if 'total_amount' in yesterday_transact:
+                yesterday_amount = yesterday_transact['total_amount']
+            else:
+                yesterday_amount = 0
+
+        if yesterday_amount != 0:
+            percentage  = (total_amount - yesterday_amount) / yesterday_amount * 100
+        else:
+            percentage = 0
+        
+        percentage_format = "{}%".format(percentage)
+
+
+        percentage_volume = 0
+        if yesterday_volume != 0:
+            percentage_volume  = (today_volume - yesterday_volume) / yesterday_volume * 100
+        else:
+            percentage_volume = 0
+        
+        percentage_format_value = "{}%".format(percentage_volume)
+        percentage_format = "{}%".format(percentage)
+
+
         response = {
-            'local_currency': 'NGN',
-            'transaction_volume': 23678,
-            'transaction_volume_per': '+17,82',
-            'yesterday_transaction_volume':12984,
-            'transaction_value': 40350,
-            'transaction_value_per': '+13,20',
-            'yesterday_transaction_value':20341,
+            'local_currency': country_id.currency.upper(),
+            # today transaction and value
+            'transaction_volume': today_volume,
+            'yesterday_transaction_volume':yesterday_volume,
+            'transaction_volume_per': percentage_format_value,
+            # yesterday transaction and value
+            'transaction_value': total_amount,
+            'yesterday_transaction_value':yesterday_amount,
+            'transaction_value_per': percentage_format
         }
 
         return Response(data=response , status=status.HTTP_200_OK)
@@ -1225,16 +1318,68 @@ class TotalActiveMerchants(GenericViewSet):
         IsBlekieAndEtransac,
         ]
     queryset = Transactions.objects.all()
+    filter_backends = (filters.DjangoFilterBackend,)
+    filterset_class = AdminRecordFilter
+
+    def get_filterinputs(self):
+        filter_fields = []
+        filterset_data = self.filterset_class
+        # Instantiate the filterset
+        filterset = filterset_data(data=self.request.query_params, queryset=self.queryset)
+        # List out the filter inputs
+        filter_inputs = filterset.data
+        # You can now iterate through filter_inputs to list them out
+        for key , value in filter_inputs.items():
+            filter_fields.append({
+               f"{key}":f"{value}"
+                })
+        return filter_fields
+
 
     @swagger_auto_schema(
         tags=['Admin Reports'],  # Add your desired tag(s) here
-        operation_summary="Daily Average",
-        operation_description=" *SANDBOX* // this shows the total count of all merchants both the new and loss merchants on the platform ",
+        operation_summary="Active Merchants",
+        operation_description=" this shows the total count of all merchants both the new and loss merchants on the platform ",
     )
     def list(self, request, *args, **kwargs):
+        
+        data = self.get_filterinputs()
+
+        country = None
+        gender = None
+        year = None
+        # Loop through the list of dictionaries
+        for item in data:
+            if 'country' in item:
+                country = item['country']
+                pass  # Stop searching if 'country' is found
+
+            if 'gender' in item:
+                gender = item['gender'].lower()
+                pass  # Stop searching if 'gender' is found
+            
+            if 'year' in item:
+                year = item['year']
+                pass
+                
+        # Now 'country' contains the value if found, or it's None if not found
+        try:
+            country_id = Country.objects.get(iso2=country.upper())
+        except Country.DoesNotExist:
+            return Response({'message': 'Country ISO2 does not exist'}, status=status.HTTP_404_NOT_FOUND)
+        
+        # today = date.today()
+        this_year = int(year)
+        #TODO:#fixing the gender selection for all 
+        merchant_qs = User.objects.select_related('country_province','country','on_boarding_user','government_organization_name','bank_details').filter(Q(gender = gender) , country_of_residence = country_id , created_date__year = this_year )
+
+        active_merchant = merchant_qs.filter( is_active = True ).count()
+        inactive_merchant = merchant_qs.filter( is_active = False ).count()
+
+
         data = {
-            'new_merchants':10456,
-            'loss_merchants':2450
+            'new_merchants':active_merchant,
+            'loss_merchants':inactive_merchant
         }
 
         return Response(data , status=status.HTTP_200_OK)
