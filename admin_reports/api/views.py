@@ -11,6 +11,7 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from django_filters import rest_framework as filters
 from django.db.models import Sum, Count
 from datetime import date, timedelta
+
 from kroon.users.pagination import StandardResultsSetPagination
 from helpers.common.security import KOKPermission
 from kroon.users.models import User
@@ -20,6 +21,12 @@ from admin_reports.permissions import IsBlekieAndEtransac
 from e_learning.models import Kiosk_E_Learning , App_Survey, SurveyQA , AppSurveyQuestion
 from ads.models import Ads
 from locations.models import Country
+from kroon.users.models import User, BusinessProfile
+from locations.models import Country , Country_Province
+from kiosk_stores.models import Merchant_Product
+from kiosk_cart.models import Order,OrderProduct , Payment
+
+
 
 
 
@@ -1164,7 +1171,7 @@ class TotalMerchants(GenericViewSet):
 
 
 class CrossBorderTransfer(GenericViewSet):
-   
+    #TODO: cross border transfer need to be fixed by allowing cross border transfer
     permission_classes = [
         AllowAny,
         # KOKPermission,
@@ -1387,7 +1394,7 @@ class TotalActiveMerchants(GenericViewSet):
 
 
 class TopPerformingRegions(GenericViewSet):
-  
+    #TODO: 
     permission_classes = [
         IsAuthenticated,
         KOKPermission,
@@ -1398,7 +1405,7 @@ class TopPerformingRegions(GenericViewSet):
     @swagger_auto_schema(
         tags=['Admin Reports'],  # Add your desired tag(s) here
         operation_summary="Top Performing Regions",
-        operation_description=" *SANDBOX* // this shows the list of top performing regions",
+        operation_description=" this shows the list of top performing regions",
     )
     def list(self, request, *args, **kwargs):
         data = [
@@ -1428,66 +1435,149 @@ class GlobalOverview(GenericViewSet):
         IsBlekieAndEtransac,
         ]
     queryset = Transactions.objects.all()
+    lookup_value_regex = "[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}"
+    filter_backends = (filters.DjangoFilterBackend,)
+    filterset_class = AdminRecordFilter
+
+    def get_filterinputs(self):
+        filter_fields = []
+        filterset_data = self.filterset_class
+        # Instantiate the filterset
+        filterset = filterset_data(data=self.request.query_params, queryset=self.queryset)
+        # List out the filter inputs
+        filter_inputs = filterset.data
+        # You can now iterate through filter_inputs to list them out
+        for key , value in filter_inputs.items():
+            filter_fields.append({
+               f"{key}":f"{value}"
+                })
+        return filter_fields
+    
 
     @swagger_auto_schema(
         tags=['Admin Reports'],  # Add your desired tag(s) here
-        operation_summary="Top Performing Regions",
-        operation_description=" *SANDBOX* // this shows the list of top performing regions",
+        operation_summary="Global Overview",
+        operation_description="This shows the list of global Overview",
     )
     def list(self, request, *args, **kwargs):
-        data = [
-            {
-                'region': 'Lagos',
-                'local_currency': 'NGN',
-                'total_wallets': 2046,
-                'total_ewallet': 893876,
-                'payout_value': 45723,
-                'total_merchants': 2046,
-                'active_merchants': 2046,
-                'merchants_revenue': 29321490,
-                'inventory_on_hand': 9321490,
-                'avg_transactions': 60,
-            },
-            {
-                'region': 'FCT Abuja',
-                'local_currency': 'NGN',
-                'total_wallets': 2046,
-                'wallet_value': 893876,
-                'payout_value': 45723,
-                'total_merchants': 2046,
-                'active_merchants': 2046,
-                'merchants_revenue': 29321490,
-                'inventory_on_hand': 9321490,
-                'avg_transactions': 60,
-            },
-            {
-                'region': 'Oyo',
-                'local_currency': 'NGN',
-                'total_wallets': 2046,
-                'wallet_value': 893876,
-                'payout_value': 45723,
-                'total_merchants': 2046,
-                'active_merchants': 2046,
-                'merchants_revenue': 29321490,
-                'inventory_on_hand': 9321490,
-                'avg_transactions': 60,
-            },
-            {
-                'region': 'Abia',
-                'local_currency': 'NGN',
-                'total_wallets': 2046,
-                'wallet_value': 893876,
-                'payout_value': 45723,
-                'total_merchants': 2046,
-                'active_merchants': 2046,
-                'merchants_revenue': 29321490,
-                'inventory_on_hand': 9321490,
-                'avg_transactions': 60,
-            },
-           
-        ]
+        
+        data = self.get_filterinputs()
 
-        return Response(data , status=status.HTTP_200_OK)
+        country = None
+        gender = None
+        year = None
+        # Loop through the list of dictionaries
+        for item in data:
+            if 'country' in item:
+                country = item['country']
+                pass  # Stop searching if 'country' is found
+
+            if 'gender' in item:
+                gender = item['gender'].lower()
+                pass  # Stop searching if 'gender' is found
+            
+            if 'year' in item:
+                year = item['year']
+                pass
+                
+        # Now 'country' contains the value if found, or it's None if not found
+        try:
+            country_id = Country.objects.get(iso2=country.upper())
+        except Country.DoesNotExist:
+            return Response({'message': 'Country ISO2 does not exist'}, status=status.HTTP_404_NOT_FOUND)
+        
+        
+        list_of_province = Country_Province.objects.select_related('country').filter(country = country_id)
+
+        print(list_of_province)
+
+
+        # if request.user.country_of_residence.iso2 == "NG":
+        #     jobs = BusinessProfile.objects.filter( user__government_registered = True ).values('business_name',).annotate(total_workers=Count('workers') ).order_by('-active')
+
+        #     all_active_user = User.objects.select_related('country_of_residence', 'country_province', 'on_boarding_user', 'bank_details').filter( government_registered = True )
+
+        # else:
+        #     jobs = BusinessProfile.objects.filter( user__on_boarding_user = request.user ).values('business_name',).annotate(total_workers=Count('workers') ).order_by('-active')
+
+        #     all_active_user = User.objects.select_related('country_of_residence', 'country_province', 'on_boarding_user', 'bank_details').filter( on_boarding_user = request.user , is_active = True )
+
+        # job_created_count = 0
+        # for job in jobs:
+        #     job_created_count += job['total_workers']
+
+        all_active_user = User.objects.select_related('country_of_residence', 'country_province', 'on_boarding_user', 'bank_details').filter( country_of_residence = country_id , is_active = True )
+
+        users_count = all_active_user.count()
+
+        # gender count
+        country_gender_male = all_active_user.filter( gender = 'male').count()
+        country_gender_female  = all_active_user.filter( gender = 'female').count()
+   
+   
+        province_list = []
+        for i in list_of_province:
+
+            # user query set
+            user_qs = User.objects.select_related('country_of_residence', 'country_province').filter(country_province = i.id, is_active = True)
+
+            province_users = User.objects.select_related('country_of_residence', 'country_province').filter(country_province = i.id, is_active = True).count()
+    
+            province_merchant_sales = Order.objects.select_related("user", "payment").filter( user__country_province = i.id,user__is_active = True, is_ordered = True ).count()
+
+            total_sales = OrderProduct.objects.select_related('user', 'payment', 'order', 'product').filter( user__country_province = i.id, ordered = True )
+
+            total_payout = Transactions.objects.select_related('user','benefactor','recipient').filter( user__country_province = i.id  , status = "successful" , action = "LOCAL BANK WITHDRAWAL" ).values("status").annotate(total_amount=Sum('debited_kroon_amount'))
+
+            total_sale = 0 
+            cost_of_sales_province = 0
+            wallet_value = 0
+            total_payout_amount = 0
+
+            # merchant sales via province 
+            for c in total_sales:
+                total_sale += c.product_total_price
+
+            # merchant cost of sales via province
+            for c in total_sales:
+                cost_of_sales_province += c.product.cost_price
+
+            for v in user_qs:
+                wallet_value += v.kroon_token
+
+            # qs_percentage = wallet_value.
+            for transact in total_payout:
+                if 'total_amount' in transact:
+                    total_payout_amount = transact['total_amount']
+                else:
+                    total_payout_amount = 0
+
+
+            note = {
+                'id': i.id,
+                'local_currency': country_id.currency.upper(),
+                'region':i.province , 
+                'total_wallets':province_users , 
+                'wallets_value': wallet_value, 
+                'payout_value':total_payout_amount , 
+                'total_merchants':province_users , 
+                'active_merchants':province_users , 
+                'merchant_sales_count':province_merchant_sales , 
+                'merchant_revenue':total_sale , 
+                'inventory_on_hand':cost_of_sales_province,
+                'avg_transaction_value':cost_of_sales_province #TODO:fix this
+                }
+            province_list.append(note)
+
+        # remote_username = request.META.get('USER')
+        # remote_ipaddr = request.META.get('REMOTE_ADDR')
+        # remote_os = request.META.get('HTTP_USER_AGENT')
+
+        # print(remote_username)
+        # print(remote_ipaddr)
+        # print(remote_os)
+        
+        return Response(province_list , status=status.HTTP_200_OK)
     
 
 # this is recorded to be a sandbox to the original data and records
