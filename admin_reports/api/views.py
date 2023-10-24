@@ -1695,14 +1695,71 @@ class TransactionChannels (GenericViewSet):
             return Response({'message': 'Country ISO2 does not exist'}, status=status.HTTP_404_NOT_FOUND)
         
 
-        total_sales = Order.objects.select_related('user', 'payment').filter( user__country_of_residence = country_id , is_ordered = True , created_date__year = year ).values("payment__payment_method").annotate(total_amount=Sum('order_total'))
+        transactions_channels_qs = Order.objects.select_related('user', 'payment').filter( user__country_of_residence = country_id , is_ordered = True , created_date__year = year ).values("payment__payment_method").annotate(total_amount=Sum('order_total'))
 
-        print(total_sales)
 
-        data={
-            'total_sale':'total_sale',
-            'cost_of_sales_global':'cost_of_sales_global'
-        }
+        return Response(transactions_channels_qs , status=status.HTTP_200_OK)
+
+
+
+class CategorySales(GenericViewSet):
+   
+    permission_classes = [
+        IsAuthenticated,
+        KOKPermission,
+        IsBlekieAndEtransac,
+        ]
+    queryset = Transactions.objects.all()
+    lookup_value_regex = "[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}"
+    filter_backends = (filters.DjangoFilterBackend,)
+    filterset_class = AdminRecordFilter
+
+    def get_filterinputs(self):
+        filter_fields = []
+        filterset_data = self.filterset_class
+        # Instantiate the filterset
+        filterset = filterset_data(data=self.request.query_params, queryset=self.queryset)
+        # List out the filter inputs
+        filter_inputs = filterset.data
+        # You can now iterate through filter_inputs to list them out
+        for key , value in filter_inputs.items():
+            filter_fields.append({
+               f"{key}":f"{value}"
+                })
+        return filter_fields
+    
+
+    @swagger_auto_schema(
+        tags=['Admin Reports'],  # Add your desired tag(s) here
+        operation_summary="Transaction Channels",
+        operation_description="This shows the global payment channels used in a particular country",
+    )
+    def list(self, request, *args, **kwargs):
+        data = self.get_filterinputs()
+
+        country = None
+        gender = None
+        year = None
+        # Loop through the list of dictionaries
+        for item in data:
+            if 'country' in item:
+                country = item['country']
+                pass  # Stop searching if 'country' is found
+
+            if 'gender' in item:
+                gender = item['gender'].lower()
+                pass  # Stop searching if 'gender' is found
+            
+            if 'year' in item:
+                year = item['year']
+                pass
+                
+        # Now 'country' contains the value if found, or it's None if not found
+        try:
+            country_id = Country.objects.get(iso2=country.upper())
+        except Country.DoesNotExist:
+            return Response({'message': 'Country ISO2 does not exist'}, status=status.HTTP_404_NOT_FOUND)
         
-        return Response(total_sales , status=status.HTTP_200_OK)
+        category_sales_qs = Order.objects.select_related('user', 'payment').filter( user__country_of_residence = country_id , is_ordered = True , created_date__year = year ).values("products__category__category").annotate(total_amount=Sum('order_total'))
 
+        return Response(category_sales_qs , status=status.HTTP_200_OK)
