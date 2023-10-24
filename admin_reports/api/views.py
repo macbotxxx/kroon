@@ -1489,32 +1489,9 @@ class GlobalOverview(GenericViewSet):
         
         list_of_province = Country_Province.objects.select_related('country').filter(country = country_id)
 
-        print(list_of_province)
-
-
-        # if request.user.country_of_residence.iso2 == "NG":
-        #     jobs = BusinessProfile.objects.filter( user__government_registered = True ).values('business_name',).annotate(total_workers=Count('workers') ).order_by('-active')
-
-        #     all_active_user = User.objects.select_related('country_of_residence', 'country_province', 'on_boarding_user', 'bank_details').filter( government_registered = True )
-
-        # else:
-        #     jobs = BusinessProfile.objects.filter( user__on_boarding_user = request.user ).values('business_name',).annotate(total_workers=Count('workers') ).order_by('-active')
-
-        #     all_active_user = User.objects.select_related('country_of_residence', 'country_province', 'on_boarding_user', 'bank_details').filter( on_boarding_user = request.user , is_active = True )
-
-        # job_created_count = 0
-        # for job in jobs:
-        #     job_created_count += job['total_workers']
-
         all_active_user = User.objects.select_related('country_of_residence', 'country_province', 'on_boarding_user', 'bank_details').filter( country_of_residence = country_id , is_active = True )
 
-        users_count = all_active_user.count()
 
-        # gender count
-        country_gender_male = all_active_user.filter( gender = 'male').count()
-        country_gender_female  = all_active_user.filter( gender = 'female').count()
-   
-   
         province_list = []
         for i in list_of_province:
 
@@ -1580,12 +1557,152 @@ class GlobalOverview(GenericViewSet):
         return Response(province_list , status=status.HTTP_200_OK)
     
 
-# this is recorded to be a sandbox to the original data and records
-# sandbox end here ----------------------------------------------------------------
+class GlobalSales(GenericViewSet):
+   
+    permission_classes = [
+        IsAuthenticated,
+        KOKPermission,
+        IsBlekieAndEtransac,
+        ]
+    queryset = Transactions.objects.all()
+    lookup_value_regex = "[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}"
+    filter_backends = (filters.DjangoFilterBackend,)
+    filterset_class = AdminRecordFilter
 
-    
+    def get_filterinputs(self):
+        filter_fields = []
+        filterset_data = self.filterset_class
+        # Instantiate the filterset
+        filterset = filterset_data(data=self.request.query_params, queryset=self.queryset)
+        # List out the filter inputs
+        filter_inputs = filterset.data
+        # You can now iterate through filter_inputs to list them out
+        for key , value in filter_inputs.items():
+            filter_fields.append({
+               f"{key}":f"{value}"
+                })
+        return filter_fields
     
 
+    @swagger_auto_schema(
+        tags=['Admin Reports'],  # Add your desired tag(s) here
+        operation_summary="Global Sales",
+        operation_description="This shows the global sales of a particular country",
+    )
+    def list(self, request, *args, **kwargs):
+        data = self.get_filterinputs()
+
+        country = None
+        gender = None
+        year = None
+        # Loop through the list of dictionaries
+        for item in data:
+            if 'country' in item:
+                country = item['country']
+                pass  # Stop searching if 'country' is found
+
+            if 'gender' in item:
+                gender = item['gender'].lower()
+                pass  # Stop searching if 'gender' is found
+            
+            if 'year' in item:
+                year = item['year']
+                pass
+                
+        # Now 'country' contains the value if found, or it's None if not found
+        try:
+            country_id = Country.objects.get(iso2=country.upper())
+        except Country.DoesNotExist:
+            return Response({'message': 'Country ISO2 does not exist'}, status=status.HTTP_404_NOT_FOUND)
         
 
+        total_sales = OrderProduct.objects.select_related('user', 'payment', 'order', 'product').filter( user__country_of_residence = country_id , ordered = True , created_date__year = year )
+
+        total_sale = 0
+        cost_of_sales_global = 0
+        # merchant sales via province 
+        for c in total_sales:
+            total_sale += c.product_total_price
+
+        # merchant cost of sales via province
+        for c in total_sales:
+            cost_of_sales_global += c.product.cost_price 
+
+        data={
+            'total_sale':total_sale,
+            'cost_of_sales_global':cost_of_sales_global
+        }
+        
+        return Response(data , status=status.HTTP_200_OK)
+
+
+class TransactionChannels (GenericViewSet):
+   
+    permission_classes = [
+        IsAuthenticated,
+        KOKPermission,
+        IsBlekieAndEtransac,
+        ]
+    queryset = Transactions.objects.all()
+    lookup_value_regex = "[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}"
+    filter_backends = (filters.DjangoFilterBackend,)
+    filterset_class = AdminRecordFilter
+
+    def get_filterinputs(self):
+        filter_fields = []
+        filterset_data = self.filterset_class
+        # Instantiate the filterset
+        filterset = filterset_data(data=self.request.query_params, queryset=self.queryset)
+        # List out the filter inputs
+        filter_inputs = filterset.data
+        # You can now iterate through filter_inputs to list them out
+        for key , value in filter_inputs.items():
+            filter_fields.append({
+               f"{key}":f"{value}"
+                })
+        return filter_fields
     
+
+    @swagger_auto_schema(
+        tags=['Admin Reports'],  # Add your desired tag(s) here
+        operation_summary="Transaction Channels",
+        operation_description="This shows the global payment channels used in a particular country",
+    )
+    def list(self, request, *args, **kwargs):
+        data = self.get_filterinputs()
+
+        country = None
+        gender = None
+        year = None
+        # Loop through the list of dictionaries
+        for item in data:
+            if 'country' in item:
+                country = item['country']
+                pass  # Stop searching if 'country' is found
+
+            if 'gender' in item:
+                gender = item['gender'].lower()
+                pass  # Stop searching if 'gender' is found
+            
+            if 'year' in item:
+                year = item['year']
+                pass
+                
+        # Now 'country' contains the value if found, or it's None if not found
+        try:
+            country_id = Country.objects.get(iso2=country.upper())
+        except Country.DoesNotExist:
+            return Response({'message': 'Country ISO2 does not exist'}, status=status.HTTP_404_NOT_FOUND)
+        
+
+        total_sales = Order.objects.select_related('user', 'payment').filter( user__country_of_residence = country_id , is_ordered = True , created_date__year = year ).values("payment__payment_method").annotate(total_amount=Sum('order_total'))
+
+        print(total_sales)
+
+        data={
+            'total_sale':'total_sale',
+            'cost_of_sales_global':'cost_of_sales_global'
+        }
+        
+        return Response(total_sales , status=status.HTTP_200_OK)
+

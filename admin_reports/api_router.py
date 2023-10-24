@@ -18,7 +18,9 @@ from admin_reports.api.views import (
     ELearningViewSet,
     SurveyViewSet,
     AnsweredSurveyViewSet,
-    InAppAdsViewSet
+    InAppAdsViewSet,
+    GlobalSales,
+    TransactionChannels
     )
 
 router = DefaultRouter() if settings.DEBUG else SimpleRouter()
@@ -41,6 +43,8 @@ router.register("e-learning", ELearningViewSet)
 router.register("survey", SurveyViewSet)
 router.register("answered-survey", AnsweredSurveyViewSet)
 router.register("inapp-ad", InAppAdsViewSet)
+router.register("global-sales", GlobalSales)
+router.register("transaction-channel", TransactionChannels)
 
 app_name = "admin_reports"
 urlpatterns = router.urls
