@@ -22,6 +22,7 @@ from e_learning.models import Kiosk_E_Learning , App_Survey, SurveyQA , AppSurve
 from ads.models import Ads
 from locations.models import Country
 from kroon.users.models import User, BusinessProfile
+from kroon.users.api.serializers import BusinessProfileSerilizer
 from locations.models import Country , Country_Province
 from kiosk_stores.models import Merchant_Product
 from kiosk_cart.models import Order,OrderProduct , Payment
@@ -1434,10 +1435,14 @@ class GlobalOverview(GenericViewSet):
         KOKPermission,
         IsBlekieAndEtransac,
         ]
-    queryset = Transactions.objects.all()
-    lookup_value_regex = "[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}"
+    queryset = Country_Province.objects.all()
     filter_backends = (filters.DjangoFilterBackend,)
     filterset_class = AdminRecordFilter
+    pagination_class = StandardResultsSetPagination
+    lookup_field = "id"
+
+    def get_object(self, queryset=None):
+        return Country_Province.objects.get(id=self.kwargs["id"])
 
     def get_filterinputs(self):
         filter_fields = []
@@ -1494,7 +1499,6 @@ class GlobalOverview(GenericViewSet):
 
         province_list = []
         for i in list_of_province:
-
             # user query set
             user_qs = User.objects.select_related('country_of_residence', 'country_province').filter(country_province = i.id, is_active = True)
 
@@ -1546,6 +1550,10 @@ class GlobalOverview(GenericViewSet):
                 }
             province_list.append(note)
 
+        # page = self.get_paginated_response(province_list)
+        # if page is not None:
+        # return self.paginator(province_list) #TODO:add pagination support
+
         # remote_username = request.META.get('USER')
         # remote_ipaddr = request.META.get('REMOTE_ADDR')
         # remote_os = request.META.get('HTTP_USER_AGENT')
@@ -1556,6 +1564,33 @@ class GlobalOverview(GenericViewSet):
         
         return Response(province_list , status=status.HTTP_200_OK)
     
+
+    @swagger_auto_schema(
+        tags=['Admin Reports'],  # Add your desired tag(s) here
+        operation_summary="Get Stores",
+        operation_description="This shows the list of stores associated with your the country",
+    )
+    def retrieve(self, request, *args, **kwargs):
+        try:
+             instance = self.get_object()
+        except Exception as e:
+            return Response({"message": str(e)}, status=status.HTTP_404_NOT_FOUND)
+        else:
+            # any additional logic
+            store_list = []
+            merchant_business_qs = BusinessProfile.objects.select_related('user').filter( user__country_province = instance.id )
+
+            serializer = BusinessProfileSerilizer(merchant_business_qs , many = True )
+            
+
+            
+            data = {
+                'name':'michael',
+                'instance':'instance'
+            }
+            return Response(data , status=status.HTTP_200_OK)
+
+
 
 class GlobalSales(GenericViewSet):
    
@@ -1634,6 +1669,7 @@ class GlobalSales(GenericViewSet):
         }
         
         return Response(data , status=status.HTTP_200_OK)
+
 
 
 class TransactionChannels (GenericViewSet):
