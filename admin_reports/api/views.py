@@ -1570,7 +1570,7 @@ class GlobalOverview(GenericViewSet):
         operation_summary="Get Stores",
         operation_description="This shows the list of stores associated with your the country",
     )
-    def retrieve(self, request, *args, **kwargs):
+    def retrieve(self, request, *args, **kwargs): #TODO:add store retrive
         try:
              instance = self.get_object()
         except Exception as e:
@@ -1664,6 +1664,7 @@ class GlobalSales(GenericViewSet):
             cost_of_sales_global += c.product.cost_price 
 
         data={
+            'currency':country_id.currency,
             'total_sale':total_sale,
             'cost_of_sales_global':cost_of_sales_global
         }
@@ -1734,7 +1735,7 @@ class TransactionChannels (GenericViewSet):
         transactions_channels_qs = Order.objects.select_related('user', 'payment').filter( user__country_of_residence = country_id , is_ordered = True , created_date__year = year ).values("payment__payment_method").annotate(total_amount=Sum('order_total'))
 
 
-        return Response(transactions_channels_qs , status=status.HTTP_200_OK)
+        return Response({'currency':country_id.currency ,'data':transactions_channels_qs }, status=status.HTTP_200_OK)
 
 
 
@@ -1798,4 +1799,4 @@ class CategorySales(GenericViewSet):
         
         category_sales_qs = Order.objects.select_related('user', 'payment').filter( user__country_of_residence = country_id , is_ordered = True , created_date__year = year ).values("products__category__category").annotate(total_amount=Sum('order_total'))
 
-        return Response(category_sales_qs , status=status.HTTP_200_OK)
+        return Response({'currency':country_id.currency ,'data':category_sales_qs } , status=status.HTTP_200_OK)
