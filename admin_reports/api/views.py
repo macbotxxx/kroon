@@ -1580,15 +1580,12 @@ class GlobalOverview(GenericViewSet):
             store_list = []
             merchant_business_qs = BusinessProfile.objects.select_related('user').filter( user__country_province = instance.id )
 
-            serializer = BusinessProfileSerilizer(merchant_business_qs , many = True )
-            
-
-            
-            data = {
-                'name':'michael',
-                'instance':'instance'
-            }
-            return Response(data , status=status.HTTP_200_OK)
+            page = self.paginate_queryset(merchant_business_qs)
+            if page is not None:
+                serializer = BusinessProfileSerilizer(page , many = True )
+                return self.get_paginated_response(serializer.data)
+        
+            return Response(serializer.data , status=status.HTTP_200_OK)
 
 
 
