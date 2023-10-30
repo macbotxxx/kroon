@@ -139,6 +139,21 @@ class Merchant_Product(BaseModel):
         help_text=_('this input store the stock limitation by which the merchant gets notified about his or low sotck level')
     )
 
+    expire_notify = models.BooleanField(
+        verbose_name = _('Expire Notification'),
+        default=False,
+        null=True,blank=True,
+        help_text= _('this indicates if the expiration notification will be sent to the merchant ')
+    )
+    
+    expiring_date = models.DateField(
+        verbose_name=_('Expiring Date'),
+        max_length=50,
+        null=True,
+        blank=True,
+        help_text=_('this storess the product expiring date and from which the merchant will be notified')
+    )
+
     is_available = models.BooleanField(
         verbose_name = _('Product availablity'),
         default=True,
