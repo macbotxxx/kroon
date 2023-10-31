@@ -2,16 +2,21 @@ import json
 import requests
 from platform import platform
 from rest_framework.generics import ListAPIView , GenericAPIView
+from rest_framework.viewsets import GenericViewSet
+
+from rest_framework.mixins import ListModelMixin , CreateModelMixin
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated , AllowAny
 from rest_framework.response import Response
+from drf_yasg.utils import swagger_auto_schema
+
 
 from django.conf import settings
 from django.db.models import Q
 
 from notifications.models import NewsFeed
-from notifications.tasks import mobile_push_notification
-from .serializers import NewsFeedSerializer
+from notifications.tasks import mobile_push_notification, service_push_notification
+from .serializers import NewsFeedSerializer, GeneralNotificationSerializer
 from rest_framework.views import APIView
 
 from helpers.common.security import KOKPermission
@@ -68,6 +73,28 @@ class SimulatePushNotificationsNewsfeed(APIView):
              )
        
         return Response({'status':'success','message':'notifications', 'data':''}, status = status.HTTP_200_OK)
+    
+
+
+class GeneralNotificationViewSet(CreateModelMixin, GenericViewSet):
+    permission_classes = [
+        IsAuthenticated,
+        KOKPermission,
+        ]
+    queryset = NewsFeed.objects.all()
+    serializer_class = GeneralNotificationSerializer
+   
+    # Post Uploaded Tutorial videos
+    @swagger_auto_schema(
+        tags=['Admin Reports'],  # Add your desired tag(s) here
+        operation_summary="General Push Notification",
+        operation_description="Create a general notification that will be sent out to all users ",
+    )
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True) 
+        service_push_notification.delay(body_message = serializer.data)
+        return Response({'message':'push notification sent' ,'data':serializer.data}, status=status.HTTP_201_CREATED)
         
 
         

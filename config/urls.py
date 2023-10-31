@@ -540,6 +540,7 @@ urlpatterns += [
     # path('admin-reports/api/v1/', include('admin_reports.api.urls')),
     # path("api/v1.0/", include("config.api_router")),
     path("api/v1.0/", include("admin_reports.api_router")),
+    path("api/v1.0/", include("notifications.api_router")),
   
     # DRF auth token and registration
     path('api/token/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
