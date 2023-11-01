@@ -59,6 +59,6 @@ class Product_Details_Serial (serializers.ModelSerializer):
     
     class Meta:
         model = Merchant_Product
-        fields = ['id', 'user', 'products_variation','product_sku','charge_by_weight','weight_quantity','weight_unit','out_of_stock_notify','low_stock_limit', 'product_name', 'slug', 'category', 'price','cost_price', 'image', 'stock', 'is_available','expire_notify','expiring_date', 'created_date', 'modified_date',]
+        fields = ['id', 'user', 'products_variation','product_sku','charge_by_weight','weight_quantity','weight_unit','out_of_stock_notify','low_stock_limit', 'product_name', 'slug', 'category', 'price','cost_price', 'image', 'stock', 'is_available','expire_notify','expiring_date','expiry_days_notify', 'created_date', 'modified_date',]
         read_only_fields = fields
 
