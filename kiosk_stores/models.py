@@ -154,6 +154,13 @@ class Merchant_Product(BaseModel):
         help_text=_('this storess the product expiring date and from which the merchant will be notified')
     )
 
+    expiry_days_notify = models.IntegerField(
+        verbose_name = _('Expiry Days'),
+        null=True,blank=True,
+        default = 0,
+        help_text= _('This shows the days before the expiring date for the merchant to get the push notifications')
+    )
+
     is_available = models.BooleanField(
         verbose_name = _('Product availablity'),
         default=True,
