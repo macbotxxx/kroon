@@ -7,5 +7,5 @@ app_name = "Kroon Network Ads"
 
 app_name = "Kroon Network Ads"
 urlpatterns =[
-    path('ads/<str:platform>/' , views.AdsView.as_view())
+    path('ads/<str:platform>/' , views.AdsView.as_view(), name='ads')
 ]

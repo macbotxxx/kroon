@@ -41,6 +41,8 @@ THIRD_PARTY_APPS = [
 ]
 
 LOCAL_APPS = [
+    # the admin reports app 
+    "admin_reports.apps.AdminReportsConfig",
     
     "kroon.users",
     # Your stuff: custom apps go here

@@ -11,5 +11,4 @@ urlpatterns = [
     path('add-user-category/', views.User_Category_Add_View.as_view()),
     path('remove-user-category/', views.User_Category_Remove_View.as_view()),
 
-
 ]

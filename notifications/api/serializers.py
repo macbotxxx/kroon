@@ -5,7 +5,10 @@ class NewsFeedSerializer(serializers.ModelSerializer):
     class Meta:
         model = NewsFeed
         fields = ['id','title', 'image', 'content','created_date']
-       
 
+
+
+class GeneralNotificationSerializer(serializers.Serializer):
+    message = serializers.CharField()
 
         

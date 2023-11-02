@@ -58,9 +58,11 @@ class Upload_Production_view (ListCreateAPIView):
             category = serializer.validated_data.get('category')
             products_variation = serializer.validated_data.pop('products_variation')
             image = serializer.validated_data.get('image')
+            expire_notify = serializer.validated_data.get('expire_notify')
+            expiring_date = serializer.validated_data.get('expiring_date')
+            expiry_days_notify = serializer.validated_data.get('expiry_days_notify')
 
             
-
             # if verify_image is not None:
             #     image = serializer.validated_data.get('image')
             # else:
@@ -105,11 +107,14 @@ class Upload_Production_view (ListCreateAPIView):
             product.merchant_local_currency = request.user.default_currency_id
             product.user = company_profile
             product.image = image
+            product.expire_notify = expire_notify
+            product.expiring_date = expiring_date
+            product.expiry_days_notify = expiry_days_notify
             product.business_profile = business_profile
             product.save()
 
             # confirmation of the product is been created
-            for variation in products_variation:
+            for variation in products_variation: #TODO: making variation optional 
                 if variation.get("variations_category" ) is not None:
                     variations = ProductVariation()
                     variations.variations_category = variation.get("variations_category" )
@@ -143,7 +148,7 @@ class Update_Product (RetrieveUpdateDestroyAPIView):
         try:
             product = Merchant_Product.objects.get( id = product_id )
         except Merchant_Product.DoesNotExist:
-            return Response({'status':'error','message':'Product does nnot exist in our database'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({'status':'error','message':'Product does not exist in our database'}, status=status.HTTP_404_NOT_FOUND)
 
         serializer = self.serializer_class( data = request.data )
         if serializer.is_valid():
@@ -157,13 +162,16 @@ class Update_Product (RetrieveUpdateDestroyAPIView):
             low_stock_limit = serializer.validated_data.get('low_stock_limit')
             charge_by_weight = serializer.validated_data.get('charge_by_weight')
             weight_quantity = serializer.validated_data.get('weight_quantity')
+            expire_notify = serializer.validated_data.get('expire_notify')
+            expiring_date = serializer.validated_data.get('expiring_date')
+            expiry_days_notify = serializer.validated_data.get('expiry_days_notify')
             category = serializer.validated_data.get('category')
             products_variation = serializer.validated_data.pop('products_variation')
         
-            Merchant_Product.objects.filter( id = product_id ).update( product_sku = product_sku , product_name = product_name, price = price , cost_price = cost_price , stock = stock , weight_unit = weight_unit , out_of_stock_notify = out_of_stock_notify  ,  charge_by_weight = charge_by_weight ,weight_quantity = weight_quantity, low_stock_limit = low_stock_limit , category = category , merchant_local_currency = request.user.default_currency_id , user = company_profile , business_profile = business_profile  )
+            Merchant_Product.objects.filter( id = product_id ).update( product_sku = product_sku , product_name = product_name, price = price , cost_price = cost_price , stock = stock , weight_unit = weight_unit , out_of_stock_notify = out_of_stock_notify  ,  charge_by_weight = charge_by_weight ,weight_quantity = weight_quantity, low_stock_limit = low_stock_limit , category = category , merchant_local_currency = request.user.default_currency_id , user = company_profile , business_profile = business_profile,expire_notify = expire_notify , expiring_date = expiring_date , expiry_days_notify = expiry_days_notify  )
 
             ProductVariation.objects.filter( product = product ).delete()
-            for variation in products_variation:
+            for variation in products_variation: #TODO: making variation optional 
                 if variation.get("variations_category" ) is not None:
                 
                     ProductVariation.objects.create( product = product, variations_category = variation.get("variations_category" ) , variation_value = variation.get("variation_value" ), quantity = variation.get("quantity") , weight_quantity = variation.get("weight_quantity") )

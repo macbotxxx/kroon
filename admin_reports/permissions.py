@@ -82,7 +82,7 @@ class IsBlekieAndEtransac(BasePermission):
     def has_permission(self,request, *args, **kwargs):
         group = None
         if request.user.groups.exists():
-            group = request.user.groups.filter(Q(name = 'etransac') or Q( name = 'blekie_tech') )
+            group = request.user.groups.filter(Q(name = 'etransac') | Q( name = 'blekie_tech') )
             if group:
                 return True
             raise AdminReportsDenied()

@@ -6,6 +6,7 @@ from django.core import mail
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.conf import settings
+from kroon.users.models import User
 import requests
 
 # import celery
@@ -43,6 +44,11 @@ def mobile_push_notification ( *args , **kwargs ):
             serverToken = KIOSK_FCM_SERVER_KEY_TAB
         else:
             serverToken = FCM_SERVER_KEY_KIOSK
+    else:
+        serverToken = FCM_SERVER_KEY_KIOSK
+        # TODO: this section needs to be fixed
+        #the general push notification which is meant to send 
+        # a push notification to all clients
         
     deviceToken = device_id
     headers = {
@@ -83,3 +89,59 @@ def mobile_push_notification ( *args , **kwargs ):
                 
 
 
+@celery_app.task()
+def service_push_notification ( *args , **kwargs ):
+
+    serverToken = None
+    # FCM push-notifications
+    body_message = kwargs.pop('body_message', None)
+
+    users_qs = User.objects.select_related('country_of_residence','country_province','on_boarding_user','government_organization_name','government_organization_name').all()
+    for i in users_qs:
+
+        message = kwargs.pop('message', None)
+        device_id = i.device_id
+        title = "System Update"
+        platform = 'kiosk'
+        device_type = 'phone'
+
+        # getting the user through the device id 
+        if platform == 'kroon':
+            serverToken = FCM_SERVER_KEY_KROON
+        elif platform == 'kiosk':
+            # identifing the device type of the user
+            if device_type == 'phone':
+                serverToken = FCM_SERVER_KEY_KIOSK
+            elif device_type == 'tab':
+                serverToken = KIOSK_FCM_SERVER_KEY_TAB
+            else:
+                serverToken = FCM_SERVER_KEY_KIOSK
+        else:
+            serverToken = FCM_SERVER_KEY_KIOSK
+            # TODO: this section needs to be fixed
+            #the general push notification which is meant to send 
+            # a push notification to all clients
+            
+        deviceToken = device_id
+        headers = {
+                'Content-Type': 'application/json',
+                'Authorization': 'key=' + serverToken,
+            }
+        
+        # grouping the notification body
+        
+        body = {
+                'notification':{
+                    'title': title,
+                    'body': body_message['message'] ,
+                    'sound': 'default',
+                },
+                'to':deviceToken,
+                'priority': 'high',
+                # 'data': {
+                #     'link': 'http://www.mykroonapp.com'
+                # },
+                }
+    
+    requests.post("https://fcm.googleapis.com/fcm/send",headers = headers, data=json.dumps(body))
+    return "Phone notification is pushed"

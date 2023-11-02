@@ -34,7 +34,7 @@ class Upload_Products_Serializer (serializers.ModelSerializer):
 
     class Meta:
         model = Merchant_Product
-        fields = ['product_sku', 'product_name', 'price', 'cost_price', 'stock', 'charge_by_weight','weight_quantity','weight_unit','out_of_stock_notify','low_stock_limit', 'category', 'products_variation', 'image']
+        fields = ['product_sku', 'product_name', 'price', 'cost_price', 'stock', 'charge_by_weight','weight_quantity','weight_unit','out_of_stock_notify','low_stock_limit', 'category', 'products_variation', 'image', 'expire_notify', 'expiring_date','expiry_days_notify',]
 
 
 class Edit_Products_Serializer (serializers.ModelSerializer):
@@ -42,7 +42,7 @@ class Edit_Products_Serializer (serializers.ModelSerializer):
 
     class Meta:
         model = Merchant_Product
-        fields = ['product_sku', 'product_name', 'price', 'cost_price', 'stock', 'charge_by_weight','weight_quantity','weight_unit','out_of_stock_notify','low_stock_limit', 'category', 'products_variation',]
+        fields = ['product_sku', 'product_name', 'price', 'cost_price', 'stock', 'charge_by_weight','weight_quantity','weight_unit','out_of_stock_notify','low_stock_limit', 'category', 'products_variation','expire_notify', 'expiring_date','expiry_days_notify',]
  
 
 
@@ -61,7 +61,7 @@ class Product_Details_Serializers (serializers.ModelSerializer):
     class Meta:
         model = Merchant_Product
         # fields = ['id', 'product_sku', 'product_name', 'products_variation']
-        fields = ['id', 'products_variation','product_sku','charge_by_weight','weight_quantity','weight_unit','out_of_stock_notify','low_stock_limit', 'product_name', 'slug', 'category', 'price','cost_price','image', 'stock', 'is_available', 'created_date', 'modified_date',]
+        fields = ['id', 'products_variation','product_sku','charge_by_weight','weight_quantity','weight_unit','out_of_stock_notify','low_stock_limit', 'product_name', 'slug', 'category', 'price','cost_price','image', 'stock','is_available','expire_notify', 'expiring_date','expiry_days_notify','created_date', 'modified_date',]
         read_only_fields = fields
 
   

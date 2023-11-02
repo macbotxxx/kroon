@@ -19,11 +19,7 @@ class AdsView (ListAPIView):
     serializer_class = AdSerializer
     queryset = Ads.objects.all()
     
-
     @swagger_auto_schema(
-            responses={
-                404: 'platform does not exist', 
-                status.HTTP_200_OK: AdSerializer },
             operation_summary="kroon Ads",
             operation_description="The kroon ad section shows the list of published ads according to the platform ",
             tags=["Kroon Ads"]

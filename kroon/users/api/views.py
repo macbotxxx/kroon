@@ -413,7 +413,6 @@ class SwitchAccountMerchant (APIView):
         switch_merchant_account.save()
         # assiginig the basic subscription plan 
         plan = Subscription_Plan.objects.get( default_plan = True )
-        print(plan)
         migrate_plan = Merchant_Subcribers()
         migrate_plan.user = self.request.user
         migrate_plan.plan = plan
