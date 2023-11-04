@@ -14,6 +14,9 @@ from django.utils.html import strip_tags
 from django.contrib import messages
 from datetime import timedelta, datetime
 from django.core.serializers.json import DjangoJSONEncoder
+from django.db.models import Count , Sum
+from django.core.mail import send_mail
+
 
 from helpers.common.security import KOKPermission , KOKMerchantPermission
 from subscriptions.models import Subscription_Plan ,Merchant_Subcribers
@@ -24,6 +27,7 @@ from helpers.subscriptions.huawei import Huawei_Service
 from .serializers import Gov_Promo_Code_Serializer , In_App_Sub_check , In_App_Sub_Migrate, MerchantSubSerializer
 from kiosk_cart.api.views import _company_account , _company_account_in_app
 from notifications.tasks import kiosk_promo_code_email
+from kiosk_stores.models import Merchant_Product
 
 
 
@@ -244,12 +248,28 @@ class TestEnd (ListAPIView):
     serializer_class = MerchantSubSerializer
 
     def get (self, request, *args, **kwargs):
-        current_time = timezone.now()
-        plans = Merchant_Subcribers.objects.filter( active = True )
-        for i in plans:
-            if i.end_date < current_time:
-                i.active = False
-                i.save()
-            else:
-                pass
+        products_qs = Merchant_Product.objects.filter( expire_notify = True ).values('business_profile').annotate( total_expired_products = Count('expire_notify'))
+        print(products_qs)
+        for i in products_qs:
+            exired_qs = Merchant_Product.objects.filter( expire_notify = True , business_profile = i['business_profile'] ).values('expiry_days_notify').annotate( total_expired_pros = Count('expire_notify'))
+            merchant_email = Merchant_Product.objects.filter(business_profile = i['business_profile']).first()
+            print(exired_qs)
+            for e in exired_qs:
+                exp_pro = Merchant_Product.objects.filter( expire_notify = True , business_profile = i['business_profile'] ).values('expiry_days_notify').annotate( total_expired_products = Count('expire_notify'))
+                for p in exp_pro:
+                    # Get the current date
+                    current_date = datetime.now()
+                    # Calculate the date 3 days from now
+                    three_days_from_now = current_date + timedelta(days=int(p['expiry_days_notify']))
+
+                    ex_products_qs = Merchant_Product.objects.filter( expire_notify = True , business_profile = i['business_profile'] , expiring_date__lte = three_days_from_now )
+                    
+        send_mail(
+                "Subject here",
+                f"{ex_products_qs}",
+                "from@example.com",
+                [f"{merchant_email.user.email}"],
+                fail_silently=False,
+            )
+                
         return Response('completed')
