@@ -60,7 +60,7 @@ class OfflineUpload_Products_Serializer (serializers.ModelSerializer):
 
     class Meta:
         model = Merchant_Product
-        fields = ['product_sku', 'product_name', 'price', 'cost_price', 'stock', 'charge_by_weight','weight_quantity','weight_unit','out_of_stock_notify','low_stock_limit', 'category', 'products_variation', 'image']
+        fields = ['product_sku', 'product_name', 'price', 'cost_price', 'stock', 'charge_by_weight','weight_quantity','weight_unit','out_of_stock_notify','low_stock_limit', 'category', 'products_variation', 'image', 'expire_notify', 'expiring_date','expiry_days_notify',]
 
 
 class Offline_Product_Upload ( serializers.Serializer ):
