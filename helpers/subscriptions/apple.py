@@ -34,7 +34,7 @@ class Apple_Service:
         response = requests.request("POST", url, headers=headers, data=payload)
         res = response.json()
         if res['status'] == 21007:
-            url = f"{self.sandbox_url}"
+            url = f"{self.base_url}"
             payload = json.dumps({
                 "exclude-old-transactions": True,
                 "password": f"{self.APPLE_PWD}",

@@ -1,0 +1,13 @@
+{
+    "type": "service_account",
+    "project_id": "kroonkiosk",
+    "private_key_id": "2cebb3b19a45722dc39a618a5f9270f6bfc253bc",
+    "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCrbX+X4U5PLZVj\nyzVTxm75hC5TcxFFzIfqrFZPsW9QoCAOLQ4Xw/+UitozkWqT7KDl8WVWsFmbAzzv\nBKIn1G7ZW9cfKyzOI/j8RFWfLPaaX7FKT94Y7hq/AqtsKkg43/tUTAfHFldBn6zk\nUFjrP9LlskOjHMD07SQWWF6QHLgQWJ44ryHehbuxUxjeNRXzmfvSIO8oP5deg5z1\nJIVg1c5OtQ8dHyj0ab1q2dQmXkE5LNvBkZBZV1njw5+o2HaDs4B438vu/kNoAWld\nN4U3ftQvlW4Bop9kR2MCRGKKt6Ba9NRbukPjjxIth9uonnYWycvDC1q6F4JY4Ddl\n9MB5YhjxAgMBAAECggEAKcpVTwjBZuL1ZrEMrIIU3qX/Bx/nh4z/W1Gs7tuSB+Up\nO1t3coq43RTmcajTAwGuDbBF5Ja0GWp2KcyG3U/XwAw4CqSjVROG6LSd7OJwsZx/\nY17KBWjSQ1tav9Ek7xyHL/si8EE9f0V2R+hgbOUPvCgzfemODodbA0mCr/4YTv9t\nHRADE4eBlejtktq2KNOB7Tov9Uf95tgJkR3moIOXuhEE97JHh41h3k+uzTmvKnOM\nglrleEsktd9c8/Q3+ZdftYh2jBMFY+OY8OJnDNDkXIcjQjsWABH5pqAE2ltqi3P2\nxwqmnROmPqFyhBqgas+3aosiLmHbA6PIK8hE7STukwKBgQDgchelxyYjSv0Udmre\n8LoYBvxGOoK1lXNZRmnUBx+ftgjOXu/LniKWs3MkR3mkt+07TbliBlVpUzfAcCu7\nck0vPVvaDYgI9UKR34f5gtL8drCDFgmZyyswHVaWhcHgVKM8EjFmsj8oAbGftpN0\n13PbhTubHECrdV10A+cckQ7ZHwKBgQDDh0PEfjQAXqskeuKol+w9atsf+dxE5s/s\nXinYGMG5HgZYPOtRKW3yC0Bfd08hKVsjynw3eHwcb9M8ThZiD25ja7IG+Z/NTB72\nLzBeNBNHnamHo/21xjuZ9L3MfnpnCkKoQS3zt9NVqR8tz9iy2m7whIfUzrPQSX7v\nxnMfOdz77wKBgQCxDtBA4x3e8aU8oz4jqVvk4H3bGQVMIh3g639I2GXGJGBGDPa2\ndoVqxR2sHQaFPuNSyTnZbo2qjQ+KK/MT6FOjVJBFMC+EgZaGZQRrfRzcNPWCM7xX\nKsNjLYHFNLeBNMOg++kkzrCr6soo6Gri3aR0JGKlNmB94hRbFUkYbAZ+mQKBgQCZ\n3fcpSLs5U0ZQldeKHsvMZSt9FU4OdqhG9K7vHEROnd8WTxJLM1QO9mW4+pWtnfLX\nzn9D06+vXRyYx0Z78nLHEDfvnz7u+qkeyHHCoC5P3DVNxXJhOlcqx1sY8qr2LS/Z\nYjl8IjvPnCAqF/cKgDRvV4vgnq0ICt42aC+t8gYBxwKBgDxpcvXGoY21hu0p8swJ\nvquMNDb3yurgno0UsCE7m2DrIkDCyIO8b5z7hxm/YBjPAo/sl3cS4pGGJM4cff/T\nITCuQxdglx0LzYAUfD2c4QaRb2aZjvrbD0D35v4HkywjVxg/eh7mcdNj0tylxdDu\npGToOdDtiZ2PYZHINTg5X0ue\n-----END PRIVATE KEY-----\n",
+    "client_email": "kroonkiosksubscriptions@kroonkiosk.iam.gserviceaccount.com",
+    "client_id": "111309451677042655777",
+    "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+    "token_uri": "https://oauth2.googleapis.com/token",
+    "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+    "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/kroonkiosksubscriptions%40kroonkiosk.iam.gserviceaccount.com",
+    "universe_domain": "googleapis.com"
+  }
