@@ -443,14 +443,14 @@ SWAGGER_SETTINGS = {
         },
         'Token Authentication': {
             'type': 'apiKey',
-            'description': 'If you need to authenticate via bearer auth (e.g., for a cross-origin request), use header `Authorization: Token SMn7BrXSqGmn69mb4GpwRql1Br9KNj` for your API calls. [More info](https://geniopay.docs.apiary.io/#introduction/understanding-authentication)',
+            'description': 'If you need to authenticate via bearer auth (e.g., for a cross-origin request), use header `Authorization: Token SMn7BrXSqGmn69mb4GpwRql1Br9KNj` for your API calls. [More info](https://kroonaapp.docs.apiary.io/#introduction/understanding-authentication)',
             'in': 'header',
             'name': 'Authorization'
         },
         # "OAuth 2.0": {
         #     "type": "oauth2",
-        #     'description': 'This API uses OAuth 2 with the implicit grant flow.Idea for application developers. This will enable users to grant your application access to the GenioPay API on their behalf without the need to manually set up or exchange any keys. [More info](https://geniopay.docs.apiary.io/#introduction/understanding-authentication)',
-        #     "authorizationUrl": "http://oauth2.geniopay.com/authorize",
+        #     'description': 'This API uses OAuth 2 with the implicit grant flow.Idea for application developers. This will enable users to grant your application access to the kroonaapp API on their behalf without the need to manually set up or exchange any keys. [More info](https://kroonaapp.docs.apiary.io/#introduction/understanding-authentication)',
+        #     "authorizationUrl": "http://oauth2.kroonaapp.com/authorize",
         #     "flow": "implicit",
         #     "scopes": {
         #         "write": "allows modifying resources",

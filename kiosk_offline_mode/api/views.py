@@ -202,6 +202,9 @@ class Offline_Product_UPload_View ( CreateAPIView ):
                 weight_quantity = offline_data['weight_quantity']
                 category = offline_data['category']
                 products_variation = offline_data['products_variation']
+                expire_notify = offline_data['expire_notify']
+                expiring_date = offline_data['expiring_date']
+                expiry_days_notify = offline_data['expiry_days_notify']
                 image = offline_data['image']
 
                 # if verify_image is not None:
@@ -241,7 +244,7 @@ class Offline_Product_UPload_View ( CreateAPIView ):
                 # 
                 business_profile = BusinessProfile.objects.get( user = company_profile , active = True )
                  
-                product = Merchant_Product.objects.create( product_sku = product_sku , product_name = product_name, price = price , cost_price = cost_price , stock = stock ,weight_quantity = weight_quantity , charge_by_weight = charge_by_weight , category = category , weight_unit = weight_unit , out_of_stock_notify = out_of_stock_notify , low_stock_limit = low_stock_limit , merchant_local_currency = request.user.default_currency_id , user = company_profile , image = image , business_profile = business_profile  )
+                product = Merchant_Product.objects.create( product_sku = product_sku , product_name = product_name, price = price , cost_price = cost_price , stock = stock ,weight_quantity = weight_quantity , charge_by_weight = charge_by_weight , category = category , weight_unit = weight_unit , out_of_stock_notify = out_of_stock_notify , low_stock_limit = low_stock_limit , merchant_local_currency = request.user.default_currency_id , user = company_profile , image = image , business_profile = business_profile , expire_notify = expire_notify , expiring_date = expiring_date, expiry_days_notify = expiry_days_notify )
                 
                 for variation in products_variation:
                     if variation.get("variations_category" ) is not None:
