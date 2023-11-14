@@ -1393,41 +1393,6 @@ class TotalActiveMerchants(GenericViewSet):
         return Response(data , status=status.HTTP_200_OK)
     
 
-
-class TopPerformingRegions(GenericViewSet):
-    #TODO: 
-    permission_classes = [
-        IsAuthenticated,
-        KOKPermission,
-        IsBlekieAndEtransac,
-        ]
-    queryset = Transactions.objects.all()
-
-    @swagger_auto_schema(
-        tags=['Admin Reports'],  # Add your desired tag(s) here
-        operation_summary="Top Performing Regions",
-        operation_description=" this shows the list of top performing regions",
-    )
-    def list(self, request, *args, **kwargs):
-        data = [
-            {
-                'region': 'Lagos',
-                'transaction_value': 29321490,
-            },
-            {
-                'region': 'Abuja',
-                'transaction_value': 19300250,
-            },
-            {
-                'region': 'Kano',
-                'transaction_value': 17322822,
-            }
-        ]
-
-        return Response(data , status=status.HTTP_200_OK)
-    
-
-
 class GlobalOverview(GenericViewSet):
    
     permission_classes = [
@@ -1568,16 +1533,15 @@ class GlobalOverview(GenericViewSet):
     @swagger_auto_schema(
         tags=['Admin Reports'],  # Add your desired tag(s) here
         operation_summary="Get Stores",
-        operation_description="This shows the list of stores associated with your the country",
+        operation_description="This shows the list of stores associated with the province or state id ",
     )
-    def retrieve(self, request, *args, **kwargs): #TODO:add store retrive
+    def retrieve(self, request, *args, **kwargs):
         try:
              instance = self.get_object()
         except Exception as e:
             return Response({"message": str(e)}, status=status.HTTP_404_NOT_FOUND)
         else:
             # any additional logic
-            store_list = []
             merchant_business_qs = BusinessProfile.objects.select_related('user').filter( user__country_province = instance.id )
 
             page = self.paginate_queryset(merchant_business_qs)

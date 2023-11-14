@@ -12,7 +12,6 @@ from admin_reports.api.views import (
     CrossBorderTransfer,
     DailyAverage,
     TotalActiveMerchants,
-    TopPerformingRegions,
     GlobalOverview,
     NewsFeedViewSet,
     ELearningViewSet,
@@ -37,7 +36,6 @@ router.register("total-merchants", TotalMerchants)
 router.register("cross-border-transfers", CrossBorderTransfer)
 router.register("daily-average", DailyAverage)
 router.register("active-merchants", TotalActiveMerchants)
-router.register("top-performing-regions", TopPerformingRegions)
 router.register("global_overview", GlobalOverview)
 router.register("news-feed", NewsFeedViewSet)
 router.register("e-learning", ELearningViewSet)
