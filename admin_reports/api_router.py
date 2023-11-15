@@ -20,31 +20,33 @@ from admin_reports.api.views import (
     InAppAdsViewSet,
     GlobalSales,
     TransactionChannels,
-    CategorySales
+    CategorySales,
+    BusinessRecords
     )
 
 router = DefaultRouter() if settings.DEBUG else SimpleRouter()
 
 
 router.register("transactions", TransactionListView, basename="all_transactions")
-router.register("users-list", AllUserListView)
-router.register("total-transactions", TotalTransactions)
-router.register("total-wallet-value", TotalWalletValue)
-router.register("total-payouts", TotalPayouts)
-router.register("total-e-wallets", TotalEwallets)
-router.register("total-merchants", TotalMerchants)
-router.register("cross-border-transfers", CrossBorderTransfer)
-router.register("daily-average", DailyAverage)
-router.register("active-merchants", TotalActiveMerchants)
-router.register("global_overview", GlobalOverview)
-router.register("news-feed", NewsFeedViewSet)
-router.register("e-learning", ELearningViewSet)
-router.register("survey", SurveyViewSet)
-router.register("answered-survey", AnsweredSurveyViewSet)
-router.register("inapp-ad", InAppAdsViewSet)
-router.register("global-sales", GlobalSales)
-router.register("transaction-channel", TransactionChannels)
-router.register("category-sales", CategorySales)
+router.register("users-list", AllUserListView, basename="user_list")
+router.register("total-transactions", TotalTransactions, basename="total_transactions")
+router.register("total-wallet-value", TotalWalletValue, basename="total_wallet_value")
+router.register("total-payouts", TotalPayouts, basename="total_payouts")
+router.register("total-e-wallets", TotalEwallets, basename="total_e_wallets")
+router.register("total-merchants", TotalMerchants, basename="total_merchants")
+router.register("cross-border-transfers", CrossBorderTransfer, basename="cross_border_transfers")
+router.register("daily-average", DailyAverage, basename="daily_average")
+router.register("active-merchants", TotalActiveMerchants, basename="active_merchants")
+router.register("global-overview", GlobalOverview, basename="global_overview")
+router.register("news-feed", NewsFeedViewSet, basename="news_feed")
+router.register("e-learning", ELearningViewSet, basename="e_learning")
+router.register("survey", SurveyViewSet, basename="survey")
+router.register("answered-survey", AnsweredSurveyViewSet, basename="answered_survey")
+router.register("inapp-ad", InAppAdsViewSet, basename="inapp_ad")
+router.register("global-sales", GlobalSales, basename="global_sales")
+router.register("transaction-channel", TransactionChannels, basename="transaction_channel")
+router.register("category-sales", CategorySales, basename="category_sales")
+router.register("business-records", BusinessRecords, basename="business_records")
 
 app_name = "admin_reports"
 urlpatterns = router.urls

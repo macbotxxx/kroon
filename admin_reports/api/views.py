@@ -1624,7 +1624,7 @@ class GlobalSales(GenericViewSet):
         for c in total_sales:
             cost_of_sales_global += c.product.cost_price 
 
-        data={
+        data = {
             'currency':country_id.currency,
             'total_sale':total_sale,
             'cost_of_sales_global':cost_of_sales_global
@@ -1692,9 +1692,7 @@ class TransactionChannels (GenericViewSet):
         except Country.DoesNotExist:
             return Response({'message': 'Country ISO2 does not exist'}, status=status.HTTP_404_NOT_FOUND)
         
-
         transactions_channels_qs = Order.objects.select_related('user', 'payment').filter( user__country_of_residence = country_id , is_ordered = True , created_date__year = year ).values("payment__payment_method").annotate(total_amount=Sum('order_total'))
-
 
         return Response({'currency':country_id.currency ,'data':transactions_channels_qs }, status=status.HTTP_200_OK)
 
@@ -1761,3 +1759,67 @@ class CategorySales(GenericViewSet):
         category_sales_qs = Order.objects.select_related('user', 'payment').filter( user__country_of_residence = country_id , is_ordered = True , created_date__year = year ).values("products__category__category").annotate(total_amount=Sum('order_total'))
 
         return Response({'currency':country_id.currency ,'data':category_sales_qs } , status=status.HTTP_200_OK)
+
+
+class BusinessRecords(GenericViewSet):
+   
+    permission_classes = [
+        IsAuthenticated,
+        KOKPermission,
+        IsBlekieAndEtransac,
+        ]
+    queryset = Transactions.objects.all()
+    lookup_value_regex = "[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}"
+    lookup_field = "id"
+
+    def get_object(self, queryset=None):
+        return BusinessProfile.objects.get(id=self.kwargs["id"])
+    
+    @swagger_auto_schema(
+        tags=['Admin Reports'],  # Add your desired tag(s) here
+        operation_summary="Retrive Stores",
+        operation_description="This retrives the store sales and records by passing the store ID ",
+    )
+    def retrieve(self, request, *args, **kwargs):
+        try:
+             instance = self.get_object()
+        except Exception as e:
+            return Response({"message": str(e)}, status=status.HTTP_404_NOT_FOUND)
+        else:
+            # any additional logic
+            merchant_business_qs = BusinessProfile.objects.select_related('user').get( id = instance.id )    
+            
+            business_owner = merchant_business_qs.user
+            # store transactional channels 
+            transactions_channels_qs = Order.objects.select_related('user', 'payment').filter( is_ordered = True , user = business_owner ).values("payment__payment_method").annotate(total_amount=Sum('order_total'))
+
+            # total sales and cost prices 
+            total_sales = OrderProduct.objects.select_related('user', 'payment', 'order', 'product').filter( ordered = True , user = business_owner )
+
+            total_sale = 0
+            cost_of_sales_global = 0
+            # merchant sales via province 
+            for c in total_sales:
+                total_sale += c.product_total_price
+
+            # merchant cost of sales via province
+            for c in total_sales:
+                cost_of_sales_global += c.product.cost_price 
+
+            # category sales and total amount
+            category_sales_qs = Order.objects.select_related('user', 'payment').filter(user = business_owner , is_ordered = True ).values("products__category__category").annotate(total_amount=Sum('order_total'))
+
+            serializer = BusinessProfileSerilizer( merchant_business_qs )
+
+            data = {
+                "business_info":serializer.data,
+                "sales_record":{
+                    "total_sale":total_sale,
+                    "cost_of_sales_global":cost_of_sales_global
+                },
+                "category_sales":category_sales_qs,
+                "transactional_channels":transactions_channels_qs
+            }
+            
+            return Response(data , status=status.HTTP_200_OK)
+    
