@@ -1791,34 +1791,49 @@ class BusinessRecords(GenericViewSet):
             
             business_owner = merchant_business_qs.user
             # store transactional channels 
-            transactions_channels_qs = Order.objects.select_related('user', 'payment').filter( is_ordered = True , user = business_owner ).values("payment__payment_method").annotate(total_amount=Sum('order_total'))
+            order_qs = Order.objects.select_related('user', 'payment').filter( is_ordered = True , user = business_owner )
+
+            # latest sales invoice 
+            latest_sales_invoice = order_qs.values("order_number", "order_total", "created_date__date", "payment__payment_method")[:5]
+
+            transactions_channels_qs = order_qs.values("payment__payment_method").annotate(total_amount=Sum('order_total'))
 
             # total sales and cost prices 
             total_sales = OrderProduct.objects.select_related('user', 'payment', 'order', 'product').filter( ordered = True , user = business_owner )
 
+            daily_sales_qs = total_sales.values("created_date__date").annotate(total_amount = Sum('product_total_price'))[:10]
+
             total_sale = 0
-            cost_of_sales_global = 0
+            cost_of_sales = 0
             # merchant sales via province 
             for c in total_sales:
                 total_sale += c.product_total_price
 
             # merchant cost of sales via province
             for c in total_sales:
-                cost_of_sales_global += c.product.cost_price 
+                cost_of_sales += c.product.cost_price 
 
             # category sales and total amount
             category_sales_qs = Order.objects.select_related('user', 'payment').filter(user = business_owner , is_ordered = True ).values("products__category__category").annotate(total_amount=Sum('order_total'))
 
+            # business workers
+            workers_qs = BusinessProfile.objects.select_related('user').filter( id = instance.id ).values("workers").count()
+           
+
             serializer = BusinessProfileSerilizer( merchant_business_qs )
 
             data = {
+                "currency_id":business_owner.default_currency_id,
                 "business_info":serializer.data,
+                "daily_sales": daily_sales_qs,
                 "sales_record":{
                     "total_sale":total_sale,
-                    "cost_of_sales_global":cost_of_sales_global
+                    "cost_of_sales":cost_of_sales
                 },
                 "category_sales":category_sales_qs,
-                "transactional_channels":transactions_channels_qs
+                "transactional_channels":transactions_channels_qs,
+                "employee_count": workers_qs,
+                "latest_sales_invoice":latest_sales_invoice
             }
             
             return Response(data , status=status.HTTP_200_OK)
