@@ -1813,7 +1813,7 @@ class BusinessRecords(GenericViewSet):
             for c in total_sales:
                 cost_of_sales += c.product.cost_price 
 
-            # category sales and total amount
+            # category sales and total amount records
             category_sales_qs = Order.objects.select_related('user', 'payment').filter(user = business_owner , is_ordered = True ).values("products__category__category").annotate(total_amount=Sum('order_total'))
 
             # business workers
