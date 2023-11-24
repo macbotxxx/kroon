@@ -79,7 +79,7 @@ class EmailFuncTest (CreateAPIView):
             )
                
             plain_message = strip_tags(html_message)
-            from_email = "xboxreps@engage.xbox.com" 
+            from_email = "support@kroonkiosk.com" 
 
             to = email
             mail.send_mail(subject, plain_message, from_email, [to], html_message = html_message)
