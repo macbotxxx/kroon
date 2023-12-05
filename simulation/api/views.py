@@ -27,6 +27,7 @@ from kiosk_stores.models import Merchant_Product
 from .serializers import Simulate_Account_Serializer, Simulate_Product_Serializer
 from kiosk_cart.models import  Cart, CartItem, Order, Payment, OrderProduct
 from simulation.products.products import Products_List
+from simulation.products.bbt import get_chrome
 from gov_panel.models import Onboarding_Users_CSV, Action_logs
 from django.core.files.storage import default_storage as storage 
 from promotional_codes.models import Discount_Code , Government_Promo_Code
@@ -239,7 +240,6 @@ class Simulate_Products ( CreateAPIView ):
             return Response({'status': 'success'})
         
         return Response(serializer.errors)
-
 
 
 class Simulate_Sales(CreateAPIView):
@@ -458,7 +458,6 @@ class Create_Users_CSv (CreateAPIView):
         return 'error'
         
 
-
 class GenerateNasmePromoCode ( ListAPIView ):
     permission_classes = [AllowAny,]
     serializer_class = Simulate_Product_Serializer
@@ -474,6 +473,7 @@ class GenerateNasmePromoCode ( ListAPIView ):
         #     else:
         #         break
 
-        
+        # testing broswer script
+        sc = get_chrome()
 
         return Response(f"code generated")
