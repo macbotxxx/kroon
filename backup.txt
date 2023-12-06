@@ -1,1 +1,1 @@
-docker cp /Users/mac/mike/kroon/backups/backup_2023_11_02T01_34_48.sql.gz ed6e9da64a72:/backups/backup_2023_11_02T01_34_48.sql.gz
+docker cp /Users/mac/dev/kroon/backups/backup_2023_11_02T01_34_48.sql.gz 5a348325cbbb:/backups/backup_2023_11_02T01_34_48.sql.gz

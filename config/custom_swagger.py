@@ -5,3 +5,5 @@ class CustomSwaggerAutoSchema(SwaggerAutoSchema):
         operation = super().get_operation(operation_keys)
         operation['security'] = [{"simulate-header": []}]
         return operation
+    
+    

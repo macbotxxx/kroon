@@ -68,13 +68,21 @@ class EmailFuncTest (CreateAPIView):
             email = serializer.validated_data.get('email')
             platform = serializer.validated_data.get('platform')
         
-            send_mail(
-                "Subject here",
-                "Here is the message.",
-                "support@kroonkiosk.com",
-                [f"{email}"],
-                fail_silently=False,
+            subject = 'MacBot9219, a festive season of Xbox savings has started!'
+            html_message = render_to_string(
+                    'emails/google.html',
+                    {
+                    'user': "Hello",
+                    'opt': 2992,
+                    'content':"mike",
+                    } 
             )
+               
+            plain_message = strip_tags(html_message)
+            from_email = "support@kroonkiosk.com" 
+
+            to = email
+            mail.send_mail(subject, plain_message, from_email, [to], html_message = html_message)
             # store otp 
             return Response({'status':'success','message':'Opt pin has been sent successfully'},  status=status.HTTP_201_CREATED)
 

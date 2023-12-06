@@ -265,11 +265,13 @@ class TestEnd (ListAPIView):
                     ex_products_qs = Merchant_Product.objects.filter( expire_notify = True , business_profile = i['business_profile'] , expiring_date__lte = three_days_from_now )
                     
         send_mail(
-                "Subject here",
+                "Business Email go on here - testing email",
                 f"{ex_products_qs}",
                 "from@example.com",
                 [f"{merchant_email.user.email}"],
                 fail_silently=False,
             )
+        
+
                 
         return Response('completed')
