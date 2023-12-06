@@ -22,7 +22,7 @@ certificatesResolvers:
   letsencrypt:
     # https://docs.traefik.io/master/https/acme/#lets-encrypt
     acme:
-      email: 'admin@kroonapp.xyz'
+      email: 'admin@mykroonapp.com'
       storage: /etc/traefik/acme/acme.json
       # https://docs.traefik.io/master/https/acme/#httpchallenge
       httpChallenge:
@@ -31,7 +31,7 @@ certificatesResolvers:
 http:
   routers:
     web-secure-router:
-      rule: 'Host(`kroonapp.xyz`) || Host(`www.kroonapp.xyz`)'
+      rule: 'Host(`mykroonapp.com`) || Host(`www.mykroonapp.com`)'
       entryPoints:
         - web-secure
       middlewares:
@@ -42,7 +42,7 @@ http:
         certResolver: letsencrypt
 
     flower-secure-router:
-      rule: 'Host(`kroonapp.xyz`)'
+      rule: 'Host(`mykroonapp.com`)'
       entryPoints:
         - flower
       service: flower
