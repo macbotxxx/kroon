@@ -402,7 +402,7 @@ r"^https://\w+\.domain\.com$",
 
 CORS_ALLOWED_ORIGINS = [
     "https://kroonkioskpro.web.app",
-    "https://kroonkioskdashboard.web.app",
+    "https://kroonkioskdashboard.web.app"
 ]
 
 CORS_ALLOW_METHODS = (
